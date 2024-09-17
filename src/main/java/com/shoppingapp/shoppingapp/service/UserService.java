@@ -1,9 +1,9 @@
 package com.shoppingapp.shoppingapp.service;
 
 import com.shoppingapp.shoppingapp.models.User;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 
 public interface UserService {
 
