@@ -34,19 +34,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User User, Long id) {
+    public User updateUser(User updatedUser, Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with the id" + id));
 
-        user.setFirstName(User.getFirstName());
-        user.setLastName(User.getLastName());
-        user.setEmail(User.getEmail());
-        user.setPhone(User.getPhone());
-        user.setUsername(User.getUsername());
-        user.setPassword(User.getPassword());
-        user.setActive(User.isActive());
 
-        return userRepository.save(User);
+        user.setFirstName(updatedUser.getFirstName());
+        user.setLastName(updatedUser.getLastName());
+        user.setEmail(updatedUser.getEmail());
+        user.setPhone(updatedUser.getPhone());
+        user.setUsername(updatedUser.getUsername());
+        user.setPassword(updatedUser.getPassword());
+        user.setActive(updatedUser.isActive());
+
+        return userRepository.save(user);
     }
 
     @Override
