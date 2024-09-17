@@ -1,0 +1,37 @@
+{
+	"info": {
+		"_postman_id": "edda0798-78fc-4f40-8925-d041ba455832",
+		"name": "Shoppii",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "UserAPI",
+			"item": [
+				{
+					"name": "New Request",
+					"id": "c4de134e-e346-4448-9969-afd405b69355",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Aro\",\r\n    \"lastName\": \"Ka\",\r\n    \"email\": \"kienduccml@gmail.com\",\r\n    \"username\": \"aro177\",\r\n    \"password\": \"123456789\",\r\n    \"phone\": \"0123414113\",\r\n    \"isActive\": true\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BASE_URL}}/api/v1/users"
+					},
+					"response": []
+				}
+			],
+			"id": "00d9590e-0c7b-4eec-80af-e5eb46a662ee"
+		}
+	]
+}
