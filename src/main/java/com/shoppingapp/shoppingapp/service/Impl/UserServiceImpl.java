@@ -6,6 +6,8 @@ import com.shoppingapp.shoppingapp.models.User;
 import com.shoppingapp.shoppingapp.repository.UserRepository;
 import com.shoppingapp.shoppingapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +32,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addUser(User user) {
+
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         return userRepository.save(user);
     }
 
