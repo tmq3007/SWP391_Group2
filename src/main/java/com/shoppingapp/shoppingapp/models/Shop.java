@@ -2,12 +2,21 @@ package com.shoppingapp.shoppingapp.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Builder
 public class Shop {
     @Id
-    @GeneratedValue
+    @GeneratedValue()
     public Long ShopID;
     public String ShopName;
     public String Address;
