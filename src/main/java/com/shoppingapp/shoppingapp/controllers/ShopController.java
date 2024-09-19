@@ -10,21 +10,26 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @CrossOrigin(maxAge = 3600)
 @RestController
+@RequestMapping("/api/v1")
 public class ShopController {
     @Autowired
     private ShopService shopService;
 
-    @PostMapping("/shops")
+    @GetMapping("/shops")
     public ResponseEntity<List<Shop>> getAllShops() {
         return ResponseEntity.ok(shopService.getAllShops());
     }
-    @GetMapping("/shops/{ShopId}")
-    public ResponseEntity<Shop> getShop(@PathVariable("shopId") Long ShopId) {
-        return ResponseEntity.ok(shopService.getShopById(ShopId));
+    @GetMapping("/shops/{shopId}")
+    public ResponseEntity<Shop> getShop(@PathVariable("shopId") Long shopId) {
+        return ResponseEntity.ok(shopService.getShopById(shopId));
     }
-    @PatchMapping("/shops/{ShopId}")
-    public ResponseEntity<Shop> updateShop(@RequestBody Shop shop,@PathVariable("shopId") Long ShopId) {
-        Shop shopObj = shopService.getShopById(ShopId);
+    @PostMapping("/shops")
+    public ResponseEntity<Shop> getShop(@RequestBody Shop shop) {
+        return ResponseEntity.ok(shopService.addShop(shop));
+    }
+    @PatchMapping("/shops/{shopId}")
+    public ResponseEntity<Shop> updateShop(@RequestBody Shop shop,@PathVariable("shopId") Long shopId) {
+        Shop shopObj = shopService.getShopById(shopId);
         if(shopObj != null) {
             shopObj.setShopName(shop.getShopName());
             shopObj.setAddress(shop.getAddress());
@@ -36,9 +41,9 @@ public class ShopController {
         }
         return ResponseEntity.ok(shopService.updateShop(shop));
     }
-    @DeleteMapping("/shops/{ShopId}")
-    public ResponseEntity<String> deleteShop(@RequestBody Shop shop,@PathVariable("shopId") Long ShopId) {
-        Shop shopObj = shopService.getShopById(ShopId);
+    @DeleteMapping("/shops/{shopId}")
+    public ResponseEntity<String> deleteShop(@PathVariable("shopId") Long shopId) {
+        Shop shopObj = shopService.getShopById(shopId);
         String deleteMsg = null;
         if(shopObj != null) {
             deleteMsg = shopService.deleteShop(shopObj);

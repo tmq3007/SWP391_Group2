@@ -33,7 +33,7 @@ public class ShopServiceImp implements ShopService {
 
     @Override
     public String deleteShop(Shop shop) {
-        shopRepository.deleteById(shop.ShopID);
+        shopRepository.delete(shop);
         return "Shop deleted";
     }
 
