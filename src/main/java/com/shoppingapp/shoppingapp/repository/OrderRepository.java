@@ -1,9 +1,9 @@
 package com.shoppingapp.shoppingapp.repository;
 
-import com.shoppingapp.shoppingapp.models.Payment;
+import com.shoppingapp.shoppingapp.models.Orders;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PaymentRepository extends JpaRepository<Payment, Long> {
+public interface OrderRepository extends JpaRepository<Orders, Long> {
 }
