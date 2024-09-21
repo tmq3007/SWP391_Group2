@@ -3,6 +3,8 @@ package com.shoppingapp.shoppingapp.controllers;
 import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
 import com.shoppingapp.shoppingapp.dto.request.CategoryCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.CategoryUpdateRequest;
+import com.shoppingapp.shoppingapp.dto.response.CategoryResponse;
+import com.shoppingapp.shoppingapp.mapper.CategoryMapper;
 import com.shoppingapp.shoppingapp.models.Category;
 import com.shoppingapp.shoppingapp.service.CategoryService;
 import lombok.AllArgsConstructor;
@@ -20,6 +22,8 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     @GetMapping()
     public ResponseEntity<List<Category>>  getAllCategories() {
@@ -27,8 +31,8 @@ public class CategoryController {
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<Category> getCategory (@PathVariable("categoryId") Long categoryId) {
-        return ResponseEntity.ok(categoryService.getCategory(categoryId));
+    public CategoryResponse getCategory (@PathVariable("categoryId") Long categoryId) {
+        return  (categoryService.getCategory(categoryId));
     }
 
     @PostMapping("")
@@ -40,7 +44,7 @@ public class CategoryController {
     }
 
     @PatchMapping("/{categoryId}")
-    public ResponseEntity<Category> updateCategory(@RequestBody CategoryUpdateRequest category,
+    public ResponseEntity<CategoryResponse> updateCategory(@RequestBody CategoryUpdateRequest category,
                                                    @PathVariable("categoryId") Long categoryId){
 
         return ResponseEntity.ok(categoryService.updateCategory(categoryId, category)) ;
@@ -48,7 +52,7 @@ public class CategoryController {
 
     @DeleteMapping("/{categoryId}")
     public ResponseEntity<String> deleteCategory(@PathVariable("categoryId") Long categoryId) {
-        Category categoryObj = categoryService.getCategory(categoryId);
+        Category categoryObj = categoryService.getCategoryById(categoryId);
         String deleteMsg = "";
         if(categoryObj != null){
             deleteMsg = categoryService.deleteCategory(categoryObj);

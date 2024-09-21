@@ -2,6 +2,7 @@ package com.shoppingapp.shoppingapp.service.Impl;
 
 import com.shoppingapp.shoppingapp.dto.request.CategoryCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.CategoryUpdateRequest;
+import com.shoppingapp.shoppingapp.dto.response.CategoryResponse;
 import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
 import com.shoppingapp.shoppingapp.exceptions.GlobalExceptionHandler;
 import com.shoppingapp.shoppingapp.exceptions.ResourceNotFoundException;
@@ -29,9 +30,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getCategory(Long id) {
-        return categoryRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Category not found"));
+    public CategoryResponse getCategory(Long id) {
+        return categoryMapper.toCategoryResponse(categoryRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Category not found")));
+    }
+
+    @Override
+    public Category getCategoryById(Long id) {
+        return categoryRepository.findById(id).orElseThrow(()-> new RuntimeException("Category not found"));
     }
 
     @Override
@@ -47,11 +53,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category updateCategory(Long categoryId,CategoryUpdateRequest request) {
-        Category category = getCategory(categoryId);
+    public CategoryResponse updateCategory(Long categoryId,CategoryUpdateRequest request) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(()-> new RuntimeException("Category not found"));
        categoryMapper.updateCategory(category,request);
 
-        return categoryRepository.save(category);
+        return categoryMapper.toCategoryResponse(categoryRepository.save(category));
     }
 
     @Override
