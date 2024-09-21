@@ -1,20 +1,24 @@
 package com.shoppingapp.shoppingapp.service;
 
+import com.shoppingapp.shoppingapp.dto.request.UserCreationRequest;
+import com.shoppingapp.shoppingapp.dto.request.UserUpdateRequest;
+import com.shoppingapp.shoppingapp.dto.response.UserResponse;
 import com.shoppingapp.shoppingapp.models.User;
 
 import java.util.List;
 
 public interface UserService {
 
-    List<User> getAllUsers();
+   UserResponse createUser(UserCreationRequest userCreationRequest);
 
-    User getUserById(Long id);
+   UserResponse getMyInfo();
 
-    User addUser(User user);
+   UserResponse updateUser(Long id, UserUpdateRequest userUpdateRequest);
 
-    User updateUser(User User, Long id);
+   void deleteUser(Long id);
 
-    String deleteUser(Long id);
+   List<UserResponse> getAll();
 
-    User getMyInfo();
+   UserResponse getUserById(Long id);
+
 }
