@@ -1,6 +1,7 @@
 package com.shoppingapp.shoppingapp.service.Impl;
 
 import com.shoppingapp.shoppingapp.dto.request.CategoryCreationRequest;
+import com.shoppingapp.shoppingapp.dto.request.CategoryUpdateRequest;
 import com.shoppingapp.shoppingapp.models.Category;
 import com.shoppingapp.shoppingapp.models.User;
 import com.shoppingapp.shoppingapp.repository.CategoryRepository;
@@ -23,7 +24,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category getCategory(Long id) {
-        return categoryRepository.findById(id).get();
+        return categoryRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Category not found"));
     }
 
     @Override
@@ -37,7 +39,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category updateCategory(Category category) {
+    public Category updateCategory(Long categoryId,CategoryUpdateRequest request) {
+        Category category = getCategory(categoryId);
+        category.setDescription(request.getDescription());
+        category.setPicture(request.getPicture());
+        category.setIsActive(request.getIsActive());
+
         return categoryRepository.save(category);
     }
 

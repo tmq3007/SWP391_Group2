@@ -1,6 +1,7 @@
 package com.shoppingapp.shoppingapp.controllers;
 
 import com.shoppingapp.shoppingapp.dto.request.CategoryCreationRequest;
+import com.shoppingapp.shoppingapp.dto.request.CategoryUpdateRequest;
 import com.shoppingapp.shoppingapp.models.Category;
 import com.shoppingapp.shoppingapp.service.CategoryService;
 import lombok.AllArgsConstructor;
@@ -36,17 +37,10 @@ public class CategoryController {
     }
 
     @PatchMapping("/{categoryId}")
-    public ResponseEntity<Category> updateCategory(@RequestBody Category category,
+    public ResponseEntity<Category> updateCategory(@RequestBody CategoryUpdateRequest category,
                                                    @PathVariable("categoryId") Long categoryId){
-        Category categoryObj = categoryService.getCategory(categoryId);
-        if(categoryObj != null){
-            categoryObj.setCategoryName(category.getCategoryName());
-            categoryObj.setDescription(category.getDescription());
-            categoryObj.setPicture(category.getPicture());
-            categoryObj.setIsActive(category.getIsActive());
-            categoryService.updateCategory(categoryObj);
-        }
-        return ResponseEntity.ok(categoryService.updateCategory(categoryObj));
+
+        return ResponseEntity.ok(categoryService.updateCategory(categoryId, category)) ;
     }
 
     @DeleteMapping("/{categoryId}")
