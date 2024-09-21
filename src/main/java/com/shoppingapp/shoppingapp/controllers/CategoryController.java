@@ -1,5 +1,6 @@
 package com.shoppingapp.shoppingapp.controllers;
 
+import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
 import com.shoppingapp.shoppingapp.dto.request.CategoryCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.CategoryUpdateRequest;
 import com.shoppingapp.shoppingapp.models.Category;
@@ -31,9 +32,11 @@ public class CategoryController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Category> getCategory (@RequestBody CategoryCreationRequest request
-    ) {
-        return ResponseEntity.ok(categoryService.addCategory(request)) ;
+    public ApiResponse<Category> addCategory (@RequestBody CategoryCreationRequest request) {
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setResult(categoryService.addCategory(request));
+
+        return apiResponse ;
     }
 
     @PatchMapping("/{categoryId}")
