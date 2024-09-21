@@ -1,5 +1,7 @@
 package com.shoppingapp.shoppingapp.service.Impl;
 
+import com.shoppingapp.shoppingapp.dto.request.PaymentCreationRequest;
+import com.shoppingapp.shoppingapp.dto.request.PaymentUpdateRequest;
 import com.shoppingapp.shoppingapp.models.Payment;
 import com.shoppingapp.shoppingapp.repository.PaymentRepository;
 import com.shoppingapp.shoppingapp.service.PaymentService;
@@ -23,12 +25,20 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Payment addPayment(Payment payment) {
+    public Payment addPayment(PaymentCreationRequest request) {
+        Payment payment = new Payment();
+        payment.setPaymentType(request.getPaymentType());
+        payment.setIsActive(request.getIsActive());
+
         return paymentRepository.save(payment);
     }
 
     @Override
-    public Payment updatePayment(Payment payment) {
+    public Payment updatePayment(PaymentUpdateRequest request, Long id) {
+
+        Payment payment =  getPayment(id);
+        payment.setPaymentType(request.getPaymentType());
+        payment.setIsActive(request.getIsActive());
         return paymentRepository.save(payment);
     }
 
