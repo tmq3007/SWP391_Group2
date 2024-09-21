@@ -3,6 +3,7 @@ package com.shoppingapp.shoppingapp.controllers;
 import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
 import com.shoppingapp.shoppingapp.dto.request.PaymentCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.PaymentUpdateRequest;
+import com.shoppingapp.shoppingapp.dto.response.PaymentResponse;
 import com.shoppingapp.shoppingapp.models.Category;
 import com.shoppingapp.shoppingapp.models.Payment;
 import com.shoppingapp.shoppingapp.models.User;
@@ -29,8 +30,8 @@ public class PaymentController {
     }
 
     @GetMapping("/{paymentId}")
-    public ResponseEntity<Payment> getPayment(@PathVariable("paymentId") Long paymentId) {
-        return  ResponseEntity.ok(paymentService.getPayment(paymentId));
+    public PaymentResponse getPayment(@PathVariable("paymentId") Long paymentId) {
+        return  paymentService.getPayment(paymentId);
     }
 
     @PostMapping("")
@@ -41,7 +42,7 @@ public class PaymentController {
     }
 
     @PatchMapping("/{paymentId}")
-    public ResponseEntity<Payment> updatePayment(@RequestBody PaymentUpdateRequest request,
+    public ResponseEntity<PaymentResponse> updatePayment(@RequestBody PaymentUpdateRequest request,
                                                  @PathVariable("paymentId") Long paymentId ) {
 
 
@@ -50,7 +51,7 @@ public class PaymentController {
 
     @DeleteMapping("/{paymentId}")
     public ResponseEntity<String> deleteUser(@PathVariable("paymentId") Long paymentId) {
-        Payment paymentObj = paymentService.getPayment(paymentId);
+        Payment paymentObj = paymentService.getPaymentById(paymentId);
         String deleteMsg = "";
         if(paymentObj != null){
            deleteMsg =  paymentService.deletePayment(paymentObj);
