@@ -1,5 +1,6 @@
 package com.shoppingapp.shoppingapp.controllers;
 
+import com.shoppingapp.shoppingapp.dto.request.CategoryCreationRequest;
 import com.shoppingapp.shoppingapp.models.Category;
 import com.shoppingapp.shoppingapp.service.CategoryService;
 import lombok.AllArgsConstructor;
@@ -29,8 +30,9 @@ public class CategoryController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Category> getCategory (@RequestBody Category category) {
-        return ResponseEntity.ok(categoryService.addCategory(category)) ;
+    public ResponseEntity<Category> getCategory (@RequestBody CategoryCreationRequest request
+    ) {
+        return ResponseEntity.ok(categoryService.addCategory(request)) ;
     }
 
     @PatchMapping("/{categoryId}")

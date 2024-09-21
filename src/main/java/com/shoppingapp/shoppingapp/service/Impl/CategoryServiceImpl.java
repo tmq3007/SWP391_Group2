@@ -1,6 +1,8 @@
 package com.shoppingapp.shoppingapp.service.Impl;
 
+import com.shoppingapp.shoppingapp.dto.request.CategoryCreationRequest;
 import com.shoppingapp.shoppingapp.models.Category;
+import com.shoppingapp.shoppingapp.models.User;
 import com.shoppingapp.shoppingapp.repository.CategoryRepository;
 import com.shoppingapp.shoppingapp.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category addCategory(Category category) {
+    public Category addCategory(CategoryCreationRequest request) {
+        Category category = new Category();
+        category.setCategoryName(request.getCategoryName());
+       category.setDescription(request.getDescription());
+       category.setPicture(request.getPicture());
+       category.setIsActive(request.getIsActive());
         return categoryRepository.save(category);
     }
 
