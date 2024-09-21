@@ -3,12 +3,10 @@ package com.shoppingapp.shoppingapp.service.Impl;
 import com.shoppingapp.shoppingapp.dto.request.CategoryCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.CategoryUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.response.CategoryResponse;
+import com.shoppingapp.shoppingapp.exceptions.AppException;
 import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
-import com.shoppingapp.shoppingapp.exceptions.GlobalExceptionHandler;
-import com.shoppingapp.shoppingapp.exceptions.ResourceNotFoundException;
 import com.shoppingapp.shoppingapp.mapper.CategoryMapper;
 import com.shoppingapp.shoppingapp.models.Category;
-import com.shoppingapp.shoppingapp.models.User;
 import com.shoppingapp.shoppingapp.repository.CategoryRepository;
 import com.shoppingapp.shoppingapp.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 
         if(categoryRepository.existsByCategoryName(request.getCategoryName())) {
-            throw new ResourceNotFoundException(ErrorCode.CATEGORY_EXISTED);
+            throw new AppException(ErrorCode.CATEGORY_EXISTED);
         }
 
         Category category = categoryMapper.toCategory(request);
