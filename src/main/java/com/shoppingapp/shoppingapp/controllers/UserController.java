@@ -1,14 +1,12 @@
 package com.shoppingapp.shoppingapp.controllers;
 
-import com.shoppingapp.shoppingapp.exceptions.ResourceNotFoundException;
-import com.shoppingapp.shoppingapp.models.User;
-import com.shoppingapp.shoppingapp.repository.UserRepository;
+import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
+import com.shoppingapp.shoppingapp.dto.request.UserCreationRequest;
+import com.shoppingapp.shoppingapp.dto.request.UserUpdateRequest;
+import com.shoppingapp.shoppingapp.dto.response.UserResponse;
 import com.shoppingapp.shoppingapp.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,43 +18,46 @@ import java.util.List;
 @Slf4j
 public class UserController {
 
-    @Autowired
-    private UserService userService;
-
-    @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        log.info("Username: {}", authentication.getName());
-        authentication.getAuthorities().forEach(authority -> log.info(authority.getAuthority()));
-
-        return ResponseEntity.ok(userService.getAllUsers());
-    }
-
-    @GetMapping("{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(userService.getUserById(id));
-    }
+    UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> addUser(@RequestBody User user) {
-
-        return ResponseEntity.ok(userService.addUser(user));
+    ApiResponse<UserResponse> createUser(@RequestBody UserCreationRequest request) {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.createUser(request))
+                .build();
     }
 
-    @PatchMapping("{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
-        return ResponseEntity.ok(userService.updateUser(user, id));
+    @GetMapping
+    ApiResponse<List<UserResponse>> getUsers() {
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(userService.getAll())
+                .build();
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(userService.deleteUser(id));
+    @GetMapping("/{userId}")
+    ApiResponse<UserResponse> getUser(@PathVariable("userId") Long userId) {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getUserById(userId))
+                .build();
     }
 
-    @GetMapping("/myInfo")
-    public ResponseEntity<User> getMyInfo() {
-        return ResponseEntity.ok(userService.getMyInfo());
+    @GetMapping("/my-info")
+    ApiResponse<UserResponse> getMyInfo() {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getMyInfo())
+                .build();
+    }
+
+    @DeleteMapping("/{userId}")
+    ApiResponse<String> deleteUser(@PathVariable("userId") Long userId) {
+        userService.deleteUser(userId);
+        return ApiResponse.<String>builder().result("User has been deleted").build();
+    }
+
+    @PutMapping("/{userId}")
+    ApiResponse<UserResponse> updateUser(@PathVariable("userId")  Long userId, @RequestBody UserUpdateRequest request) {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.updateUser(userId, request))
+                .build();
     }
 }

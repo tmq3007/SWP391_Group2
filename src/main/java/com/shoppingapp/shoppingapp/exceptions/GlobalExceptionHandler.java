@@ -23,8 +23,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
-    @ExceptionHandler(value = ResourceNotFoundException.class)
-    ResponseEntity<ApiResponse> handlingResourceNotFoundException(ResourceNotFoundException exception){
+    @ExceptionHandler(value = AppException.class)
+    ResponseEntity<ApiResponse> handlingAppException(AppException exception){
         ErrorCode errorCode = exception.getErrorCode();
         ApiResponse apiResponse = new ApiResponse();
 
