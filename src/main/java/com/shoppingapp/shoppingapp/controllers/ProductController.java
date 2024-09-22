@@ -44,7 +44,7 @@ public class ProductController {
         if(productObj != null) {
             productObj.setProductName(product.getProductName());
             productObj.setCategory(product.getCategory());
-            productObj.setShopId(product.getShopId());
+            productObj.setShop(product.getShop());
             productObj.setDescription(product.getDescription());
             productObj.setMeasurementUnit(product.getMeasurementUnit());
             productObj.setUnitBuyPrice(product.getUnitBuyPrice());
