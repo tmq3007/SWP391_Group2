@@ -45,11 +45,11 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        Set<Role> roles = new HashSet<>();
-        roleRepository.findById(PredefinedRole.CUSTOMER_ROLE).ifPresent(roles::add);
-        roleRepository.findById(PredefinedRole.VENDOR_ROLE).ifPresent(roles::add);
+        var roles = roleRepository.findAllById(request.getRoles());
+        user.setRoles(new HashSet<>(roles));
 
-        user.setRoles(roles);
+
+        user.setActive(true);
 
         try {
             user = userRepository.save(user);

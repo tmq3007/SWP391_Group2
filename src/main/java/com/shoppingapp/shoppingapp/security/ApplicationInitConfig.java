@@ -35,7 +35,7 @@ public class ApplicationInitConfig {
     @Bean
     @ConditionalOnProperty(
             prefix = "spring",
-            value = "datasource.driverClassName",
+            value = "datasource.driver-class-name",
             havingValue = "com.mysql.cj.jdbc.Driver")
     ApplicationRunner applicationRunner(UserRepository userRepository, RoleRepository roleRepository) {
         log.info("Initializing application.....");
@@ -43,7 +43,12 @@ public class ApplicationInitConfig {
             if (userRepository.findByUsername(ADMIN_USER_NAME).isEmpty()) {
                 roleRepository.save(Role.builder()
                         .name(PredefinedRole.CUSTOMER_ROLE)
-                        .description("User role")
+                        .description("Customer role")
+                        .build());
+
+                roleRepository.save(Role.builder()
+                        .name(PredefinedRole.VENDOR_ROLE)
+                        .description("Vendor role")
                         .build());
 
                 Role adminRole = roleRepository.save(Role.builder()
