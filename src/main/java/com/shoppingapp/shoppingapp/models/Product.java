@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,7 +24,8 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
-    private Long shopId;
+    @ManyToMany
+    private Set<Shop> shop;
     private String description;
     private String measurementUnit;
     private Double unitBuyPrice;
