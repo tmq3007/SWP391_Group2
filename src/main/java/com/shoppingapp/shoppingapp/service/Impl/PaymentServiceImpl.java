@@ -1,5 +1,9 @@
 package com.shoppingapp.shoppingapp.service.Impl;
 
+import com.shoppingapp.shoppingapp.dto.request.PaymentCreationRequest;
+import com.shoppingapp.shoppingapp.dto.request.PaymentUpdateRequest;
+import com.shoppingapp.shoppingapp.dto.response.PaymentResponse;
+import com.shoppingapp.shoppingapp.mapper.PaymentMapper;
 import com.shoppingapp.shoppingapp.models.Payment;
 import com.shoppingapp.shoppingapp.repository.PaymentRepository;
 import com.shoppingapp.shoppingapp.service.PaymentService;
@@ -17,19 +21,36 @@ public class PaymentServiceImpl implements PaymentService {
         return (List<Payment>) paymentRepository.findAll();
     }
 
+    @Autowired
+    private PaymentMapper paymentMapper;
     @Override
-    public Payment getPayment(Long id) {
-        return paymentRepository.findById(id).get();
+    public PaymentResponse getPayment(Long id) {
+        return paymentMapper.toPaymentResponse(paymentRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Payment not found")));
     }
 
     @Override
-    public Payment addPayment(Payment payment) {
+    public Payment getPaymentById(Long id) {
+        return paymentRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Payment not found"));
+    }
+
+    @Override
+    public Payment addPayment(PaymentCreationRequest request) {
+        Payment payment = new Payment();
+        payment.setPaymentType(request.getPaymentType());
+        payment.setIsActive(request.getIsActive());
+
         return paymentRepository.save(payment);
     }
 
     @Override
-    public Payment updatePayment(Payment payment) {
-        return paymentRepository.save(payment);
+    public PaymentResponse updatePayment(PaymentUpdateRequest request, Long id) {
+
+        Payment payment =  paymentRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Payment not found"));
+       paymentMapper.updatePayment(payment, request);
+        return paymentMapper.toPaymentResponse(paymentRepository.save(payment));
     }
 
     @Override

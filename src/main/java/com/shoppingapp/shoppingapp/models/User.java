@@ -1,33 +1,36 @@
 package com.shoppingapp.shoppingapp.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.util.Set;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+     Long id;
 
-    private String firstName;
-    private String lastName;
+     String firstName;
+     String lastName;
 
-    private String email;
+     String email;
 
-    private String username;
-    private String password;
+     String username;
+     String password;
 
-    private String phone;
+     String phone;
 
-    private boolean isActive = true;
+     boolean isActive;
+
+     @ManyToMany
+    Set<Role> roles;
 
 }

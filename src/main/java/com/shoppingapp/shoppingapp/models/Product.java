@@ -19,7 +19,9 @@ public class Product {
     private Long productId;
 
     private String productName;
-    private Long categoryId;
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
     private Long shopId;
     private String description;
     private String measurementUnit;
