@@ -1,5 +1,11 @@
 package com.shoppingapp.shoppingapp.service.Impl;
 
+import com.shoppingapp.shoppingapp.dto.request.CategoryCreationRequest;
+import com.shoppingapp.shoppingapp.dto.request.CategoryUpdateRequest;
+import com.shoppingapp.shoppingapp.dto.response.CategoryResponse;
+import com.shoppingapp.shoppingapp.exceptions.AppException;
+import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
+import com.shoppingapp.shoppingapp.mapper.CategoryMapper;
 import com.shoppingapp.shoppingapp.models.Category;
 import com.shoppingapp.shoppingapp.repository.CategoryRepository;
 import com.shoppingapp.shoppingapp.service.CategoryService;
@@ -12,6 +18,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private CategoryMapper categoryMapper;
 
 
     @Override
@@ -20,18 +28,35 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getCategory(Long id) {
-        return categoryRepository.findById(id).get();
+    public CategoryResponse getCategory(Long id) {
+        return categoryMapper.toCategoryResponse(categoryRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Category not found")));
     }
 
     @Override
-    public Category addCategory(Category category) {
+    public Category getCategoryById(Long id) {
+        return categoryRepository.findById(id).orElseThrow(()-> new RuntimeException("Category not found"));
+    }
+
+    @Override
+    public Category addCategory(CategoryCreationRequest request) {
+
+
+        if(categoryRepository.existsByCategoryName(request.getCategoryName())) {
+            throw new AppException(ErrorCode.CATEGORY_EXISTED);
+        }
+
+        Category category = categoryMapper.toCategory(request);
         return categoryRepository.save(category);
     }
 
     @Override
-    public Category updateCategory(Category category) {
-        return categoryRepository.save(category);
+    public CategoryResponse updateCategory(Long categoryId,CategoryUpdateRequest request) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(()-> new RuntimeException("Category not found"));
+       categoryMapper.updateCategory(category,request);
+
+        return categoryMapper.toCategoryResponse(categoryRepository.save(category));
     }
 
     @Override

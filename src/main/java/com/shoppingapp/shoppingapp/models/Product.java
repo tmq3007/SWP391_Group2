@@ -1,31 +1,38 @@
 package com.shoppingapp.shoppingapp.models;
 
 import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
+
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     Long productId;
+    private Long productId;
 
-     String productName;
-     Long categoryId;
-     Long shopId;
-     String description;
-     String measurementUnit;
-     Double unitBuyPrice;
-     Double unitSellPrice;
-     Double discount;
-     int stock;
-     String pictureUrl;
-     Boolean isActive;
+    private String productName;
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+    @ManyToMany
+    private Set<Shop> shop;
+    private String description;
+    private String measurementUnit;
+    private Double unitBuyPrice;
+    private Double unitSellPrice;
+    private Double discount;
+    private int stock;
+    private String pictureUrl;
+    private Boolean isActive;
 
 }

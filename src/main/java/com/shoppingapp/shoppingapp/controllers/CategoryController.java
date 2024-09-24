@@ -1,5 +1,10 @@
 package com.shoppingapp.shoppingapp.controllers;
 
+import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
+import com.shoppingapp.shoppingapp.dto.request.CategoryCreationRequest;
+import com.shoppingapp.shoppingapp.dto.request.CategoryUpdateRequest;
+import com.shoppingapp.shoppingapp.dto.response.CategoryResponse;
+import com.shoppingapp.shoppingapp.mapper.CategoryMapper;
 import com.shoppingapp.shoppingapp.models.Category;
 import com.shoppingapp.shoppingapp.service.CategoryService;
 import lombok.AllArgsConstructor;
@@ -17,6 +22,8 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     @GetMapping()
     public ResponseEntity<List<Category>>  getAllCategories() {
@@ -24,32 +31,28 @@ public class CategoryController {
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<Category> getCategory (@PathVariable("categoryId") Long categoryId) {
-        return ResponseEntity.ok(categoryService.getCategory(categoryId));
+    public CategoryResponse getCategory (@PathVariable("categoryId") Long categoryId) {
+        return  (categoryService.getCategory(categoryId));
     }
 
     @PostMapping("")
-    public ResponseEntity<Category> getCategory (@RequestBody Category category) {
-        return ResponseEntity.ok(categoryService.addCategory(category)) ;
+    public ApiResponse<Category> addCategory (@RequestBody CategoryCreationRequest request) {
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setResult(categoryService.addCategory(request));
+
+        return apiResponse ;
     }
 
     @PatchMapping("/{categoryId}")
-    public ResponseEntity<Category> updateCategory(@RequestBody Category category,
+    public ResponseEntity<CategoryResponse> updateCategory(@RequestBody CategoryUpdateRequest category,
                                                    @PathVariable("categoryId") Long categoryId){
-        Category categoryObj = categoryService.getCategory(categoryId);
-        if(categoryObj != null){
-            categoryObj.setCategoryName(category.getCategoryName());
-            categoryObj.setDescription(category.getDescription());
-            categoryObj.setPicture(category.getPicture());
-            categoryObj.setIsActive(category.getIsActive());
-            categoryService.updateCategory(categoryObj);
-        }
-        return ResponseEntity.ok(categoryService.updateCategory(categoryObj));
+
+        return ResponseEntity.ok(categoryService.updateCategory(categoryId, category)) ;
     }
 
     @DeleteMapping("/{categoryId}")
     public ResponseEntity<String> deleteCategory(@PathVariable("categoryId") Long categoryId) {
-        Category categoryObj = categoryService.getCategory(categoryId);
+        Category categoryObj = categoryService.getCategoryById(categoryId);
         String deleteMsg = "";
         if(categoryObj != null){
             deleteMsg = categoryService.deleteCategory(categoryObj);

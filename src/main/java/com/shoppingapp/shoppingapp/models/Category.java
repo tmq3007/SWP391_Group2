@@ -18,9 +18,9 @@ import lombok.experimental.FieldDefaults;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long categoryId;
-    String categoryName;
-    String description;
-    String picture;
-    Boolean isActive;
+     Long categoryId;
+     String categoryName;
+     String description;
+     String picture;
+     Boolean isActive;
 }

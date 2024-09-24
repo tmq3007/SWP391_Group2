@@ -15,10 +15,11 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long paymentId;
-    String paymentType;
-    Boolean isActive;
+      Long paymentId;
+      String paymentType;
+      Boolean isActive;
 }

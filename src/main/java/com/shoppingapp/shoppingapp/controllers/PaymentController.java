@@ -1,5 +1,9 @@
 package com.shoppingapp.shoppingapp.controllers;
 
+import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
+import com.shoppingapp.shoppingapp.dto.request.PaymentCreationRequest;
+import com.shoppingapp.shoppingapp.dto.request.PaymentUpdateRequest;
+import com.shoppingapp.shoppingapp.dto.response.PaymentResponse;
 import com.shoppingapp.shoppingapp.models.Category;
 import com.shoppingapp.shoppingapp.models.Payment;
 import com.shoppingapp.shoppingapp.models.User;
@@ -26,32 +30,28 @@ public class PaymentController {
     }
 
     @GetMapping("/{paymentId}")
-    public ResponseEntity<Payment> getPayment(@PathVariable("paymentId") Long paymentId) {
-        return  ResponseEntity.ok(paymentService.getPayment(paymentId));
+    public PaymentResponse getPayment(@PathVariable("paymentId") Long paymentId) {
+        return  paymentService.getPayment(paymentId);
     }
 
     @PostMapping("")
-    public ResponseEntity<Payment> getPayment(@RequestBody Payment payment) {
-        return ResponseEntity.ok(paymentService.addPayment(payment));
+    public ApiResponse<Payment> createPayment(@RequestBody PaymentCreationRequest request) {
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setResult(paymentService.addPayment(request));
+        return apiResponse;
     }
 
     @PatchMapping("/{paymentId}")
-    public ResponseEntity<Payment> updatePayment(@RequestBody Payment payment,
+    public ResponseEntity<PaymentResponse> updatePayment(@RequestBody PaymentUpdateRequest request,
                                                  @PathVariable("paymentId") Long paymentId ) {
-        Payment paymentObj = paymentService.getPayment(paymentId);
-        if(paymentObj != null){
-            paymentObj.setPaymentType(payment.getPaymentType());
-            paymentObj.setIsActive(payment.getIsActive());
 
-            paymentService.updatePayment(paymentObj);
-        }
 
-        return ResponseEntity.ok(paymentService.updatePayment(paymentObj));
+        return ResponseEntity.ok(paymentService.updatePayment(request,paymentId));
     }
 
     @DeleteMapping("/{paymentId}")
     public ResponseEntity<String> deleteUser(@PathVariable("paymentId") Long paymentId) {
-        Payment paymentObj = paymentService.getPayment(paymentId);
+        Payment paymentObj = paymentService.getPaymentById(paymentId);
         String deleteMsg = "";
         if(paymentObj != null){
            deleteMsg =  paymentService.deletePayment(paymentObj);
