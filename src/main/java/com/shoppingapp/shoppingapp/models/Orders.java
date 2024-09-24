@@ -2,6 +2,8 @@ package com.shoppingapp.shoppingapp.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
+
 import java.time.LocalDate;
 
 
@@ -9,18 +11,19 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderId;
+    Long orderId;
 
-    private Long userId;
+    Long userId;
 
-    private Long paymentId;
+    Long paymentId;
 
-    private LocalDate paymentDate;
+    LocalDate paymentDate;
 
-    private LocalDate orderDate;
+    LocalDate orderDate;
 
-    private Boolean isPaid;
+    Boolean isPaid;
 }

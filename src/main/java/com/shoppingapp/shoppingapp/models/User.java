@@ -4,30 +4,33 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+     Long id;
 
-    private String firstName;
-    private String lastName;
+     String firstName;
+     String lastName;
 
-    private String email;
+     String email;
 
-    private String username;
-    private String password;
+     String username;
+     String password;
 
-    private String phone;
+     String phone;
 
-    private boolean isActive = true;
+     boolean isActive = true;
 
 }
