@@ -1,5 +1,6 @@
 package com.shoppingapp.shoppingapp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,9 +24,13 @@ public class Shop {
     private User user;
 
     @OneToMany
+    @JsonIgnore
+
     private Set<Product> products;
 
     @ManyToMany
+
+    @JsonIgnore
     private Set<Orders> order;
     String shopName;
     private String address;

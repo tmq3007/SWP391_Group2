@@ -11,8 +11,8 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface ShopMapper {
     @Mapping(target = "user", ignore = true)
-    @Mapping(target = "products", ignore = true)
-    @Mapping(target = "order", ignore = true)
+//    @Mapping(target = "products", ignore = true)
+//    @Mapping(target = "order", ignore = true)
     Shop toShop(ShopCreationRequest shopCreationRequest);
 
     @Mapping(target = "user", ignore = true)

@@ -64,17 +64,7 @@ public class ShopServiceImp implements ShopService {
 
         shop.setUser(userOp.get());
 
-        Set<Long> productIds = request.getProducts().stream()
-                .map(Long::valueOf)
-                .collect(Collectors.toSet());;  // Assuming the request has product IDs to link
-        Set<Product> products = new HashSet<>(productRepository.findAllById(productIds));
-        shop.setProducts(products);
 
-        Set<Long> orderIds = request.getOrder().stream()
-                .map(Long::valueOf)
-                .collect(Collectors.toSet());;  // Assuming the request has product IDs to link
-        Set<Orders> orders = new HashSet<>(orderRepository.findAllById(orderIds));
-        shop.setOrder(orders);
         return shopRepository.save(shop);
     }
 
