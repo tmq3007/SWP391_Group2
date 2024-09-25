@@ -20,7 +20,7 @@ public class ProductResponse {
     private Long productId;
     private String productName;
     private Category category;
-    private Set<Shop> shop;
+    private Shop shop;
     private String description;
     private String measurementUnit;
     private Double unitBuyPrice;

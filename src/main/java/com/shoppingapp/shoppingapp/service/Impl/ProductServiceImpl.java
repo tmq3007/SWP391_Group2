@@ -59,16 +59,17 @@ public class ProductServiceImpl implements ProductService {
 
         var categoryOptional = categoryRepository.findById(Long.valueOf(request.getCategory()));
         if (!categoryOptional.isPresent()) {
-            throw new AppException(ErrorCode.CATEGORY_EXISTED);  // Xử lý khi không tìm thấy category
+            throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
         }
 
         product.setCategory(categoryOptional.get());
 
-        Set<Long> shopIds = request.getShop().stream()
-                .map(Long::valueOf)
-                .collect(Collectors.toSet());
-        Set<Shop> shops = new HashSet<>(shopRepository.findAllById(shopIds));
-        product.setShop(shops);
+        var shopOptional = shopRepository.findById(Long.valueOf(request.getShop()));
+        if (!shopOptional.isPresent()) {
+            throw new AppException(ErrorCode.SHOP_NOT_EXISTED);
+        }
+
+        product.setShop(shopOptional.get());
         return productRepository.save(product);
     }
 
@@ -81,16 +82,17 @@ public class ProductServiceImpl implements ProductService {
 
         var categoryOptional = categoryRepository.findById(Long.valueOf(request.getCategory()));
         if (!categoryOptional.isPresent()) {
-            throw new AppException(ErrorCode.CATEGORY_EXISTED);
+            throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
         }
 
         product.setCategory(categoryOptional.get());
 
-        Set<Long> shopIds = request.getShop().stream()
-                .map(Long::valueOf)
-                .collect(Collectors.toSet());
-        Set<Shop> shops = new HashSet<>(shopRepository.findAllById(shopIds));
-        product.setShop(shops);
+        var shopOptional = shopRepository.findById(Long.valueOf(request.getShop()));
+        if (!shopOptional.isPresent()) {
+            throw new AppException(ErrorCode.SHOP_NOT_EXISTED);
+        }
+
+        product.setShop(shopOptional.get());
 
         return productMapper.toProductResponse(productRepository.save(product));
     }
