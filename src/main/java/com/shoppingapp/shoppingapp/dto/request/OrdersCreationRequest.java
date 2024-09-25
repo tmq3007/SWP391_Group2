@@ -1,15 +1,13 @@
 package com.shoppingapp.shoppingapp.dto.request;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrdersCreationRequest {

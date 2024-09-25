@@ -1,5 +1,6 @@
 package com.shoppingapp.shoppingapp.controllers;
 
+import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
 import com.shoppingapp.shoppingapp.dto.request.OrdersCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.OrdersUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.response.OrdersResponse;
@@ -34,9 +35,10 @@ public class OrderController{
     }
 
     @PatchMapping("/{orderId}")
-    public ResponseEntity<OrdersResponse> updateOrder(@PathVariable("orderId") Long orderId, @RequestBody OrdersUpdateRequest order)    {
-        return ResponseEntity.ok(orderService.updateOrder(orderId,order));
+    public ApiResponse<OrdersResponse> updateOrder(@PathVariable("orderId") Long orderId, @RequestBody OrdersUpdateRequest order)    {
+        return ApiResponse.<OrdersResponse>builder().result(orderService.updateOrder(orderId, order)).build();
     }
+
     @DeleteMapping("/{orderId}")
     public ResponseEntity<?> deleteOrder(@PathVariable("orderId") Long orderId){
         return ResponseEntity.ok(orderService.deleteOrder(orderId));

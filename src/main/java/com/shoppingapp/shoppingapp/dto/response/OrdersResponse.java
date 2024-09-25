@@ -1,21 +1,23 @@
 package com.shoppingapp.shoppingapp.dto.response;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import com.shoppingapp.shoppingapp.models.Payment;
+import com.shoppingapp.shoppingapp.models.User;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrdersResponse {
     Long orderId;
-    Long userId;
-    Long paymentId;
+
+    User user;
+    Payment payment;
+
     LocalDate paymentDate;
     LocalDate orderDate;
     Boolean isPaid;

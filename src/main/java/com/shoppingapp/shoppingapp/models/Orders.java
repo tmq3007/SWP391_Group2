@@ -17,9 +17,11 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long orderId;
 
-    Long userId;
+    @ManyToOne
+    User user;
 
-    Long paymentId;
+    @OneToOne
+    Payment payment;
 
     LocalDate paymentDate;
 
