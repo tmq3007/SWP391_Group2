@@ -23,8 +23,7 @@ public class ShopController {
     private ShopService shopService;
     @Autowired
     private ShopMapper shopMapper;
-    @Autowired
-    private UserServiceImpl userServiceImpl;
+
 
     //get all shop
     @GetMapping()
@@ -39,16 +38,15 @@ public class ShopController {
 
     //add new shop
     @PostMapping("")
-    ApiResponse<Shop> getShop(@RequestBody ShopCreationRequest request) {
-        ApiResponse<Shop> apiResponse = new ApiResponse<>();
+    ApiResponse<ShopResponse> createShop(@RequestBody ShopCreationRequest request) {
+        ApiResponse apiResponse = new ApiResponse();
         apiResponse.setResult(shopService.createShop(request));
         return apiResponse;
     }
     //upadate a shop by id
     @PatchMapping("/{shopId}")
-    ApiResponse<Shop> updateShop(@RequestBody ShopUpdateRequest request, @PathVariable("shopId") Long shopId) {
-    return ApiResponse.<Shop>builder()
-            .result(shopService.updateShop(request,shopId)).build();
+    ResponseEntity<ShopResponse> updateShop(@RequestBody ShopUpdateRequest request, @PathVariable("shopId") Long shopId) {
+    return ResponseEntity.ok(shopService.updateShop(request,shopId));
     }
     @DeleteMapping("/{shopId}")
     ApiResponse<String> deleteShop(@PathVariable("shopId") Long shopId) {

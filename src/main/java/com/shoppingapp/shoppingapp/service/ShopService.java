@@ -10,6 +10,6 @@ public interface ShopService {
     List<Shop> getAllShops();
     ShopResponse getShopById(long ShopId);
     Shop createShop(ShopCreationRequest request);
-    Shop updateShop(ShopUpdateRequest request, long ShopId);
+    ShopResponse updateShop(ShopUpdateRequest request, long ShopId);
     String deleteShop(Long shopId);
 }

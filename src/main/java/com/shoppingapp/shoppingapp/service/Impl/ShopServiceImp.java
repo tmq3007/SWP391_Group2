@@ -6,9 +6,10 @@ import com.shoppingapp.shoppingapp.dto.response.ShopResponse;
 import com.shoppingapp.shoppingapp.exceptions.AppException;
 import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
 import com.shoppingapp.shoppingapp.mapper.ShopMapper;
+import com.shoppingapp.shoppingapp.models.Orders;
+import com.shoppingapp.shoppingapp.models.Product;
 import com.shoppingapp.shoppingapp.models.Shop;
-import com.shoppingapp.shoppingapp.repository.CategoryRepository;
-import com.shoppingapp.shoppingapp.repository.ShopRepository;
+import com.shoppingapp.shoppingapp.repository.*;
 import com.shoppingapp.shoppingapp.service.ShopService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 
@@ -28,6 +33,12 @@ public class ShopServiceImp implements ShopService {
     private ShopRepository shopRepository;
     @Autowired
     private ShopMapper shopMapper;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
 
     @Override
@@ -46,14 +57,50 @@ public class ShopServiceImp implements ShopService {
             throw new AppException(ErrorCode.SHOP_EXISTED);
         }
         Shop shop = shopMapper.toShop(request);
+        var userOp = userRepository.findById(Long.valueOf(request.getUser()));
+        if (!userOp.isPresent()) {
+            throw new AppException(ErrorCode.USER_NOT_EXISTED);  // Xử lý khi không tìm thấy user
+        }
+
+        shop.setUser(userOp.get());
+
+        Set<Long> productIds = request.getProducts().stream()
+                .map(Long::valueOf)
+                .collect(Collectors.toSet());;  // Assuming the request has product IDs to link
+        Set<Product> products = new HashSet<>(productRepository.findAllById(productIds));
+        shop.setProducts(products);
+
+        Set<Long> orderIds = request.getOrder().stream()
+                .map(Long::valueOf)
+                .collect(Collectors.toSet());;  // Assuming the request has product IDs to link
+        Set<Orders> orders = new HashSet<>(orderRepository.findAllById(orderIds));
+        shop.setOrder(orders);
         return shopRepository.save(shop);
     }
 
     @Override
-    public Shop updateShop(ShopUpdateRequest request, long shopId) {
+    public ShopResponse updateShop(ShopUpdateRequest request, long shopId) {
         Shop shop = shopRepository.findById(shopId).orElseThrow(()-> new RuntimeException("Shop not found"));
         shopMapper.updateShop(shop,request);
-        return shopRepository.save(shop);
+        var userOp = userRepository.findById(Long.valueOf(request.getUser()));
+        if (!userOp.isPresent()) {
+            throw new AppException(ErrorCode.USER_NOT_EXISTED);  // Xử lý khi không tìm thấy user
+        }
+
+        shop.setUser(userOp.get());
+
+        Set<Long> productIds = request.getProducts().stream()
+                .map(Long::valueOf)
+                .collect(Collectors.toSet());;  // Assuming the request has product IDs to link
+        Set<Product> products = new HashSet<>(productRepository.findAllById(productIds));
+        shop.setProducts(products);
+
+        Set<Long> orderIds = request.getOrder().stream()
+                .map(Long::valueOf)
+                .collect(Collectors.toSet());;  // Assuming the request has product IDs to link
+        Set<Orders> orders = new HashSet<>(orderRepository.findAllById(orderIds));
+        shop.setOrder(orders);
+        return shopMapper.toShopResponse(shopRepository.save(shop));
     }
 
     @Override
