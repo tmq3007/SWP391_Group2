@@ -23,6 +23,7 @@ public class Product {
     private String productName;
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
+
     private Category category;
     @ManyToMany
     private Set<Shop> shop;

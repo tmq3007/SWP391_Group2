@@ -18,7 +18,8 @@ public enum ErrorCode {
     EMAIL_EXISTED(1008, "Email existed", HttpStatus.BAD_REQUEST),
 
     CATEGORY_EXISTED(1009, "Category existed", HttpStatus.BAD_REQUEST),
-    SHOP_EXISTED(1010, "Shop existed", HttpStatus.BAD_REQUEST),
+    PRODUCT_EXISTED(1010, "Product existed", HttpStatus.BAD_REQUEST),
+    SHOP_EXISTED(1011, "Shop existed", HttpStatus.BAD_REQUEST),
 
     ;
 

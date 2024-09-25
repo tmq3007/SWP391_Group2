@@ -36,6 +36,7 @@ public class ShopController {
     ApiResponse<ShopResponse> getShop(@PathVariable("shopId") Long shopId) {
         return ApiResponse.<ShopResponse>builder().result(shopService.getShopById(shopId)).build();
     }
+
     //add new shop
     @PostMapping("")
     ApiResponse<Shop> getShop(@RequestBody ShopCreationRequest request) {
