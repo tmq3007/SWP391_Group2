@@ -12,9 +12,6 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ShopUpdateRequest {
     private String shopName;
-    private Long user;
-    private Set<Long> products;
-    private Set<Long> order;
     private String address;
     private String city;
     private String state;
