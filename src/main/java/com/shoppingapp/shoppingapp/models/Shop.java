@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long shopID;
+    public Long shopId;
     public String shopName;
     public String address;
     public String city;

@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class ProductUpdateRequest {
     private String category;
-    private Set<String> shop;
+    private String shop;
     private String description;
     private String measurementUnit;
     private Double unitBuyPrice;
