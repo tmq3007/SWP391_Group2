@@ -17,6 +17,9 @@ public class ShopUpdateRequest {
     private String state;
     private String country;
     private String phone;
+    private String description;
+    private String logo;
+    private String cover;
 
 
 }
