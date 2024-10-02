@@ -4,6 +4,7 @@ import com.nimbusds.jose.JOSEException;
 import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
 import com.shoppingapp.shoppingapp.dto.request.AuthenticationRequest;
 import com.shoppingapp.shoppingapp.dto.request.IntrospectRequest;
+import com.shoppingapp.shoppingapp.dto.request.LogoutRequest;
 import com.shoppingapp.shoppingapp.dto.response.AuthenticationResponse;
 import com.shoppingapp.shoppingapp.dto.response.IntrospectResponse;
 import com.shoppingapp.shoppingapp.service.AuthenticationService;
@@ -22,7 +23,7 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationService authenticationService;
 
-    @PostMapping("/token")
+    @PostMapping("/login")
     public ApiResponse<AuthenticationResponse> isAuthenticated(@RequestBody AuthenticationRequest request) {
         var result = authenticationService.isAuthenticated(request);
 
@@ -39,6 +40,14 @@ public class AuthenticationController {
 
         return ApiResponse.<IntrospectResponse>builder()
                 .result(result)
+                .build();
+    }
+
+    @PostMapping("/logout")
+    ApiResponse<Void> logout(@RequestBody LogoutRequest request)
+            throws ParseException, JOSEException {
+        authenticationService.logout(request);
+        return ApiResponse.<Void>builder()
                 .build();
     }
 }
