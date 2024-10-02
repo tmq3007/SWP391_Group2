@@ -72,7 +72,9 @@ public class SecurityConfig {
                 CorsConfiguration cfg = new CorsConfiguration();
 
                 cfg.setAllowedOriginPatterns(Arrays.asList(
+                        "http://localhost:3000",
                         "http://localhost:3001",
+                        "http://localhost:3002",
                         "http://localhost:8080"
                 ));
                 cfg.setAllowedMethods(Collections.singletonList("*"));
