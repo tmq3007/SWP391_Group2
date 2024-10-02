@@ -23,7 +23,7 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationService authenticationService;
 
-    @PostMapping("/token")
+    @PostMapping("/login")
     public ApiResponse<AuthenticationResponse> isAuthenticated(@RequestBody AuthenticationRequest request) {
         var result = authenticationService.isAuthenticated(request);
 
