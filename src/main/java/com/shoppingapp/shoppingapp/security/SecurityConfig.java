@@ -35,7 +35,8 @@ public class SecurityConfig {
             "/api/v1/users/sign-up",
             "/api/v1/auth/login",
             "/api/v1/auth/introspect",
-            "/api/v1/auth/logout"
+            "/api/v1/auth/logout",
+            "/api/v1/products"
     };
 
     @NonFinal
@@ -74,8 +75,8 @@ public class SecurityConfig {
                 cfg.setAllowedOriginPatterns(Arrays.asList(
                         "http://localhost:3000",
                         "http://localhost:3001",
-                        "http://localhost:3002",
-                        "http://localhost:8080"
+                        "http://localhost:3007",
+                        "http://localhost:3003"
                 ));
                 cfg.setAllowedMethods(Collections.singletonList("*"));
                 cfg.setAllowCredentials(true);
