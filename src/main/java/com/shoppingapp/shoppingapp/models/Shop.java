@@ -1,27 +1,42 @@
 package com.shoppingapp.shoppingapp.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-@FieldDefaults(level = AccessLevel.PUBLIC)
 public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     Long shopID;
-     String shopName;
-     String address;
-     String city;
-     String state;
-     String country;
-     String phone;
+    public Long shopID;
+
+    @ManyToOne
+    @JoinColumn(name = "id", nullable = false)
+    private User user;
+
+    @OneToMany
+    @JsonIgnore
+
+    private Set<Product> products;
+
+    @ManyToMany
+
+    @JsonIgnore
+    private Set<Orders> order;
+    String shopName;
+    private String address;
+    private String city;
+    private String state;
+    private String country;
+    private String phone;
 
 }

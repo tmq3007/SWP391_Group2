@@ -16,7 +16,7 @@ public class ProductCreationRequest {
 
     private String productName;
     private String category;
-    private Set<String> shop;
+    private String shop;
     private String description;
     private String measurementUnit;
     private Double unitBuyPrice;
