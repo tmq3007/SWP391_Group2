@@ -1,13 +1,13 @@
 package com.shoppingapp.shoppingapp.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -17,12 +17,26 @@ import lombok.NoArgsConstructor;
 public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long shopId;
-    public String shopName;
-    public String address;
-    public String city;
-    public String state;
-    public String country;
-    public String phone;
+    public Long shopID;
+
+    @ManyToOne
+    @JoinColumn(name = "id", nullable = false)
+    private User user;
+
+    @OneToMany
+    @JsonIgnore
+
+    private Set<Product> products;
+
+    @ManyToMany
+
+    @JsonIgnore
+    private Set<Orders> order;
+    private String shopName;
+    private String address;
+    private String city;
+    private String state;
+    private String country;
+    private String phone;
 
 }
