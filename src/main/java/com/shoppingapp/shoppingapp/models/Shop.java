@@ -32,7 +32,7 @@ public class Shop {
 
     @JsonIgnore
     private Set<Orders> order;
-    String shopName;
+    private String shopName;
     private String address;
     private String city;
     private String state;
