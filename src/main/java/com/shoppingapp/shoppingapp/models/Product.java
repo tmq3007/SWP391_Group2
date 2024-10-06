@@ -30,6 +30,8 @@ public class Product {
     @JoinColumn(name = "shop_id", nullable = false )
     private Shop shop;
 
+
+
     private String description;
     private String measurementUnit;
     private Double unitBuyPrice;

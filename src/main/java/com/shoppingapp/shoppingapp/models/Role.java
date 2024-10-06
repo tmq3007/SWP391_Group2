@@ -22,4 +22,3 @@ public class Role {
     Set<Permission> permissions;
 }
 
-//convert String

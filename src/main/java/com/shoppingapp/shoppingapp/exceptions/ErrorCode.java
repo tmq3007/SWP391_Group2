@@ -24,6 +24,8 @@ public enum ErrorCode {
     SHOP_EXISTED(1013, "Shop existed", HttpStatus.BAD_REQUEST),
     SHOP_NOT_EXISTED(1014, "Shop not existed", HttpStatus.BAD_REQUEST),
     ORDER_NOT_EXISTED(2000,"ORDER NOT EXITED",HttpStatus.BAD_REQUEST),
+    PRODUCT_IS_NOT_ACTIVE(1015,"PRODUCT IS NOT ACTIVE",HttpStatus.BAD_REQUEST),
+    DUPLICATE_ENTRY(1016,"Duplicate entry",HttpStatus.BAD_REQUEST)
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

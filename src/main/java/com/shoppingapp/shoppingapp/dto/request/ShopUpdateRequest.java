@@ -12,14 +12,14 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ShopUpdateRequest {
     private String shopName;
-    private Long user;
-    private Set<Long> products;
-    private Set<Long> order;
     private String address;
     private String city;
     private String state;
     private String country;
     private String phone;
+    private String description;
+    private String logo;
+    private String cover;
 
 
 }
