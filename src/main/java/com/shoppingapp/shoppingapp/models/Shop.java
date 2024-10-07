@@ -32,11 +32,14 @@ public class Shop {
 
     @JsonIgnore
     private Set<Orders> order;
-    String shopName;
+    private String shopName;
     private String address;
     private String city;
     private String state;
     private String country;
     private String phone;
+    private String description;
+    private String logo;
+    private String cover;
 
 }
