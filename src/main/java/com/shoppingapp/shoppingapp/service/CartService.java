@@ -4,14 +4,20 @@ import com.shoppingapp.shoppingapp.dto.request.CartCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.CartUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.response.CartResponse;
 import com.shoppingapp.shoppingapp.models.Cart;
+import com.shoppingapp.shoppingapp.models.CartItem;
+import com.shoppingapp.shoppingapp.models.Product;
+import com.shoppingapp.shoppingapp.models.User;
 
 import java.util.List;
 
 public interface CartService {
-    List<Cart> getAllCartsByUserId(Long userId);
 
+    public CartItem addCartItem(
+            User user,
+            Product product,
+            String unitBuy,
+            int  quantity
+    );
 
-    CartResponse addToCart(Long productId,Long userId);
-
-    String deleteCart(Long productId,Long userId);
+    public Cart findUserCart(User user);
 }

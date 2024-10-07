@@ -7,14 +7,18 @@ import com.shoppingapp.shoppingapp.exceptions.AppException;
 import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
 import com.shoppingapp.shoppingapp.mapper.CartMapper;
 import com.shoppingapp.shoppingapp.models.Cart;
+import com.shoppingapp.shoppingapp.models.CartItem;
 import com.shoppingapp.shoppingapp.models.Product;
 import com.shoppingapp.shoppingapp.models.User;
+import com.shoppingapp.shoppingapp.repository.CartItemRepository;
 import com.shoppingapp.shoppingapp.repository.CartRepository;
 import com.shoppingapp.shoppingapp.repository.ProductRepository;
 import com.shoppingapp.shoppingapp.repository.UserRepository;
 import com.shoppingapp.shoppingapp.service.CartService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -22,78 +26,78 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 @Service
+@RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
-    private CartRepository cartRepository;
-
-    @Autowired
-    private CartMapper cartMapper;
-
-
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
+    private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
+    private final CartMapper cartMapper;
     @Override
-    public List<Cart> getAllCartsByUserId(Long userId) {
-        return cartRepository.findByUserId(userId);
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public CartItem addCartItem(User user, Product product, String unitBuy, int quantity) {
+        Cart cart = findUserCart(user);
+
+        // Tìm kiếm sản phẩm trong giỏ hàng với cùng sản phẩm và đơn vị mua
+        CartItem isPresent = cartItemRepository.findByCartAndProductAndBuyUnit(cart, product, unitBuy);
+
+        if (isPresent == null) {
+            // Sản phẩm chưa có trong giỏ hàng, thêm mới
+            CartItem cartItem = new CartItem();
+            cartItem.setProduct(product);
+            cartItem.setQuantity(quantity);
+            cartItem.setUserId(user.getId());
+            cartItem.setBuyUnit(unitBuy);
+
+            // Tính tổng giá cho sản phẩm mới
+            Double totalPrice = quantity * product.getUnitSellPrice();
+            cartItem.setTotalPrice(totalPrice);
+
+            // Thêm vào giỏ hàng
+            cart.getCartItems().add(cartItem);
+            cartItem.setCart(cart); // Gắn giỏ hàng cho item mới
+
+            // Cập nhật tổng số lượng và giá của giỏ hàng
+            cart.setTotalItem(cart.getTotalItem() + quantity);
+            cart.setTotalPrice(cart.getTotalPrice() + totalPrice);
+
+            return cartItemRepository.save(cartItem); // Lưu và trả về item mới
+        } else {
+            int newQuantity = isPresent.getQuantity() + quantity;
+            Double oldTotalPrice = isPresent.getTotalPrice();
+            Double newTotalPrice = newQuantity * product.getUnitSellPrice();
+
+// Cập nhật số lượng và tổng giá cho item đã tồn tại
+            isPresent.setQuantity(newQuantity);
+            isPresent.setTotalPrice(newTotalPrice);
+
+// Cập nhật tổng số lượng và giá của giỏ hàng
+            cart.setTotalItem(cart.getTotalItem() + quantity);
+            cart.setTotalPrice(cart.getTotalPrice() - oldTotalPrice + newTotalPrice);
+
+
+            return cartItemRepository.save(isPresent); // Lưu và trả về item đã cập nhật
+        }
     }
 
     @Override
-    public CartResponse addToCart(Long productId, Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public Cart findUserCart(User user) {
+        Cart cart = cartRepository.findByUserId(user.getId());
 
-        // Kiểm tra xem Cart có tồn tại với userId và productId không
-        Cart existingCart = cartRepository.findCartByUserIdAndProductId(userId, productId);
-
-        if (existingCart == null) {
-            // Nếu không tồn tại, tạo mới
-            Cart cart = new Cart();
+        // Nếu không tìm thấy cart, tạo một giỏ hàng mới
+        if (cart == null) {
+            cart = new Cart();
             cart.setUser(user);
-            cart.setProduct(product);
-            cart.setQuantity(1);
-            cart.setTotalPrice(product.getUnitSellPrice() - product.getDiscount());
-            Cart savedCart = cartRepository.save(cart);
-            return cartMapper.toCartResponse(savedCart);
-        } else {
-            // Nếu đã tồn tại, cập nhật số lượng
-            existingCart.setQuantity(existingCart.getQuantity() + 1);
-            existingCart.setTotalPrice(existingCart.getQuantity() * (product.getUnitSellPrice() - product.getDiscount()));
-            Cart updatedCart = cartRepository.save(existingCart);
-            return cartMapper.toCartResponse(updatedCart);
+            cart.setCartItems(new HashSet<>());
+//            cart.setTotalItem(0);
+//            cart.setTotalPrice(0.0);
+            cart = cartRepository.save(cart);
         }
+
+        return cart;
     }
-
-    @Override
-    public String deleteCart(Long productId, Long userId) {
-        
-        Cart existingCart = cartRepository.findCartByUserIdAndProductId(userId, productId);
-
-        if (existingCart != null) {
-
-            if (existingCart.getQuantity() > 1) {
-                existingCart.setQuantity(existingCart.getQuantity() - 1);
-
-                cartRepository.save(existingCart);
-                return "Reduced quantity of the product in cart to " + existingCart.getQuantity();
-            } else {
-
-                cartRepository.delete(existingCart);
-                return "Product removed from cart successfully";
-            }
-        } else {
-            return "Product not found in cart";
-        }
-    }
-
-
 
 }
