@@ -5,9 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
 @Getter
 @Setter
@@ -15,19 +12,24 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Cart {
+public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long  id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false) // Chỉ định tên cột trong bảng Cart
-    User user;
+    @ManyToOne
+    @JsonIgnore
+     Cart cart;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-     Set<CartItem> cartItems = new HashSet<>();
+    @ManyToOne
+    Product product;
 
-    int totalItem;
+    String buyUnit;
+
+    int quantity=1;
 
     Double totalPrice;
+
+    Long userId;
+
 }

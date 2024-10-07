@@ -15,9 +15,6 @@ public interface ShopMapper {
 //    @Mapping(target = "order", ignore = true)
     Shop toShop(ShopCreationRequest shopCreationRequest);
 
-    @Mapping(target = "user", ignore = true)
-    @Mapping(target = "products", ignore = true)
-    @Mapping(target = "order", ignore = true)
     void updateShop(@MappingTarget Shop shop, ShopUpdateRequest shopUpdateRequest);
     ShopResponse toShopResponse(Shop shop);
 }

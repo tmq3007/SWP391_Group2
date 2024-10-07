@@ -28,7 +28,7 @@ public class User {
 
      String phone;
 
-     boolean isActive;
+     Boolean isActive;
 
      @ManyToMany
     Set<Role> roles;

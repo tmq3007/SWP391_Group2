@@ -72,24 +72,7 @@ public class ShopServiceImp implements ShopService {
     public ShopResponse updateShop(ShopUpdateRequest request, long shopId) {
         Shop shop = shopRepository.findById(shopId).orElseThrow(()-> new RuntimeException("Shop not found"));
         shopMapper.updateShop(shop,request);
-        var userOp = userRepository.findById(Long.valueOf(request.getUser()));
-        if (!userOp.isPresent()) {
-            throw new AppException(ErrorCode.USER_NOT_EXISTED);  // Xử lý khi không tìm thấy user
-        }
 
-        shop.setUser(userOp.get());
-
-        Set<Long> productIds = request.getProducts().stream()
-                .map(Long::valueOf)
-                .collect(Collectors.toSet());;  // Assuming the request has product IDs to link
-        Set<Product> products = new HashSet<>(productRepository.findAllById(productIds));
-        shop.setProducts(products);
-
-        Set<Long> orderIds = request.getOrder().stream()
-                .map(Long::valueOf)
-                .collect(Collectors.toSet());;  // Assuming the request has product IDs to link
-        Set<Orders> orders = new HashSet<>(orderRepository.findAllById(orderIds));
-        shop.setOrder(orders);
         return shopMapper.toShopResponse(shopRepository.save(shop));
     }
 
