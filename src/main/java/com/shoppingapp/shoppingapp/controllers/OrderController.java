@@ -1,10 +1,6 @@
 package com.shoppingapp.shoppingapp.controllers;
 
-import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
-import com.shoppingapp.shoppingapp.dto.request.OrdersCreationRequest;
-import com.shoppingapp.shoppingapp.dto.request.OrdersUpdateRequest;
-import com.shoppingapp.shoppingapp.dto.response.OrdersResponse;
-import com.shoppingapp.shoppingapp.service.OrdersService;
+import com.shoppingapp.shoppingapp.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,31 +13,41 @@ import java.util.List;
 public class OrderController{
 
     @Autowired
-    private OrdersService orderService;
+    private OrderService orderService;
 
     @GetMapping("")
-    public ResponseEntity<List<OrdersResponse>> getAllOrder(){
+    public ResponseEntity<List<Orders>> getAllOrder(){
         return ResponseEntity.ok(orderService.getAllOrders());
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrdersResponse> getOrderById(@PathVariable("orderId") Long orderId){
+    public ResponseEntity<Orders> getOrderById(@PathVariable("orderId") Long orderId){
         return ResponseEntity.ok(orderService.getOrderById(orderId));
     }
 
     @PostMapping("")
-    public ResponseEntity<OrdersResponse> addOrder(@RequestBody OrdersCreationRequest order){
+    public ResponseEntity<Orders> addOrder(@RequestBody Orders order){
         return ResponseEntity.ok(orderService.addOrder(order));
     }
 
     @PatchMapping("/{orderId}")
-    public ApiResponse<OrdersResponse> updateOrder(@PathVariable("orderId") Long orderId, @RequestBody OrdersUpdateRequest order)    {
-        return ApiResponse.<OrdersResponse>builder().result(orderService.updateOrder(orderId, order)).build();
+    public ResponseEntity<Orders> updateOrder(@PathVariable("orderId") Long orderId, @RequestBody Orders order){
+        Orders current = orderService.getOrderById(orderId);
+        if(current != null){
+            current.setOrderDate(order.getOrderDate());
+            current.setIsPaid(order.getIsPaid());
+            current.setPaymentDate(order.getPaymentDate());
+        }
+        return ResponseEntity.ok(orderService.updateOrder(current));
     }
-
     @DeleteMapping("/{orderId}")
     public ResponseEntity<?> deleteOrder(@PathVariable("orderId") Long orderId){
-        return ResponseEntity.ok(orderService.deleteOrder(orderId));
+        Orders current = orderService.getOrderById(orderId);
+        if(current != null){
+            orderService.deleteOrder(current);
+        }
+        return ResponseEntity.ok("Delete successful!");
     }
+
 
 }
