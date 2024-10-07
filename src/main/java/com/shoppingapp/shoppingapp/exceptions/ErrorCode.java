@@ -25,6 +25,7 @@ public enum ErrorCode {
     SHOP_EXISTED(1013, "Shop existed", HttpStatus.BAD_REQUEST),
     SHOP_NOT_EXISTED(1014, "Shop not existed", HttpStatus.BAD_REQUEST),
     INVALID_PASSWORD_CONFIRM(1015, "Password is incorrect", HttpStatus.BAD_REQUEST),
+    PRODUCT_IS_NOT_ACTIVE(1016,"PRODUCT IS NOT ACTIVE",HttpStatus.BAD_REQUEST),
     ORDER_NOT_EXISTED(2000,"ORDER NOT EXITED",HttpStatus.BAD_REQUEST),
     ;
 

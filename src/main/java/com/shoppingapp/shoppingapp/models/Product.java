@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -31,7 +33,6 @@ public class Product {
     private Shop shop;
 
 
-
     private String description;
     private String measurementUnit;
     private Double unitBuyPrice;
@@ -40,5 +41,8 @@ public class Product {
     private int stock;
     private String pictureUrl;
     private Boolean isActive;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
 
 }
