@@ -26,6 +26,7 @@ public enum ErrorCode {
     SHOP_NOT_EXISTED(1014, "Shop not existed", HttpStatus.BAD_REQUEST),
     INVALID_PASSWORD_CONFIRM(1015, "Password is incorrect", HttpStatus.BAD_REQUEST),
     ORDER_NOT_EXISTED(2000,"ORDER NOT EXITED",HttpStatus.BAD_REQUEST),
+    ADDRESS_NOT_FOUND(2001,"Address not found",HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

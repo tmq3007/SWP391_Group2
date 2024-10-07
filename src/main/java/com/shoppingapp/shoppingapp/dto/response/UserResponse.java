@@ -1,5 +1,6 @@
 package com.shoppingapp.shoppingapp.dto.response;
 
+import com.shoppingapp.shoppingapp.models.Address;
 import com.shoppingapp.shoppingapp.models.Role;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -28,4 +29,6 @@ public class UserResponse {
     boolean isActive = true;
 
     Set<Role> roles;
+
+    Set<Address> addresses;
 }

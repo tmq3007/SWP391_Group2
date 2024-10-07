@@ -1,19 +1,17 @@
-package com.shoppingapp.shoppingapp.models;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+package com.shoppingapp.shoppingapp.dto.request;
+
+import com.shoppingapp.shoppingapp.models.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Set;
-
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-public class Address {
+public class AddressCreationRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long addressID;
@@ -22,7 +20,6 @@ public class Address {
     private String district;
     private String subDistrict;
     private String street;
-    @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
-    private User user;
+    private Long user;
 }
+
