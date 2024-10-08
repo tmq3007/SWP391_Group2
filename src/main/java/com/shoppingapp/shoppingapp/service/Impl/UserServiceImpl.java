@@ -1,13 +1,11 @@
 package com.shoppingapp.shoppingapp.service.Impl;
 
-import com.shoppingapp.shoppingapp.constant.PredefinedRole;
 import com.shoppingapp.shoppingapp.dto.request.UserCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.response.UserResponse;
 import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
 import com.shoppingapp.shoppingapp.exceptions.AppException;
 import com.shoppingapp.shoppingapp.mapper.UserMapper;
-import com.shoppingapp.shoppingapp.models.Role;
 import com.shoppingapp.shoppingapp.models.User;
 
 import com.shoppingapp.shoppingapp.repository.RoleRepository;
@@ -41,6 +39,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse createUser(UserCreationRequest request) {
+
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new AppException(ErrorCode.USERNAME_EXISTED);
+        }
+
+        // Check if email already exists
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        }
+
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
@@ -48,7 +56,7 @@ public class UserServiceImpl implements UserService {
         user.setRoles(new HashSet<>(roles));
 
 
-        user.setActive(true);
+        user.setIsActive(true);
 
         try {
             user = userRepository.save(user);
@@ -98,7 +106,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public UserResponse getUserById(Long id) {
         return userMapper.toUserResponse(
                 userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED)));
