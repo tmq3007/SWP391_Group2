@@ -81,6 +81,7 @@ public class CartController {
         user.setPhone(userResponse.getPhone());
         user.setIsActive(userResponse.getIsActive());
 
+
         Product product = productService.getProductById(req.getProductId());
 
         CartItem cartItem = cartService.addCartItem(
