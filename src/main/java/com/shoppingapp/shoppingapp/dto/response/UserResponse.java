@@ -26,7 +26,7 @@ public class UserResponse {
 
     String phone;
 
-    boolean isActive = true;
+    Boolean isActive;
 
     Set<Role> roles;
 

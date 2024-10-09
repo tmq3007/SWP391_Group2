@@ -55,7 +55,7 @@ public class CartController {
         user.setUsername(userResponse.getUsername());
         user.setPassword(userResponse.getPassword());
         user.setPhone(userResponse.getPhone());
-        user.setActive(userResponse.isActive());
+        user.setIsActive(userResponse.getIsActive());
 //
 //        ApiResponse apiResponse = new ApiResponse();
 //        apiResponse.setMessage("Added");
@@ -79,7 +79,8 @@ public class CartController {
         user.setUsername(userResponse.getUsername());
         user.setPassword(userResponse.getPassword());
         user.setPhone(userResponse.getPhone());
-        user.setActive(userResponse.isActive());
+        user.setIsActive(userResponse.getIsActive());
+
 
         Product product = productService.getProductById(req.getProductId());
 
@@ -104,7 +105,7 @@ public class CartController {
         user.setUsername(userResponse.getUsername());
         user.setPassword(userResponse.getPassword());
         user.setPhone(userResponse.getPhone());
-        user.setActive(userResponse.isActive());
+        user.setIsActive(userResponse.getIsActive());
 
         cartItemService.removeCartItem(user.getId(),cartItemId);
         ApiResponse<CartItem> apiResponse = new ApiResponse<>(); // Khai báo kiểu dữ liệu cho ApiResponse
@@ -125,7 +126,7 @@ public class CartController {
         user.setUsername(userResponse.getUsername());
         user.setPassword(userResponse.getPassword());
         user.setPhone(userResponse.getPhone());
-        user.setActive(userResponse.isActive());
+        user.setIsActive(userResponse.getIsActive());
 
         CartItem updatedCartitem = null;
         if(cartItem.getQuantity()>0){

@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
         user.setRoles(new HashSet<>(roles));
 
 
-        user.setActive(true);
+        user.setIsActive(true);
 
         try {
             user = userRepository.save(user);
