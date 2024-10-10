@@ -8,6 +8,7 @@ import com.nimbusds.jwt.SignedJWT;
 import com.shoppingapp.shoppingapp.dto.request.AuthenticationRequest;
 import com.shoppingapp.shoppingapp.dto.request.IntrospectRequest;
 import com.shoppingapp.shoppingapp.dto.request.LogoutRequest;
+import com.shoppingapp.shoppingapp.dto.request.RefreshRequest;
 import com.shoppingapp.shoppingapp.dto.response.AuthenticationResponse;
 import com.shoppingapp.shoppingapp.dto.response.IntrospectResponse;
 import com.shoppingapp.shoppingapp.exceptions.AppException;
@@ -18,7 +19,9 @@ import com.shoppingapp.shoppingapp.repository.InvalidatedTokenRepository;
 import com.shoppingapp.shoppingapp.repository.UserRepository;
 import com.shoppingapp.shoppingapp.service.AuthenticationService;
 import lombok.experimental.NonFinal;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,6 +35,7 @@ import java.util.StringJoiner;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Autowired
@@ -42,6 +46,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @NonFinal
     protected static final String SIGNER_KEY = "gfjiDVvVEVhlrLHRE/78BNgpxNOoWN/4huIBjg6Vqo9oQ6ExAxyYiYpwiNdvqZ7D";
+
+    @NonFinal
+    @Value("${jwt.valid.duration}")
+    protected long VALID_DURATION;
+
+    @NonFinal
+    @Value("${jwt.refreshable.duration}")
+    protected long REFRESH_DURATION;
+
 
     @Override
     public AuthenticationResponse isAuthenticated(AuthenticationRequest request) {
@@ -69,7 +82,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         boolean isValid = true;
 
         try {
-            verifyToken(token);
+            verifyToken(token, false);
         } catch (AppException e) {
             isValid = false;
         }
@@ -78,10 +91,29 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public void logout(LogoutRequest request) throws ParseException, JOSEException {
-        var signToken = verifyToken(request.getToken());
+        try {
+            var signToken = verifyToken(request.getToken(), true);
 
-        String jit = signToken.getJWTClaimsSet().getJWTID();
-        Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
+            String jit = signToken.getJWTClaimsSet().getJWTID();
+            Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
+
+            InvalidatedToken invalidatedToken = InvalidatedToken.builder()
+                    .id(jit)
+                    .expiryTime(expiryTime)
+                    .build();
+
+            invalidatedTokenRepository.save(invalidatedToken);
+        } catch (AppException e) {
+            log.info("Token is invalid");
+        }
+    }
+
+    @Override
+    public AuthenticationResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException {
+        var signedJWT = verifyToken(request.getToken(), true);
+
+        var jit = signedJWT.getJWTClaimsSet().getJWTID();
+        var expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
 
         InvalidatedToken invalidatedToken = InvalidatedToken.builder()
                 .id(jit)
@@ -89,6 +121,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
 
         invalidatedTokenRepository.save(invalidatedToken);
+
+        var username = signedJWT.getJWTClaimsSet().getSubject();
+
+        var user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        var token = generateToken(user);
+
+        return AuthenticationResponse.builder()
+                .token(token)
+                .isAuthenticated(true)
+                .build();
     }
 
     private String generateToken(User user) {
@@ -99,7 +143,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .issuer("shoppingapp")
                 .issueTime(new Date())
                 .expirationTime(new Date(
-                        Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
+                        Instant.now().plus(VALID_DURATION, ChronoUnit.SECONDS).toEpochMilli()
                 ))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
@@ -131,12 +175,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     }
 
-    private SignedJWT verifyToken(String token) throws JOSEException, ParseException {
+    private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
 
         SignedJWT signedJWT = SignedJWT.parse(token);
 
-        Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+        Date expiryTime = (isRefresh)
+                ? new Date(signedJWT.getJWTClaimsSet().getIssueTime().toInstant().plus(REFRESH_DURATION, ChronoUnit.SECONDS).toEpochMilli())
+                : signedJWT.getJWTClaimsSet().getExpirationTime();
 
         var verified = signedJWT.verify(verifier);
 

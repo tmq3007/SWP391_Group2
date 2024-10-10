@@ -43,4 +43,9 @@ public class OrderServiceImpl implements OrderService {
     public void deleteOrders(List<Orders> orders) {
         orderRepository.deleteAll(orders);
     }
+
+    @Override
+    public int getTotalOrders() {
+        return (int) orderRepository.count();
+    }
 }

@@ -12,4 +12,6 @@ public interface ShopService {
     Shop createShop(ShopCreationRequest request);
     ShopResponse updateShop(ShopUpdateRequest request, long ShopId);
     String deleteShop(Long shopId);
+
+    int getTotalShops();
 }
