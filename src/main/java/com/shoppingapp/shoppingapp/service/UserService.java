@@ -19,8 +19,16 @@ public interface UserService {
 
    List<UserResponse> getAll();
 
+   List<UserResponse> getVendors();
+
+   List<UserResponse> getCustomers();
+
    UserResponse getUserById(Long id);
 
    int getTotalVendors();
+
+   void banUser(Long id);
+
+   void unbanUser(Long id);
 
 }

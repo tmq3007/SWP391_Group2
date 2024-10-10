@@ -67,6 +67,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         if(!authenticated) throw new AppException(ErrorCode.INVALID_PASSWORD_CONFIRM);
 
+        if(!user.getIsActive()) throw new AppException(ErrorCode.USER_NOT_ACTIVE);
+
         var token = generateToken(user);
 
         return AuthenticationResponse.builder()

@@ -20,7 +20,7 @@ public class UserUpdateRequest {
     String username;
     String password;
 
-    boolean isActive;
+    Boolean isActive;
 
     Set<String> Roles;
 

@@ -106,6 +106,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<UserResponse> getVendors() {
+        return userRepository.findAll().stream()
+                .filter(user -> user.getRoles().stream().anyMatch(role -> role.getName().equals("VENDOR")))
+                .map(userMapper::toUserResponse)
+                .toList();
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<UserResponse> getCustomers() {
+        return userRepository.findAll().stream()
+                .filter(user -> user.getRoles().stream().anyMatch(role -> role.getName().equals("CUSTOMER")))
+                .map(userMapper::toUserResponse)
+                .toList();
+    }
+
+    @Override
     @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public UserResponse getUserById(Long id) {
         return userMapper.toUserResponse(
@@ -116,6 +134,22 @@ public class UserServiceImpl implements UserService {
     public int getTotalVendors() {
         List<User> userList = userRepository.findAll();
         return (int) userList.stream().filter(user -> user.getRoles().stream().anyMatch(role -> role.getName().equals("VENDOR"))).count();
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public void banUser(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        user.setIsActive(false);
+        userRepository.save(user);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public void unbanUser(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        user.setIsActive(true);
+        userRepository.save(user);
     }
 
 
