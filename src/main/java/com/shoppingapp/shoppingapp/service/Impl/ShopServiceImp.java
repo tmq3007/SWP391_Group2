@@ -82,6 +82,11 @@ public class ShopServiceImp implements ShopService {
         return "Deleted";
     }
 
+    @Override
+    public int getTotalShops() {
+       return shopRepository.findAll().size();
+    }
+
 
 
 

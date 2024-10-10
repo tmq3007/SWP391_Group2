@@ -60,4 +60,11 @@ public class UserController {
                 .result(userService.updateUser(userId, request))
                 .build();
     }
+
+    @GetMapping("/total-vendors")
+    ApiResponse<Integer> getTotalVendors() {
+        return ApiResponse.<Integer>builder()
+                .result(userService.getTotalVendors())
+                .build();
+    }
 }

@@ -111,4 +111,12 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserResponse(
                 userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED)));
     }
+
+    @Override
+    public int getTotalVendors() {
+        List<User> userList = userRepository.findAll();
+        return (int) userList.stream().filter(user -> user.getRoles().stream().anyMatch(role -> role.getName().equals("VENDOR"))).count();
+    }
+
+
 }

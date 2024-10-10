@@ -21,4 +21,6 @@ public interface UserService {
 
    UserResponse getUserById(Long id);
 
+   int getTotalVendors();
+
 }

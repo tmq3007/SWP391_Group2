@@ -54,6 +54,10 @@ public class ShopController {
         return ApiResponse.<String>builder().result("Shop is deleted").build();
     }
 
+    @GetMapping("/total-shops")
+    ApiResponse<Integer> getTotalShops() {
+        return ApiResponse.<Integer>builder().result(shopService.getTotalShops()).build();
+    }
 
 
 }

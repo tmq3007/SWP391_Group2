@@ -11,4 +11,5 @@ public interface OrderService {
     Orders getOrderById(Long id);
     void deleteOrder(Orders order);
     void deleteOrders(List<Orders> orders);
+    int getTotalOrders();
 }
