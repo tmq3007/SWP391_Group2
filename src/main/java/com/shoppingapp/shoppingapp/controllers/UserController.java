@@ -60,4 +60,37 @@ public class UserController {
                 .result(userService.updateUser(userId, request))
                 .build();
     }
+
+    @GetMapping("/total-vendors")
+    ApiResponse<Integer> getTotalVendors() {
+        return ApiResponse.<Integer>builder()
+                .result(userService.getTotalVendors())
+                .build();
+    }
+
+    @PutMapping("/ban/{userId}")
+    ApiResponse<String> banUser(@PathVariable("userId") Long userId) {
+        userService.banUser(userId);
+        return ApiResponse.<String>builder().result("User has been banned").build();
+    }
+
+    @PutMapping("/unban/{userId}")
+    ApiResponse<String> unbanUser(@PathVariable("userId") Long userId) {
+        userService.unbanUser(userId);
+        return ApiResponse.<String>builder().result("User has been unbanned").build();
+    }
+
+    @GetMapping("/all-vendors")
+    ApiResponse<List<UserResponse>> getVendors() {
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(userService.getVendors())
+                .build();
+    }
+
+    @GetMapping("/all-customers")
+    ApiResponse<List<UserResponse>> getCustomers() {
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(userService.getCustomers())
+                .build();
+    }
 }
