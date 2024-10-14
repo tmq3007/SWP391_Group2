@@ -30,5 +30,4 @@ public class UserResponse {
 
     Set<Role> roles;
 
-    Set<Address> addresses;
 }

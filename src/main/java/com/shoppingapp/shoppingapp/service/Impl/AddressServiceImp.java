@@ -57,7 +57,6 @@ public class AddressServiceImp implements AddressService {
         User user = userOp.get();
         Address address = addressMapper.toAddress(request);
         address.setUser(user);
-
         return addressRepository.save(address);
     }
 

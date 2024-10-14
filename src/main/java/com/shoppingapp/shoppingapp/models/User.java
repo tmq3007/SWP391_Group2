@@ -34,9 +34,7 @@ public class User {
      @ManyToMany
     Set<Role> roles;
 
-     @OneToMany
-     @JsonIgnore
-    Set<Address> addresses;
+
 
 
 }
