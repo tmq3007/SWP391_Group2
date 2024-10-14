@@ -1,5 +1,6 @@
 package com.shoppingapp.shoppingapp.controllers;
 
+import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
 import com.shoppingapp.shoppingapp.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +48,11 @@ public class OrderController{
             orderService.deleteOrder(current);
         }
         return ResponseEntity.ok("Delete successful!");
+    }
+
+    @GetMapping("/total-orders")
+    public ApiResponse<Integer> getTotalOrders(){
+        return ApiResponse.<Integer>builder().result(orderService.getTotalOrders()).build();
     }
 
 }

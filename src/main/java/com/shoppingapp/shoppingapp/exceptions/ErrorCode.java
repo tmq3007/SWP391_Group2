@@ -27,7 +27,7 @@ public enum ErrorCode {
     INVALID_PASSWORD_CONFIRM(1015, "Password is incorrect", HttpStatus.BAD_REQUEST),
     PRODUCT_IS_NOT_ACTIVE(1016,"PRODUCT IS NOT ACTIVE",HttpStatus.BAD_REQUEST),
     ORDER_NOT_EXISTED(2000,"ORDER NOT EXITED",HttpStatus.BAD_REQUEST),
-    ADDRESS_NOT_FOUND(2001,"Address not found",HttpStatus.BAD_REQUEST),
+    USER_NOT_ACTIVE(2001,"You have been banned from our site",HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
