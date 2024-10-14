@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -87,7 +88,11 @@ public class ShopServiceImp implements ShopService {
        return shopRepository.findAll().size();
     }
 
-
+    @Override
+    public Optional<Long> getShopIdByUserId(Long userId) {
+        Optional<Shop> shop = shopRepository.findByUserId(userId);
+        return shop.map(Shop::getShopID);
+    }
 
 
 }
