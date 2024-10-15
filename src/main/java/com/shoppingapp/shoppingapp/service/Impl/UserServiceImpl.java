@@ -1,5 +1,6 @@
 package com.shoppingapp.shoppingapp.service.Impl;
 
+import com.shoppingapp.shoppingapp.dto.request.ProfileUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.response.UserResponse;
@@ -152,6 +153,23 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+
+
+    @Override
+    public boolean changePassword(Long id, String newPassword) {
+        return false;
+    }
+
+    @Override
+    //@PostAuthorize("returnObject.username == authentication.name")
+    public void updateProfile(Long userId, ProfileUpdateRequest request) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
+        user.setPhone(request.getPhone());
+        userRepository.save(user);
+    }
 
 
 }
