@@ -172,4 +172,21 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    @Override
+    public boolean changePassword(Long id, String newPassword) {
+        return false;
+    }
+
+    @Override
+    //@PostAuthorize("returnObject.username == authentication.name")
+    public void updateProfile(Long userId, ProfileUpdateRequest request) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
+        user.setPhone(request.getPhone());
+        userRepository.save(user);
+    }
+
+
 }
