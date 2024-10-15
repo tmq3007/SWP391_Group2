@@ -9,10 +9,12 @@ import com.shoppingapp.shoppingapp.mapper.CategoryMapper;
 import com.shoppingapp.shoppingapp.models.Category;
 import com.shoppingapp.shoppingapp.repository.CategoryRepository;
 import com.shoppingapp.shoppingapp.service.CategoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+@Slf4j
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
@@ -40,8 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category addCategory(CategoryCreationRequest request) {
-
-
+log.info("Service: Category added");
         if(categoryRepository.existsByCategoryName(request.getCategoryName())) {
             throw new AppException(ErrorCode.CATEGORY_EXISTED);
         }
