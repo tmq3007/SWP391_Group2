@@ -1,5 +1,6 @@
 package com.shoppingapp.shoppingapp.service.Impl;
 
+import com.shoppingapp.shoppingapp.dto.request.ProfileUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.response.UserResponse;
@@ -51,7 +52,10 @@ public class UserServiceImpl implements UserService {
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
 
+        log.info("Request: {}", request);
+
         User user = userMapper.toUser(request);
+        log.info("User: {}", user);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         var roles = roleRepository.findAllById(request.getRoles());
@@ -157,6 +161,15 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
+    public UserResponse updateProfile(Long id, ProfileUpdateRequest request) {
+        return null;
+    }
+
+    @Override
+    public boolean changePassword(Long id, String newPassword) {
+        return false;
+    }
 
 
 }

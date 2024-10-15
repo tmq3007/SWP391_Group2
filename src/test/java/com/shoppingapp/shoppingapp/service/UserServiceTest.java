@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -80,6 +81,10 @@ public class UserServiceTest {
                 .email("aro177@gmail.com")
                 .username("johndoe")
                 .phone("08012345678")
+                .roles(Set.of(Role.builder()
+                        .name("CUSTOMER")
+                        .description("Customer Role")
+                        .build()))
                 .build();
 
         user = User.builder()
@@ -142,6 +147,8 @@ public class UserServiceTest {
         //GIVEN
         Mockito.when(userRepository.existsByUsername(ArgumentMatchers.anyString())).thenReturn(false);
         Mockito.when(userRepository.existsByEmail(ArgumentMatchers.anyString())).thenReturn(false);
+        Mockito.when(userMapper.toUser(ArgumentMatchers.any())).thenReturn(user);
+        Mockito.when(userMapper.toUserResponse(ArgumentMatchers.any())).thenReturn(userResponse);
         Mockito.when(userRepository.save(ArgumentMatchers.any())).thenReturn(user);
 
         //WHEN
@@ -175,6 +182,7 @@ public class UserServiceTest {
         Mockito.when(userRepository.existsByUsername(ArgumentMatchers.anyString())).thenReturn(false);
         Mockito.when(userRepository.existsByEmail(ArgumentMatchers.anyString())).thenReturn(true);
 
+
         // WHEN
         var exception = assertThrows(AppException.class, () -> userService.createUser(request));
 
@@ -186,6 +194,7 @@ public class UserServiceTest {
     @WithMockUser(username = "johndoe")
     void getMyInfo_valid_success() {
         Mockito.when(userRepository.findByUsername(ArgumentMatchers.anyString())).thenReturn(Optional.of(user));
+        Mockito.when(userMapper.toUserResponse(ArgumentMatchers.any())).thenReturn(userResponse);
 
         var response = userService.getMyInfo();
 
