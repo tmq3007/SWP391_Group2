@@ -197,4 +197,5 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         return signedJWT;
     }
+
 }

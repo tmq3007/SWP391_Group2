@@ -1,29 +1,25 @@
-package com.shoppingapp.shoppingapp.models;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+package com.shoppingapp.shoppingapp.dto.request;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
 
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-public class Address {
+public class AddressUpdateRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long addressID;
-
     private String city;
     private String district;
     private String subDistrict;
     private String street;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id", nullable = false)
-    private User user;
 }
