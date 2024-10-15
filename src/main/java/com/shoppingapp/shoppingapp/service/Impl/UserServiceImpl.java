@@ -6,6 +6,7 @@ import com.shoppingapp.shoppingapp.dto.response.UserResponse;
 import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
 import com.shoppingapp.shoppingapp.exceptions.AppException;
 import com.shoppingapp.shoppingapp.mapper.UserMapper;
+import com.shoppingapp.shoppingapp.models.Role;
 import com.shoppingapp.shoppingapp.models.User;
 
 import com.shoppingapp.shoppingapp.repository.RoleRepository;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -85,7 +87,10 @@ public class UserServiceImpl implements UserService {
         userMapper.updateUser(user, request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        var roles = roleRepository.findAllById(request.getRoles());
+        Set<Role> roles = new HashSet<>(roleRepository.findAllById(request.getRoles()));
+        if (roles.size() != request.getRoles().size()) {
+            throw new AppException(ErrorCode.ROLE_NOT_FOUND); // New Error Code
+        }
         user.setRoles(new HashSet<>(roles));
 
         return userMapper.toUserResponse(userRepository.save(user));

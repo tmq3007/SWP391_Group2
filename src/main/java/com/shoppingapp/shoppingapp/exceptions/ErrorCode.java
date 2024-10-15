@@ -28,6 +28,7 @@ public enum ErrorCode {
     PRODUCT_IS_NOT_ACTIVE(1016,"PRODUCT IS NOT ACTIVE",HttpStatus.BAD_REQUEST),
     ORDER_NOT_EXISTED(2000,"ORDER NOT EXITED",HttpStatus.BAD_REQUEST),
     USER_NOT_ACTIVE(2001,"You have been banned from our site",HttpStatus.BAD_REQUEST),
+    ROLE_NOT_FOUND(2002,"Role not found",HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
