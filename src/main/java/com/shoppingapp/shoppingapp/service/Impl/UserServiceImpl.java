@@ -7,7 +7,6 @@ import com.shoppingapp.shoppingapp.dto.response.UserResponse;
 import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
 import com.shoppingapp.shoppingapp.exceptions.AppException;
 import com.shoppingapp.shoppingapp.mapper.UserMapper;
-import com.shoppingapp.shoppingapp.models.Role;
 import com.shoppingapp.shoppingapp.models.User;
 
 import com.shoppingapp.shoppingapp.repository.RoleRepository;
@@ -26,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -43,19 +41,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse createUser(UserCreationRequest request) {
 
-        if (userRepository.existsByUsername(request.getUsername())) {
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             throw new AppException(ErrorCode.USERNAME_EXISTED);
         }
 
         // Check if email already exists
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
 
-        log.info("Request: {}", request);
-
         User user = userMapper.toUser(request);
-        log.info("User: {}", user);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         var roles = roleRepository.findAllById(request.getRoles());
@@ -91,10 +86,7 @@ public class UserServiceImpl implements UserService {
         userMapper.updateUser(user, request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        Set<Role> roles = new HashSet<>(roleRepository.findAllById(request.getRoles()));
-        if (roles.size() != request.getRoles().size()) {
-            throw new AppException(ErrorCode.ROLE_NOT_FOUND); // New Error Code
-        }
+        var roles = roleRepository.findAllById(request.getRoles());
         user.setRoles(new HashSet<>(roles));
 
         return userMapper.toUserResponse(userRepository.save(user));
@@ -161,14 +153,22 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    @Override
-    public UserResponse updateProfile(Long id, ProfileUpdateRequest request) {
-        return null;
-    }
+
 
     @Override
     public boolean changePassword(Long id, String newPassword) {
         return false;
+    }
+
+    @Override
+    //@PostAuthorize("returnObject.username == authentication.name")
+    public void updateProfile(Long userId, ProfileUpdateRequest request) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
+        user.setPhone(request.getPhone());
+        userRepository.save(user);
     }
 
 

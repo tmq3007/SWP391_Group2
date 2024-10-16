@@ -32,6 +32,6 @@ public interface UserService {
 
    void unbanUser(Long id);
 
-   UserResponse updateProfile(Long id, ProfileUpdateRequest request);
+   void updateProfile(Long id, ProfileUpdateRequest request);
    boolean changePassword(Long id, String newPassword);
 }
