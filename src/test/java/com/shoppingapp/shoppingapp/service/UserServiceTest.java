@@ -193,11 +193,14 @@ public class UserServiceTest {
     @Test
     @WithMockUser(username = "johndoe")
     void getMyInfo_valid_success() {
+        // GIVEN
         Mockito.when(userRepository.findByUsername(ArgumentMatchers.anyString())).thenReturn(Optional.of(user));
         Mockito.when(userMapper.toUserResponse(ArgumentMatchers.any())).thenReturn(userResponse);
 
+        // WHEN
         var response = userService.getMyInfo();
 
+        // THEN
         Assertions.assertThat(response.getUsername()).isEqualTo("johndoe");
         Assertions.assertThat(response.getId()).isEqualTo(1L);
     }
