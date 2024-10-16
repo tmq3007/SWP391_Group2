@@ -44,7 +44,15 @@ public class UserControllerTest {
     private UserResponse userResponse2;
     private UserResponse updatedUserResponse;
 
+    private UserResponse userProfileResponse;
 
+    private Integer totalVendors;
+
+    private Long userId;
+
+
+    private List<UserResponse> vendors;
+    private List<UserResponse> customers;
 
     @BeforeEach
     void initData() {
@@ -101,6 +109,29 @@ public class UserControllerTest {
                 .username("johnupdated")
                 .phone("08012345678")
                 .build();
+
+        userProfileResponse = UserResponse.builder()
+                .id(1L)
+                .firstName("John")
+                .lastName("Doe")
+                .email("johndoe@example.com")
+                .username("johndoe")
+                .phone("08012345678")
+                .build();
+
+        totalVendors = 10;
+
+        userId = 1L;
+
+        vendors = Arrays.asList(
+                UserResponse.builder().id(1L).username("vendor1").email("vendor1@example.com").build(),
+                UserResponse.builder().id(2L).username("vendor2").email("vendor2@example.com").build()
+        );
+
+        customers = Arrays.asList(
+                UserResponse.builder().id(1L).username("customer1").email("customer1@example.com").build(),
+                UserResponse.builder().id(2L).username("customer2").email("customer2@example.com").build()
+        );
     }
 
     @Test
@@ -174,4 +205,94 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.result").value("User has been deleted"));
     }
+
+    @Test
+    @WithMockUser(username = "johndoe") // Simulate an authenticated user
+    void getMyInfo_validUser_success() throws Exception {
+        // GIVEN
+        Mockito.when(userService.getMyInfo()).thenReturn(userProfileResponse);
+
+        // WHEN & THEN
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/my-info")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.id").value(1L))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.firstName").value("John"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.lastName").value("Doe"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.email").value("johndoe@example.com"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.username").value("johndoe"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.phone").value("08012345678"));
+    }
+
+    @Test
+    @WithMockUser
+    void getTotalVendors_validRequest_success() throws Exception {
+        // GIVEN
+        Mockito.when(userService.getTotalVendors()).thenReturn(totalVendors);
+
+        // WHEN & THEN
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/total-vendors")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk()) // Status should be 200 OK
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result").value(totalVendors)); // Check if the result contains the total vendors
+    }
+
+    @Test
+    @WithMockUser
+    void banUser_validRequest_success() throws Exception {
+        // Mock the service method for banning a user
+        Mockito.doNothing().when(userService).banUser(userId);
+
+        // Perform the PUT request for banning the user
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/users/ban/{userId}", userId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk()) // Status should be 200 OK
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result").value("User has been banned")); // Check if the result contains the correct message
+    }
+
+    @Test
+    @WithMockUser
+    void unbanUser_validRequest_success() throws Exception {
+        // Mock the service method for unbanning a user
+        Mockito.doNothing().when(userService).unbanUser(userId);
+
+        // Perform the PUT request for unbanning the user
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/users/unban/{userId}", userId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk()) // Status should be 200 OK
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result").value("User has been unbanned")); // Check if the result contains the correct message
+    }
+
+    @Test
+    @WithMockUser
+    void getVendors_validRequest_success() throws Exception {
+        // Mock the service method to return the vendors
+        Mockito.when(userService.getVendors()).thenReturn(vendors);
+
+        // Perform the GET request for vendors
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/all-vendors")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk()) // Status should be 200 OK
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result[0].username").value("vendor1")) // Check first vendor username
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result[1].username").value("vendor2")) // Check second vendor username
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.length()").value(2)); // Ensure there are 2 vendors in the response
+    }
+
+    @Test
+    @WithMockUser
+    void getCustomers_validRequest_success() throws Exception {
+        // Mock the service method to return the customers
+        Mockito.when(userService.getCustomers()).thenReturn(customers);
+
+        // Perform the GET request for customers
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/all-customers")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk()) // Status should be 200 OK
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result[0].username").value("customer1")) // Check first customer username
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result[1].username").value("customer2")) // Check second customer username
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.length()").value(2)); // Ensure there are 2 customers in the response
+    }
+
+
 }

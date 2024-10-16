@@ -25,10 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import java.nio.file.AccessDeniedException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @SpringBootTest
 public class UserServiceTest {
@@ -60,6 +57,14 @@ public class UserServiceTest {
 
     private Role role;
 
+    private User vendorUser1;
+    private User vendorUser2;
+    private User customerUser;
+
+    private UserResponse vendorResponse1;
+    private UserResponse vendorResponse2;
+
+    private UserResponse customerResponse1;
 
     @BeforeEach
     void initData() {
@@ -137,6 +142,44 @@ public class UserServiceTest {
                 .email("aro177@gmail.com")
                 .username("johndoe")
                 .phone("08012345678")
+                .build();
+
+        Role vendorRole = Role.builder().name("VENDOR").description("Vendor Role").build();
+        Role customerRole = Role.builder().name("CUSTOMER").description("Customer Role").build();
+
+        vendorUser1 = User.builder()
+                .id(1L)
+                .username("vendor1")
+                .roles(Set.of(vendorRole))
+                .build();
+
+        vendorUser2 = User.builder()
+                .id(2L)
+                .username("vendor2")
+                .roles(Set.of(vendorRole))
+                .build();
+
+
+        customerUser = User.builder()
+                .id(3L)
+                .username("customer1")
+                .roles(Set.of(customerRole))
+                .build();
+
+
+        vendorResponse1 = UserResponse.builder()
+                .id(1L)
+                .username("vendor1")
+                .build();
+
+        vendorResponse2 = UserResponse.builder()
+                .id(2L)
+                .username("vendor2")
+                .build();
+
+        customerResponse1 = UserResponse.builder()
+                .id(3L)
+                .username("customer1")
                 .build();
 
     }
@@ -298,5 +341,167 @@ public class UserServiceTest {
         // WHEN & THEN
         assertThrows(EmptyResultDataAccessException.class, () -> userService.deleteUser(userId)); // Adjust this as per your exception handling
     }
+
+    @Test
+    @WithMockUser(roles = "ADMIN") // Simulate an admin user
+    void getVendors_validRequest_success() {
+        // Mock the UserRepository to return all users
+        List<User> allUsers = Arrays.asList(vendorUser1, vendorUser2, customerUser);
+        Mockito.when(userRepository.findAll()).thenReturn(allUsers);
+
+        // Mock UserMapper to convert User -> UserResponse
+        Mockito.when(userMapper.toUserResponse(vendorUser1)).thenReturn(vendorResponse1);
+        Mockito.when(userMapper.toUserResponse(vendorUser2)).thenReturn(vendorResponse2);
+
+        // Call the method
+        List<UserResponse> result = userService.getVendors();
+
+        // Validate results
+        Assertions.assertThat(result).hasSize(2); // Should have 2 vendors
+        Assertions.assertThat(result.get(0).getUsername()).isEqualTo("vendor1");
+        Assertions.assertThat(result.get(1).getUsername()).isEqualTo("vendor2");
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN") // Simulate an admin user
+    void getCustomers_validRequest_success() {
+        // Mock the UserRepository to return all users
+        List<User> allUsers = Arrays.asList(vendorUser1, vendorUser2, customerUser);
+        Mockito.when(userRepository.findAll()).thenReturn(allUsers);
+
+        // Mock UserMapper to convert User -> UserResponse
+        Mockito.when(userMapper.toUserResponse(customerUser)).thenReturn(customerResponse1);
+
+
+        // Call the method
+        List<UserResponse> result = userService.getCustomers();
+
+        // Validate results
+        Assertions.assertThat(result).hasSize(1); // Should have 2 vendors
+        Assertions.assertThat(result.get(0).getUsername()).isEqualTo("customer1");
+
+    }
+
+    @Test
+    @WithMockUser(roles = "USER") // Test with non-admin role
+    void getVendors_nonAdminRole_forbidden() {
+
+
+        // WHEN & THEN
+        assertThrows(AuthorizationDeniedException.class, () -> userService.getVendors()); // Should throw an access denied exception
+    }
+
+    @Test
+    @WithMockUser(roles = "VENDOR") // Test with non-admin role
+    void getCustomers_nonAdminRole_forbidden() {
+
+
+        // WHEN & THEN
+        assertThrows(AuthorizationDeniedException.class, () -> userService.getCustomers()); // Should throw an access denied exception
+    }
+
+    @Test
+    void getTotalVendors_validRequest_success() {
+        // Mock the UserRepository to return all users
+        List<User> allUsers = Arrays.asList(vendorUser1, vendorUser2, customerUser);
+        Mockito.when(userRepository.findAll()).thenReturn(allUsers);
+
+        // Call the method
+        int result = userService.getTotalVendors();
+
+        // Validate the result
+        Assertions.assertThat(result).isEqualTo(2);
+    }
+
+    @Test
+    void getTotalVendors_noVendors_success() {
+        // Mock the UserRepository to return only customers (no vendors)
+        List<User> allUsers = Arrays.asList(customerUser);
+        Mockito.when(userRepository.findAll()).thenReturn(allUsers);
+
+        // Call the method
+        int result = userService.getTotalVendors();
+
+        // Validate the result
+        Assertions.assertThat(result).isEqualTo(0);
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN") // Test with an admin role
+    void banUser_adminRole_success() {
+        // Mock userRepository to return a user
+        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
+
+        // Call the method
+        userService.banUser(1L);
+
+        // Verify if the user is banned
+        Assertions.assertThat(user.getIsActive()).isFalse();
+        Mockito.verify(userRepository).save(user);
+    }
+
+    @Test
+    @WithMockUser(roles = "USER") // Test with a non-admin role
+    void banUser_nonAdminRole_forbidden() {
+        // GIVEN
+        Long userId = 1L;
+
+        // WHEN & THEN
+        Assertions.assertThatThrownBy(() -> userService.banUser(userId))
+                .isInstanceOf(AuthorizationDeniedException.class);
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void banUser_userNotFound_fail() {
+        // Mock userRepository to return an empty optional (user not found)
+        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.empty());
+
+        // Call the method and expect an AppException
+        Assertions.assertThatThrownBy(() -> userService.banUser(1L))
+                .isInstanceOf(AppException.class)
+                .hasMessageContaining("User not existed");
+    }
+
+    // Test for unbanUser method
+    @Test
+    @WithMockUser(roles = "ADMIN") // Test with an admin role
+    void unbanUser_adminRole_success() {
+        // Mock userRepository to return a banned user
+        user.setIsActive(false);
+        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
+
+        // Call the method
+        userService.unbanUser(1L);
+
+        // Verify if the user is unbanned
+        Assertions.assertThat(user.getIsActive()).isTrue();
+        Mockito.verify(userRepository).save(user);
+    }
+
+    @Test
+    @WithMockUser(roles = "USER") // Test with a non-admin role
+    void unbanUser_nonAdminRole_forbidden() {
+        // GIVEN
+        Long userId = 1L;
+
+        // WHEN & THEN
+        Assertions.assertThatThrownBy(() -> userService.unbanUser(userId))
+                .isInstanceOf(AuthorizationDeniedException.class);
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void unbanUser_userNotFound_fail() {
+        // Mock userRepository to return an empty optional (user not found)
+        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.empty());
+
+        // Call the method and expect an AppException
+        Assertions.assertThatThrownBy(() -> userService.unbanUser(1L))
+                .isInstanceOf(AppException.class)
+                .hasMessageContaining("User not existed");
+    }
+
+
 
 }
