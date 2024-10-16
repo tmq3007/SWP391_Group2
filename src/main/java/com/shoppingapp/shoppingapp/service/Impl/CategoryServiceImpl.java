@@ -62,7 +62,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public String deleteCategory(Category category) {
+        // Check if the category exists in the database
+        if (!categoryRepository.existsById(category.getCategoryId())) {
+            throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
+        }
+
+        // Proceed to delete the category if it exists
         categoryRepository.delete(category);
         return "Category deleted successfully with ID:" + category.getCategoryId();
     }
+
 }
