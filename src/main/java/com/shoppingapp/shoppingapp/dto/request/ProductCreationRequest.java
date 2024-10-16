@@ -24,6 +24,7 @@ public class ProductCreationRequest {
     private Double discount;
     private int stock;
     private String pictureUrl;
+    private String pictureUrl2;
     private Boolean isActive;
 
 }

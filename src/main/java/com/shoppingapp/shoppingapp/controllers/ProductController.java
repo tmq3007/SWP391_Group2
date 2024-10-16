@@ -10,6 +10,7 @@ import com.shoppingapp.shoppingapp.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class ProductController {
     }
 
     //Build Get Product REST API
+
     @GetMapping("{productId}")
     public ResponseEntity<Product> getProductById(@PathVariable("productId") Long ProductId) {
         return ResponseEntity.ok(productService.getProductById(ProductId));
@@ -47,6 +49,7 @@ public class ProductController {
 
         return apiResponse;
     }
+
 
     //Build Update Product REST API
     @PatchMapping("{productId}")

@@ -53,9 +53,12 @@ public class ProductServiceImpl implements ProductService {
 
         Product product = productMapper.toProduct(request);
 
-        if(productRepository.existsByProductName(request.getProductName())) {
-            throw new AppException(ErrorCode.PRODUCT_EXISTED);
+        var shopOptional = shopRepository.findById(Long.valueOf(request.getShop()));
+        if (!shopOptional.isPresent()) {
+            throw new AppException(ErrorCode.SHOP_NOT_EXISTED);
         }
+
+        product.setShop(shopOptional.get());
 
         var categoryOptional = categoryRepository.findById(Long.valueOf(request.getCategory()));
         if (!categoryOptional.isPresent()) {
@@ -64,12 +67,10 @@ public class ProductServiceImpl implements ProductService {
 
         product.setCategory(categoryOptional.get());
 
-        var shopOptional = shopRepository.findById(Long.valueOf(request.getShop()));
-        if (!shopOptional.isPresent()) {
-            throw new AppException(ErrorCode.SHOP_NOT_EXISTED);
+        if(productRepository.existsByProductName(request.getProductName())) {
+            throw new AppException(ErrorCode.PRODUCT_EXISTED);
         }
 
-        product.setShop(shopOptional.get());
         return productRepository.save(product);
     }
 
@@ -80,6 +81,12 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         productMapper.updateProduct(product, request);
 
+        var shopOptional = shopRepository.findById(Long.valueOf(request.getShop()));
+        if (!shopOptional.isPresent()) {
+            throw new AppException(ErrorCode.SHOP_NOT_EXISTED);
+        }
+
+        product.setShop(shopOptional.get());
         var categoryOptional = categoryRepository.findById(Long.valueOf(request.getCategory()));
         if (!categoryOptional.isPresent()) {
             throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
@@ -87,12 +94,6 @@ public class ProductServiceImpl implements ProductService {
 
         product.setCategory(categoryOptional.get());
 
-        var shopOptional = shopRepository.findById(Long.valueOf(request.getShop()));
-        if (!shopOptional.isPresent()) {
-            throw new AppException(ErrorCode.SHOP_NOT_EXISTED);
-        }
-
-        product.setShop(shopOptional.get());
 
         return productMapper.toProductResponse(productRepository.save(product));
     }

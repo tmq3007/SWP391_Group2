@@ -30,7 +30,7 @@ public enum ErrorCode {
     USER_NOT_ACTIVE(2001,"You have been banned from our site",HttpStatus.BAD_REQUEST),
     ROLE_NOT_FOUND(2002,"Role not found",HttpStatus.BAD_REQUEST),
     ADDRESS_NOT_FOUND(2003,"Address not found",HttpStatus.BAD_REQUEST),
-
+    EMAIL_NOT_EXISTED(2004,"Email not existed",HttpStatus.BAD_REQUEST),
     CART_NOT_EXIST(3000,"Cart not existed",HttpStatus.BAD_REQUEST),
     PAYMENT_NOT_FOUND(4000,"Payment not found",HttpStatus.BAD_REQUEST),
     PAYMENT_EXISTED(4001,"Payment existed",HttpStatus.BAD_REQUEST),
