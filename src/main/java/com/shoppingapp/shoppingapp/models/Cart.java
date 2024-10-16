@@ -7,7 +7,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.HashSet;
 import java.util.Set;
-
 @Entity
 @Getter
 @Setter
@@ -18,16 +17,15 @@ import java.util.Set;
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long  id;
+    Long id;
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false) // Chỉ định tên cột trong bảng Cart
     User user;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-     Set<CartItem> cartItems = new HashSet<>();
+    Set<CartItem> cartItems = new HashSet<>();
 
-    int totalItem;
-
-    Double totalPrice;
+    int totalItem = 0;             // Initialize total items to 0
+    Double totalPrice = 0.0;       // Initialize total price to 0.0
 }
