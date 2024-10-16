@@ -35,15 +35,13 @@ public class ShopServiceImp implements ShopService {
     private ShopMapper shopMapper;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
-    private ProductRepository productRepository;
+
 
 
     @Override
-    public List<Shop> getAllShops() {
-        return (List<Shop>) shopRepository.findAll();
+    public List<ShopResponse> getAllShops() {
+
+        return shopRepository.findAll().stream().map(shopMapper::toShopResponse).collect(Collectors.toList());
     }
 
     @Override
@@ -52,7 +50,7 @@ public class ShopServiceImp implements ShopService {
     }
 
     @Override
-    public Shop createShop(ShopCreationRequest request) {
+    public ShopResponse createShop(ShopCreationRequest request) {
         if(shopRepository.existsByShopName(request.getShopName())){
             throw new AppException(ErrorCode.SHOP_EXISTED);
         }
@@ -63,9 +61,9 @@ public class ShopServiceImp implements ShopService {
         }
 
         shop.setUser(userOp.get());
+        Shop savedShop = shopRepository.save(shop);
 
-
-        return shopRepository.save(shop);
+        return shopMapper.toShopResponse(savedShop);
     }
 
     @Override

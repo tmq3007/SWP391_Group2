@@ -3,13 +3,12 @@ import java.util.List;
 
 import com.shoppingapp.shoppingapp.dto.request.ShopCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.ShopUpdateRequest;
-import com.shoppingapp.shoppingapp.dto.response.ShopResponse;
-import com.shoppingapp.shoppingapp.models.Shop;
+import com.shoppingapp.shoppingapp.dto.response.ShopResponse;;
 
 public interface ShopService {
-    List<Shop> getAllShops();
+    List<ShopResponse> getAllShops();
     ShopResponse getShopById(long ShopId);
-    Shop createShop(ShopCreationRequest request);
+    ShopResponse createShop(ShopCreationRequest request);
     ShopResponse updateShop(ShopUpdateRequest request, long ShopId);
     String deleteShop(Long shopId);
 

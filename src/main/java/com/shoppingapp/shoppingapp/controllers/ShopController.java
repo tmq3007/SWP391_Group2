@@ -4,11 +4,7 @@ import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
 import com.shoppingapp.shoppingapp.dto.request.ShopCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.ShopUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.response.ShopResponse;
-import com.shoppingapp.shoppingapp.dto.response.UserResponse;
 import com.shoppingapp.shoppingapp.mapper.ShopMapper;
-import com.shoppingapp.shoppingapp.models.Category;
-import com.shoppingapp.shoppingapp.models.Shop;
-import com.shoppingapp.shoppingapp.service.Impl.UserServiceImpl;
 import com.shoppingapp.shoppingapp.service.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +23,10 @@ public class ShopController {
 
     //get all shop
     @GetMapping()
-    public ResponseEntity<List<Shop>>  getAllCategories() {
-        return ResponseEntity.ok(shopService.getAllShops()) ;
+    public ApiResponse<List<ShopResponse>> getAllShop() {
+        return ApiResponse.<List<ShopResponse>>builder()
+                .result(shopService.getAllShops())
+                .build();
     }
     // get shop by id
     @GetMapping("{shopId}")

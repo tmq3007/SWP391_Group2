@@ -161,16 +161,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    @Override
-    public UserResponse updateProfile(Long id, ProfileUpdateRequest request) {
-        return null;
-    }
-
-    @Override
-    public boolean changePassword(Long id, String newPassword) {
-        return false;
-    }
-
 
     @Override
     public boolean changePassword(Long id, String newPassword) {

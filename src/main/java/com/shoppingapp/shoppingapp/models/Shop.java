@@ -18,25 +18,20 @@ public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long shopID;
-
     @ManyToOne
     @JoinColumn(name = "id", nullable = false)
     private User user;
-
     @OneToMany
     @JsonIgnore
-
     private Set<Product> products;
-
     @ManyToMany
-
     @JsonIgnore
     private Set<Orders> order;
     private String shopName;
     private String address;
     private String city;
-    private String state;
-    private String country;
+    private String district;
+    private String subdistrict;
     private String phone;
     private String description;
     private String logo;
