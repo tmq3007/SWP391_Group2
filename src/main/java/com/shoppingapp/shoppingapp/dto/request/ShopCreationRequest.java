@@ -12,10 +12,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ShopCreationRequest {
     private String shopName;
-
     private Long user;
-//    private Set<Long> products;
-//    private Set<Long> order;
     private String address;
     private String city;
     private String district;

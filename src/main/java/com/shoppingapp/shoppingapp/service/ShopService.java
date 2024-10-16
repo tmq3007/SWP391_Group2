@@ -1,5 +1,6 @@
 package com.shoppingapp.shoppingapp.service;
 import java.util.List;
+import java.util.Optional;
 
 import com.shoppingapp.shoppingapp.dto.request.ShopCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.ShopUpdateRequest;
@@ -13,4 +14,6 @@ public interface ShopService {
     String deleteShop(Long shopId);
 
     int getTotalShops();
+    Optional<Long> getShopIdByUserId(Long userId);
+    Shop getShopProfile(String jwt);
 }

@@ -52,10 +52,7 @@ public class UserServiceImpl implements UserService {
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
 
-        log.info("Request: {}", request);
-
         User user = userMapper.toUser(request);
-        log.info("User: {}", user);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         var roles = roleRepository.findAllById(request.getRoles());
@@ -160,6 +157,7 @@ public class UserServiceImpl implements UserService {
         user.setIsActive(true);
         userRepository.save(user);
     }
+
 
 
     @Override

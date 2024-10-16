@@ -7,6 +7,8 @@ import com.shoppingapp.shoppingapp.dto.request.ProductCreationRequest;
 import com.shoppingapp.shoppingapp.dto.response.CartResponse;
 import com.shoppingapp.shoppingapp.dto.response.ProductResponse;
 import com.shoppingapp.shoppingapp.dto.response.UserResponse;
+import com.shoppingapp.shoppingapp.exceptions.AppException;
+import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
 import com.shoppingapp.shoppingapp.mapper.CartMapper;
 import com.shoppingapp.shoppingapp.mapper.UserMapper;
 import com.shoppingapp.shoppingapp.models.Cart;
@@ -43,11 +45,12 @@ public class CartController {
     private CartMapper cartMapper;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Cart> findUserCartHandler(@PathVariable("userId") Long userId) {
+    public ApiResponse<Cart> findUserCartHandler(@PathVariable("userId") Long userId) {
         UserResponse userResponse = userService.getUserById(userId);
 
 
         User user = new User();
+
         user.setId(userResponse.getId());
         user.setFirstName(userResponse.getFirstName());
         user.setLastName(userResponse.getLastName());
@@ -57,20 +60,27 @@ public class CartController {
         user.setPhone(userResponse.getPhone());
         user.setIsActive(userResponse.getIsActive());
 //
-//        ApiResponse apiResponse = new ApiResponse();
+        ApiResponse apiResponse = new ApiResponse();
 //        apiResponse.setMessage("Added");
 
         Cart cart = cartService.findUserCart(user);
-        return new ResponseEntity<Cart>(cart, HttpStatus.OK); // Trả về cart
+        if (cart == null) {
+            throw new AppException(ErrorCode.CART_NOT_EXIST);
+        }
+        apiResponse.setResult(cart);
+        return apiResponse;
     }
 
 
 
     @PutMapping("/add/{userId}")
-    public ResponseEntity<CartItem> addItemToCart(@RequestBody AddItemRequest req,
+    public ApiResponse<CartItem> addItemToCart(@RequestBody AddItemRequest req,
                                                @PathVariable("userId") Long userId
                                                ) {
         UserResponse userResponse = userService.getUserById(userId);
+        if (userResponse == null) {
+            throw new AppException(ErrorCode.USER_NOT_EXISTED);
+        }
         User user = new User();
         user.setId(userResponse.getId());
         user.setFirstName(userResponse.getFirstName());
@@ -81,22 +91,26 @@ public class CartController {
         user.setPhone(userResponse.getPhone());
         user.setIsActive(userResponse.getIsActive());
 
-
         Product product = productService.getProductById(req.getProductId());
-
+        if (product == null) {
+            throw new AppException(ErrorCode.PRODUCT_NOT_EXISTED);
+        }
         CartItem cartItem = cartService.addCartItem(
                 user, product, req.getBuyUnit(), req.getQuantity()
         );
 
-//        ApiResponse<CartItem> apiResponse = new ApiResponse<>();
-//        apiResponse.setMessage("Add item to cart success");
-        return new ResponseEntity<>(cartItem, HttpStatus.ACCEPTED); // Trả về cart
+        ApiResponse<CartItem> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(cartItem);
+        return apiResponse;
     }
 
     @DeleteMapping("/delete/user/{userId}/cartItem/{cartItemId}")
     public ResponseEntity<ApiResponse> deleteCart( @PathVariable("userId") Long userId
                                         , @PathVariable("cartItemId") Long cartItemId) throws Exception {
         UserResponse userResponse = userService.getUserById(userId);
+        if (userResponse == null) {
+            throw new AppException(ErrorCode.USER_NOT_EXISTED);
+        }
         User user = new User();
         user.setId(userResponse.getId());
         user.setFirstName(userResponse.getFirstName());
@@ -108,16 +122,19 @@ public class CartController {
         user.setIsActive(userResponse.getIsActive());
 
         cartItemService.removeCartItem(user.getId(),cartItemId);
-        ApiResponse<CartItem> apiResponse = new ApiResponse<>(); // Khai báo kiểu dữ liệu cho ApiResponse
+        ApiResponse<CartItem> apiResponse = new ApiResponse<>();
         apiResponse.setMessage("delete item from cart success");
         return new ResponseEntity<>(apiResponse, HttpStatus.ACCEPTED); // Trả về cart
     }
 
     @PutMapping("/delete/user/{userId}/cartItem/{cartItemId}")
-    public ResponseEntity<CartItem> updateCartItemHandler( @PathVariable("userId") Long userId,
+    public ApiResponse<CartItem> updateCartItemHandler( @PathVariable("userId") Long userId,
                                                            @PathVariable("cartItemId") Long cartItemId,
                                                            @RequestBody CartItem cartItem ) throws Exception{
         UserResponse userResponse = userService.getUserById(userId);
+        if (userResponse == null) {
+            throw new AppException(ErrorCode.USER_NOT_EXISTED);
+        }
         User user = new User();
         user.setId(userResponse.getId());
         user.setFirstName(userResponse.getFirstName());
@@ -132,7 +149,9 @@ public class CartController {
         if(cartItem.getQuantity()>0){
             updatedCartitem = cartItemService.updateCartItem(user.getId(),cartItemId,cartItem);
         }
-        return new ResponseEntity<>(updatedCartitem, HttpStatus.ACCEPTED); // Trả về cart
+        ApiResponse<CartItem> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(cartItem);
+        return apiResponse;
     }
 
 

@@ -9,10 +9,12 @@ import com.shoppingapp.shoppingapp.mapper.CategoryMapper;
 import com.shoppingapp.shoppingapp.models.Category;
 import com.shoppingapp.shoppingapp.repository.CategoryRepository;
 import com.shoppingapp.shoppingapp.service.CategoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+@Slf4j
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
@@ -30,18 +32,17 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponse getCategory(Long id) {
         return categoryMapper.toCategoryResponse(categoryRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Category not found")));
+                .orElseThrow(()-> new AppException(ErrorCode.CATEGORY_NOT_EXISTED)));
     }
 
     @Override
     public Category getCategoryById(Long id) {
-        return categoryRepository.findById(id).orElseThrow(()-> new RuntimeException("Category not found"));
+        return categoryRepository.findById(id).orElseThrow(()-> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
     }
 
     @Override
     public Category addCategory(CategoryCreationRequest request) {
-
-
+        log.info("Service: Category added");
         if(categoryRepository.existsByCategoryName(request.getCategoryName())) {
             throw new AppException(ErrorCode.CATEGORY_EXISTED);
         }
@@ -53,7 +54,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponse updateCategory(Long categoryId,CategoryUpdateRequest request) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(()-> new RuntimeException("Category not found"));
+                .orElseThrow(()-> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
        categoryMapper.updateCategory(category,request);
 
         return categoryMapper.toCategoryResponse(categoryRepository.save(category));

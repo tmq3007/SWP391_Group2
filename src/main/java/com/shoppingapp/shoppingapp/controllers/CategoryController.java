@@ -4,16 +4,20 @@ import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
 import com.shoppingapp.shoppingapp.dto.request.CategoryCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.CategoryUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.response.CategoryResponse;
+import com.shoppingapp.shoppingapp.exceptions.AppException;
+import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
 import com.shoppingapp.shoppingapp.mapper.CategoryMapper;
 import com.shoppingapp.shoppingapp.models.Category;
 import com.shoppingapp.shoppingapp.service.CategoryService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @CrossOrigin("*")
 @RestController
 @RequestMapping(("/api/v1/categories"))
@@ -26,17 +30,22 @@ public class CategoryController {
     private CategoryMapper categoryMapper;
 
     @GetMapping()
-    public ResponseEntity<List<Category>>  getAllCategories() {
-        return ResponseEntity.ok(categoryService.getAllCategories()) ;
+    public ApiResponse<List<Category>>  getAllCategories() {
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setResult(categoryService.getAllCategories());
+        return apiResponse;
     }
 
     @GetMapping("/{categoryId}")
-    public CategoryResponse getCategory (@PathVariable("categoryId") Long categoryId) {
-        return  (categoryService.getCategory(categoryId));
+    public ApiResponse<CategoryResponse> getCategory (@PathVariable("categoryId") Long categoryId) {
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setResult(categoryService.getCategory(categoryId));
+        return apiResponse;
     }
 
     @PostMapping("")
     public ApiResponse<Category> addCategory (@RequestBody CategoryCreationRequest request) {
+        log.info("Controller: addCategory");
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setResult(categoryService.addCategory(request));
 
@@ -44,20 +53,28 @@ public class CategoryController {
     }
 
     @PatchMapping("/{categoryId}")
-    public ResponseEntity<CategoryResponse> updateCategory(@RequestBody CategoryUpdateRequest category,
+    public ApiResponse<CategoryResponse> updateCategory(@RequestBody CategoryUpdateRequest category,
                                                    @PathVariable("categoryId") Long categoryId){
-
-        return ResponseEntity.ok(categoryService.updateCategory(categoryId, category)) ;
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setResult(categoryService.updateCategory(categoryId, category));
+        return apiResponse ;
     }
 
     @DeleteMapping("/{categoryId}")
-    public ResponseEntity<String> deleteCategory(@PathVariable("categoryId") Long categoryId) {
+    public ApiResponse<String> deleteCategory(@PathVariable("categoryId") Long categoryId) {
         Category categoryObj = categoryService.getCategoryById(categoryId);
-        String deleteMsg = "";
-        if(categoryObj != null){
-            deleteMsg = categoryService.deleteCategory(categoryObj);
+        ApiResponse<String> apiResponse = new ApiResponse<>();
+
+        if (categoryObj != null) {
+            categoryService.deleteCategory(categoryObj); // Service deletes the category
+            apiResponse.setCode(0);
+            apiResponse.setResult("Category deleted successfully");
+        } else {
+            throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
         }
-        return ResponseEntity.ok(deleteMsg);
+
+        return apiResponse;
     }
+
 
 }

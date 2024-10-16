@@ -29,11 +29,11 @@ public class Review {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false) // Sử dụng @JoinColumn thay vì @Column
+    @JoinColumn(name = "product_id", nullable = false)
     Product product;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false) // Sử dụng @JoinColumn
+    @JoinColumn(name = "user_id", nullable = false)
     User user;
 
     @Column(nullable = false)
