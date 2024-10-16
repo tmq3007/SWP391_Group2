@@ -16,4 +16,5 @@ public interface ShopService {
 
     int getTotalShops();
     Optional<Long> getShopIdByUserId(Long userId);
+    Shop getShopProfile(String jwt);
 }

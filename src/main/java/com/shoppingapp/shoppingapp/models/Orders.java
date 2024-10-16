@@ -23,4 +23,9 @@ public class Orders {
     private LocalDate orderDate;
 
     private Boolean isPaid;
+
+    @ManyToOne
+    @JoinColumn(name = "shop_id", nullable = false)
+    private Shop shop;
+
 }

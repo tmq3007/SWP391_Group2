@@ -11,8 +11,7 @@ import java.util.Optional;
 public interface ShopRepository extends JpaRepository<Shop, Long> {
     boolean existsByShopName(String shopName);
 
-        // Tìm Shop dựa trên user
-        Optional<Shop> findByUserId(Long userId);
+    Optional<Shop> findByUserId(Long userId);
 
 
 }

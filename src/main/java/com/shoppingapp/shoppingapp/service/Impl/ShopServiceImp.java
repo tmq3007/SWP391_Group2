@@ -30,6 +30,11 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class ShopServiceImp implements ShopService {
+    @Override
+    public Shop getShopProfile(String jwt) {
+        return null;
+    }
+
     @Autowired
     private ShopRepository shopRepository;
     @Autowired
@@ -91,7 +96,7 @@ public class ShopServiceImp implements ShopService {
     @Override
     public Optional<Long> getShopIdByUserId(Long userId) {
         Optional<Shop> shop = shopRepository.findByUserId(userId);
-        return shop.map(Shop::getShopID);
+        return shop.map(Shop::getShopId);
     }
 
 
