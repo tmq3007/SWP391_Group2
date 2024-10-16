@@ -35,7 +35,7 @@ public class ProductController {
     }
 
     //Build Get Product REST API
-    @PreAuthorize("hasRole('VENDOR')")
+
     @GetMapping("{productId}")
     public ResponseEntity<Product> getProductById(@PathVariable("productId") Long ProductId) {
         return ResponseEntity.ok(productService.getProductById(ProductId));
@@ -50,7 +50,7 @@ public class ProductController {
         return apiResponse;
     }
 
-    @PreAuthorize("hasRole('VENDOR')")
+
     //Build Update Product REST API
     @PatchMapping("{productId}")
     public ResponseEntity<ProductResponse> updateProduct(@RequestBody ProductUpdateRequest product,
@@ -59,7 +59,6 @@ public class ProductController {
     }
 
     //Build Delete Product REST API
-    @PreAuthorize("hasRole('VENDOR')")
     @DeleteMapping("{productId}")
     public ResponseEntity<String> deleteProduct(@PathVariable("productId") Long ProductId) {
         Product productObj = productService.getProductById(ProductId);

@@ -160,8 +160,7 @@ public class ProductControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/products/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("code").value(0))
-                .andExpect(MockMvcResultMatchers.jsonPath("result.productName").value("siu"));
+                .andExpect(MockMvcResultMatchers.jsonPath("productName").value("siu"));
     }
 
 
@@ -207,13 +206,11 @@ public class ProductControllerTest {
                 .thenReturn(updatedProductResponse);
 
         // When
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/products/{id}", 1L)
+        mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/products/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(content))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("code").value(0));
-
-
+                .andExpect(MockMvcResultMatchers.jsonPath("productName").value("Updated Product"));
     }
 
     @Test
@@ -225,7 +222,6 @@ public class ProductControllerTest {
             // When
             mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/products/{id}", 1L)
                             .contentType(MediaType.APPLICATION_JSON_VALUE))
-                    .andExpect(MockMvcResultMatchers.status().isOk())
-                    .andExpect(MockMvcResultMatchers.jsonPath("code").value(0));
+                    .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }
