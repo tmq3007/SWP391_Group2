@@ -21,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -150,6 +151,7 @@ public class ProductControllerTest {
 
 
     @Test
+    @WithMockUser(username = "admin", authorities = { "ADMIN"  })
     void getProductById() throws Exception {
         // Given
         Mockito.when(productService.getProductById(ArgumentMatchers.anyLong())).thenReturn(productResponse);
@@ -166,6 +168,7 @@ public class ProductControllerTest {
 
 
     @Test
+    @WithMockUser(username = "admin", authorities = { "ADMIN"  })
     void updateProduct() throws Exception {
         // Given
         ProductUpdateRequest updateRequest = ProductUpdateRequest.builder()
@@ -214,6 +217,7 @@ public class ProductControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", authorities = { "ADMIN"  })
     void deleteProduct() throws Exception {
             // Given
             Mockito.when(productService.deleteProductById(ArgumentMatchers.any())).thenReturn("Product deleted successfully");
