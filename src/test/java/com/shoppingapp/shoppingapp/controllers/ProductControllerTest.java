@@ -56,6 +56,7 @@ public class ProductControllerTest {
         category.setCategoryName("Electronics");
 
         shop = new Shop();
+
         shop.setShopId(1L);
         shop.setShopName("Shop1");
 

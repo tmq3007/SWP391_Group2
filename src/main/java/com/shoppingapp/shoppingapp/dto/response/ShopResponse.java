@@ -23,6 +23,7 @@ public class ShopResponse {
     private String city;
     private String district;
     private String subdistrict;
+    private String description;
     private String phone;
     private String logo;
     private String cover;
