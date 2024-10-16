@@ -31,11 +31,9 @@ public class TransactionController {
         return apiResponse;
     }
 
-
     @GetMapping()
     public ResponseEntity<List<Transaction>>  getAllTransactions() {
         return ResponseEntity.ok(transactionService.getAllTransactions()) ;
     }
-
 
 }
