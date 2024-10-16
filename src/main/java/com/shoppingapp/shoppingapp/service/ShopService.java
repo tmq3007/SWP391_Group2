@@ -4,7 +4,8 @@ import java.util.Optional;
 
 import com.shoppingapp.shoppingapp.dto.request.ShopCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.ShopUpdateRequest;
-import com.shoppingapp.shoppingapp.dto.response.ShopResponse;;
+import com.shoppingapp.shoppingapp.dto.response.ShopResponse;
+import com.shoppingapp.shoppingapp.models.Shop;;
 
 public interface ShopService {
     List<ShopResponse> getAllShops();
