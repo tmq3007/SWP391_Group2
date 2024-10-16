@@ -11,12 +11,12 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface OrdersMapper {
 
-    @Mapping(target = "user",ignore = true)
-    @Mapping(target = "payment",ignore = true)
+    @Mapping(target = "userId",ignore = true)
+    @Mapping(target = "paymentId",ignore = true)
     Orders toOrders (OrdersCreationRequest request);
 
-    @Mapping(target = "user",ignore = true)
-    @Mapping(target = "payment",ignore = true)
+    @Mapping(target = "userId",ignore = true)
+    @Mapping(target = "paymentId",ignore = true)
     void updateOrders(@MappingTarget Orders orders, OrdersUpdateRequest request);
 
     OrdersResponse toOrdersReponse (Orders orders);
