@@ -214,7 +214,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "admin", authorities = { "ADMIN"  })
+    @WithMockUser
     void deleteProduct() throws Exception {
             // Given
             Mockito.when(productService.deleteProductById(ArgumentMatchers.any())).thenReturn("Product deleted successfully");

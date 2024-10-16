@@ -69,8 +69,6 @@ public class ShopServiceImp implements ShopService {
         }
 
         shop.setUser(userOp.get());
-
-
         return shopRepository.save(shop);
     }
 

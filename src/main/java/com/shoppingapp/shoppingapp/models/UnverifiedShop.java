@@ -14,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Data
 @Builder
-public class Shop {
+public class UnverifiedShop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long shopId;
@@ -22,16 +22,6 @@ public class Shop {
     @ManyToOne
     @JoinColumn(name = "id", nullable = false)
     private User user;
-
-    @OneToMany
-    @JsonIgnore
-
-    private Set<Product> products;
-
-    @ManyToMany
-    @JsonIgnore
-    private Set<Orders> order;
-
     private String shopName;
     private String address;
     private String city;
