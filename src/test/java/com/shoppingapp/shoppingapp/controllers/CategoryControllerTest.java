@@ -241,7 +241,6 @@ class CategoryControllerTest {
         // Given
         Long categoryId = 1L;
 
-
         Mockito.when(categoryService.getCategory(categoryId))
                 .thenReturn(response);
 

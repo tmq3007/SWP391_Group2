@@ -32,6 +32,9 @@ public enum ErrorCode {
     ADDRESS_NOT_FOUND(2003,"Address not found",HttpStatus.BAD_REQUEST),
 
     CART_NOT_EXIST(3000,"Cart not existed",HttpStatus.BAD_REQUEST),
+    PAYMENT_NOT_FOUND(4000,"Payment not found",HttpStatus.BAD_REQUEST),
+    PAYMENT_EXISTED(4001,"Payment existed",HttpStatus.BAD_REQUEST),
+
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
