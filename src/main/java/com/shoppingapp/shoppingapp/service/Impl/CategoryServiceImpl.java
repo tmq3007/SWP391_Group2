@@ -32,17 +32,17 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponse getCategory(Long id) {
         return categoryMapper.toCategoryResponse(categoryRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Category not found")));
+                .orElseThrow(()-> new AppException(ErrorCode.CATEGORY_NOT_EXISTED)));
     }
 
     @Override
     public Category getCategoryById(Long id) {
-        return categoryRepository.findById(id).orElseThrow(()-> new RuntimeException("Category not found"));
+        return categoryRepository.findById(id).orElseThrow(()-> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
     }
 
     @Override
     public Category addCategory(CategoryCreationRequest request) {
-log.info("Service: Category added");
+        log.info("Service: Category added");
         if(categoryRepository.existsByCategoryName(request.getCategoryName())) {
             throw new AppException(ErrorCode.CATEGORY_EXISTED);
         }
@@ -54,7 +54,7 @@ log.info("Service: Category added");
     @Override
     public CategoryResponse updateCategory(Long categoryId,CategoryUpdateRequest request) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(()-> new RuntimeException("Category not found"));
+                .orElseThrow(()-> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
        categoryMapper.updateCategory(category,request);
 
         return categoryMapper.toCategoryResponse(categoryRepository.save(category));

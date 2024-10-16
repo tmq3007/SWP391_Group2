@@ -258,4 +258,23 @@ class CategoryControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.result.isActive").value(true));
     }
 
+    @Test
+    @WithMockUser(username = "admin", authorities = { "ADMIN", "CUSTOMER","VENDOR" })
+    void getCategory_categoryNotExist_fail() throws Exception {
+        // Given
+        Long categoryId = 1L;
+
+         Mockito.when(categoryService.getCategory(categoryId))
+                .thenThrow(new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
+
+        // When & Then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/v1/categories/{categoryId}", categoryId)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1010)) // The predefined error code for "Category not existed"
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Category not existed")); // The error message
+    }
+
+
 }
