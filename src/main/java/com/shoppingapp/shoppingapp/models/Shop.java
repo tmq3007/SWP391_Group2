@@ -17,7 +17,7 @@ import java.util.Set;
 public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long shopID;
+    public Long shopId;
 
     @ManyToOne
     @JoinColumn(name = "id", nullable = false)

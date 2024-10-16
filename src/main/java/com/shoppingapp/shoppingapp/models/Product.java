@@ -40,6 +40,7 @@ public class Product {
     private Double discount;
     private int stock;
     private String pictureUrl;
+    private String pictureUrl2;
     private Boolean isActive;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)

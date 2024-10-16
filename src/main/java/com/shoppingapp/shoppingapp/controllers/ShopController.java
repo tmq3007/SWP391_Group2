@@ -27,7 +27,7 @@ public class ShopController {
 
     //get all shop
     @GetMapping()
-    public ResponseEntity<List<Shop>>  getAllCategories() {
+    public ResponseEntity<List<Shop>>  getAllShop() {
         return ResponseEntity.ok(shopService.getAllShops()) ;
     }
     // get shop by id
