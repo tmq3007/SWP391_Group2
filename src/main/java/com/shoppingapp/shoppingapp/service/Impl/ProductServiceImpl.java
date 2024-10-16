@@ -51,52 +51,60 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product createProduct(ProductCreationRequest request) {
 
-        Product product = productMapper.toProduct(request);
-
-        var shopOptional = shopRepository.findById(Long.valueOf(request.getShop()));
+        // Kiểm tra shopId
+        var shopOptional = shopRepository.findById(request.getShop());
         if (!shopOptional.isPresent()) {
             throw new AppException(ErrorCode.SHOP_NOT_EXISTED);
         }
 
-        product.setShop(shopOptional.get());
-
-        var categoryOptional = categoryRepository.findById(Long.valueOf(request.getCategory()));
+        // Kiểm tra categoryId
+        var categoryOptional = categoryRepository.findById(request.getCategory());
         if (!categoryOptional.isPresent()) {
             throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
         }
 
-        product.setCategory(categoryOptional.get());
-
-        if(productRepository.existsByProductName(request.getProductName())) {
+        // Check productName để tránh trùng lặp
+        if (productRepository.existsByProductName(request.getProductName())) {
             throw new AppException(ErrorCode.PRODUCT_EXISTED);
         }
+
+        // Tạo sản phẩm
+        Product product = productMapper.toProduct(request);
+        product.setShop(shopOptional.get());
+        product.setCategory(categoryOptional.get());
 
         return productRepository.save(product);
     }
 
+
     @Override
     public ProductResponse updateProduct(Long productId, ProductUpdateRequest request) {
+        if (productId == null) {
+            throw new AppException(ErrorCode.PRODUCT_NOT_EXISTED);
+        }
 
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
+
         productMapper.updateProduct(product, request);
 
-        var shopOptional = shopRepository.findById(Long.valueOf(request.getShop()));
+        var shopOptional = shopRepository.findById(request.getShop());
         if (!shopOptional.isPresent()) {
             throw new AppException(ErrorCode.SHOP_NOT_EXISTED);
         }
 
         product.setShop(shopOptional.get());
-        var categoryOptional = categoryRepository.findById(Long.valueOf(request.getCategory()));
+
+        var categoryOptional = categoryRepository.findById(request.getCategory());
         if (!categoryOptional.isPresent()) {
             throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
         }
 
         product.setCategory(categoryOptional.get());
 
-
         return productMapper.toProductResponse(productRepository.save(product));
     }
+
 
 
     @Override

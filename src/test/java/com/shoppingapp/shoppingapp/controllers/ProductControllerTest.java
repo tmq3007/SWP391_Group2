@@ -62,8 +62,8 @@ public class ProductControllerTest {
 
         request = ProductCreationRequest.builder()
                 .productName("siu")
-                .category(String.valueOf(category))
-                .shop(String.valueOf(shop))
+                .category(category.getCategoryId())
+                .shop(shop.getShopId())
                 .description("duoc")
                 .measurementUnit("12")
                 .unitBuyPrice(Double.valueOf("12"))
@@ -117,7 +117,7 @@ public class ProductControllerTest {
         //Given
         Category nonExistentCategory = new Category();
         nonExistentCategory.setCategoryId(2L);
-        request.setCategory(String.valueOf(nonExistentCategory.getCategoryId()));
+        request.setCategory(nonExistentCategory.getCategoryId());
 
         ObjectMapper objectMapper = new ObjectMapper();
         String content = objectMapper.writeValueAsString(request);
@@ -171,8 +171,8 @@ public class ProductControllerTest {
     void updateProduct() throws Exception {
         // Given
         ProductUpdateRequest updateRequest = ProductUpdateRequest.builder()
-                .category("Electronics")
-                .shop("Shop1")
+                .category(2L)
+                .shop(1L)
                 .description("Updated product description")
                 .measurementUnit("kg")
                 .unitBuyPrice(15.0)
@@ -186,8 +186,8 @@ public class ProductControllerTest {
 
         ProductResponse updatedProductResponse = ProductResponse.builder()
                 .productName("Updated Product")
-                .category(category)
-                .shop(shop)
+                .category(2L)
+                .shop(1L)
                 .description("Updated product description")
                 .measurementUnit("kg")
                 .unitBuyPrice(15.0)
