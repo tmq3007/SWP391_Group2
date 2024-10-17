@@ -25,7 +25,13 @@ import java.util.stream.Collectors;
 
 
 public class ProductServiceImpl implements ProductService {
-    
+    @Override
+    public String deleteProductById(Long productId) {
+        productRepository.findById(productId)
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
+        productRepository.deleteById(productId);
+        return "";
+    }
 
     @Autowired
     private ProductMapper productMapper;
@@ -45,7 +51,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getProductById(Long ProductId) {
-        return productRepository.findById(ProductId).get();
+        return productRepository.findById(ProductId).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
     }
 
     @Override
@@ -97,7 +103,6 @@ public class ProductServiceImpl implements ProductService {
             product.setShop(shopOptional.get());
         }
 
-        // Check if category ID is provided before updating category
         if (request.getCategory() != null) {
             var categoryOptional = categoryRepository.findById(request.getCategory());
             if (!categoryOptional.isPresent()) {
@@ -111,9 +116,4 @@ public class ProductServiceImpl implements ProductService {
 
 
 
-    @Override
-    public String deleteProductById(Product product) {
-        productRepository.delete(product);
-        return "Product deleted";
-    }
 }

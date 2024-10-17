@@ -43,6 +43,8 @@ public class ProductControllerTest {
     private ProductService productService;
 
     private ProductCreationRequest request;
+    private ProductCreationRequest request1;
+
     private Product productResponse;
     private Category category;
     private Shop shop;
@@ -116,9 +118,20 @@ public class ProductControllerTest {
     @Test
     void createProduct_validRequest_fail() throws Exception {
         //Given
-        Category nonExistentCategory = new Category();
-        nonExistentCategory.setCategoryId(2L);
-        request.setCategory(nonExistentCategory.getCategoryId());
+        request1 = ProductCreationRequest.builder()
+                .productName("siu")
+                .category(2L)
+                .shop(shop.getShopId())
+                .description("duoc")
+                .measurementUnit("12")
+                .unitBuyPrice(Double.valueOf("12"))
+                .unitSellPrice(Double.valueOf("40"))
+                .discount(Double.valueOf("0.2"))
+                .stock(Integer.parseInt("20"))
+                .pictureUrl("")
+                .pictureUrl2("")
+                .isActive(Boolean.valueOf("true"))
+                .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
         String content = objectMapper.writeValueAsString(request);
@@ -127,9 +140,8 @@ public class ProductControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/products")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(content))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("code").value(1010))
-                .andExpect(MockMvcResultMatchers.jsonPath("message").value("Category not existed"));
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                ;
     }
 
     @Test

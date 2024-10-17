@@ -3,6 +3,8 @@ package com.shoppingapp.shoppingapp.service;
 import com.shoppingapp.shoppingapp.dto.request.ProductCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.ProductUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.response.ProductResponse;
+import com.shoppingapp.shoppingapp.exceptions.AppException;
+import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
 import com.shoppingapp.shoppingapp.models.Category;
 import com.shoppingapp.shoppingapp.models.Product;
 import com.shoppingapp.shoppingapp.models.Shop;
@@ -177,9 +179,66 @@ class ProductServiceTest {
         Mockito.doNothing().when(productRepository).delete(ArgumentMatchers.any(Product.class));
 
         // When
-        String result = productService.deleteProductById(product);
+        String result = productService.deleteProductById(1L);
 
         // Then
-        Assertions.assertThat(result).isEqualTo("Product deleted");
+        Assertions.assertThat(result).isEqualTo("");
     }
+
+    @Test
+    void getProductById_ProductNotFound() {
+        Mockito.when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        Assertions.assertThatThrownBy(() -> productService.getProductById(1L))
+                .isInstanceOf(AppException.class)
+                .hasMessage(ErrorCode.PRODUCT_NOT_EXISTED.getMessage())
+                .extracting("errorCode")
+                .isEqualTo(ErrorCode.PRODUCT_NOT_EXISTED);
+    }
+
+    @Test
+    void createProduct_CategoryNotFound() {
+        Mockito.when(categoryRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        Assertions.assertThatThrownBy(() -> productService.createProduct(requestCreate))
+                .isInstanceOf(AppException.class)
+                .hasMessage(ErrorCode.CATEGORY_NOT_EXISTED.getMessage())
+                .extracting("errorCode")
+                .isEqualTo(ErrorCode.CATEGORY_NOT_EXISTED);
+    }
+
+    @Test
+    void createProduct_ShopNotFound() {
+        Mockito.when(shopRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        Assertions.assertThatThrownBy(() -> productService.createProduct(requestCreate))
+                .isInstanceOf(AppException.class)
+                .hasMessage(ErrorCode.SHOP_NOT_EXISTED.getMessage())
+                .extracting("errorCode")
+                .isEqualTo(ErrorCode.SHOP_NOT_EXISTED);
+    }
+
+    @Test
+    void updateProduct_ProductNotFound() {
+        Mockito.when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        Assertions.assertThatThrownBy(() -> productService.updateProduct(1L, requestUpdate))
+                .isInstanceOf(AppException.class)
+                .hasMessage(ErrorCode.PRODUCT_NOT_EXISTED.getMessage())
+                .extracting("errorCode")
+                .isEqualTo(ErrorCode.PRODUCT_NOT_EXISTED);
+    }
+
+    @Test
+    void deleteProductById_ProductNotFound() {
+        Mockito.when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        Assertions.assertThatThrownBy(() -> productService.deleteProductById(1L))
+                .isInstanceOf(AppException.class)
+                .hasMessage(ErrorCode.PRODUCT_NOT_EXISTED.getMessage())
+                ;
+    }
+
+
+
 }

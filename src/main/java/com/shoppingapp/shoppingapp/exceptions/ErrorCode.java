@@ -36,6 +36,9 @@ public enum ErrorCode {
     SHOP_REQUEST_NOT_EXISTED(3002, "Shop request creation not existed", HttpStatus.BAD_REQUEST),
     PAYMENT_NOT_FOUND(4000,"Payment not found",HttpStatus.BAD_REQUEST),
     PAYMENT_EXISTED(4001,"Payment existed",HttpStatus.BAD_REQUEST),
+    TRANSACTION_NOT_FOUND(4002,"Transaction not found",HttpStatus.BAD_REQUEST),
+    TRANSACTION_NOT_EXISTED(4003,"Transaction not existed",HttpStatus.BAD_REQUEST),
+
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
