@@ -88,19 +88,23 @@ public class ProductServiceImpl implements ProductService {
 
         productMapper.updateProduct(product, request);
 
-        var shopOptional = shopRepository.findById(request.getShop());
-        if (!shopOptional.isPresent()) {
-            throw new AppException(ErrorCode.SHOP_NOT_EXISTED);
+        // Check if shop ID is provided before updating shop
+        if (request.getShop() != null) {
+            var shopOptional = shopRepository.findById(request.getShop());
+            if (!shopOptional.isPresent()) {
+                throw new AppException(ErrorCode.SHOP_NOT_EXISTED);
+            }
+            product.setShop(shopOptional.get());
         }
 
-        product.setShop(shopOptional.get());
-
-        var categoryOptional = categoryRepository.findById(request.getCategory());
-        if (!categoryOptional.isPresent()) {
-            throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
+        // Check if category ID is provided before updating category
+        if (request.getCategory() != null) {
+            var categoryOptional = categoryRepository.findById(request.getCategory());
+            if (!categoryOptional.isPresent()) {
+                throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
+            }
+            product.setCategory(categoryOptional.get());
         }
-
-        product.setCategory(categoryOptional.get());
 
         return productMapper.toProductResponse(productRepository.save(product));
     }

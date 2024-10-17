@@ -11,7 +11,6 @@ import java.util.Set;
 
 @Entity
 @AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Builder
 public class Shop {
@@ -42,4 +41,12 @@ public class Shop {
     private String logo;
     private String cover;
 
+    // Constructor with ID
+    public Shop(Long shopId) {
+        this.shopId = shopId;
+    }
+
+    // Default constructor
+    public Shop() {
+    }
 }

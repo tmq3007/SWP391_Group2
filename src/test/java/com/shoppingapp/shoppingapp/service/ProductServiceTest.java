@@ -6,7 +6,9 @@ import com.shoppingapp.shoppingapp.dto.response.ProductResponse;
 import com.shoppingapp.shoppingapp.models.Category;
 import com.shoppingapp.shoppingapp.models.Product;
 import com.shoppingapp.shoppingapp.models.Shop;
+import com.shoppingapp.shoppingapp.repository.CategoryRepository;
 import com.shoppingapp.shoppingapp.repository.ProductRepository;
+import com.shoppingapp.shoppingapp.repository.ShopRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +33,12 @@ class ProductServiceTest {
     @MockBean
     private ProductRepository productRepository;
 
+    @MockBean
+    private CategoryRepository categoryRepository;
+
+    @MockBean
+    private ShopRepository shopRepository;
+
     private ProductCreationRequest requestCreate;
     private ProductUpdateRequest requestUpdate;
     private Product product;
@@ -40,20 +48,22 @@ class ProductServiceTest {
 
     @BeforeEach
     void initData() {
-        // Create dummy Category and Shop
+        // Dummy Category
         category = new Category();
         category.setCategoryId(1L);
         category.setCategoryName("Electronics");
 
-        shop = new Shop();
-        shop.setShopId(1L);
-        shop.setShopName("Shop1");
+        // Dummy Shop
+        shop = Shop.builder()
+                .shopId(1L)
+                .shopName("Shop1")
+                .build();
 
         // Initialize ProductCreationRequest for test cases
         requestCreate = ProductCreationRequest.builder()
-                .category(1L)  // Chuyển thành Long ID thay vì đối tượng
-                .shop(1L)      // Chuyển thành Long ID thay vì đối tượng
                 .productName("TestProduct")
+                .category(1L)  // Using category ID
+                .shop(1L)      // Using shop ID
                 .description("Test Product Description")
                 .measurementUnit("12")
                 .unitBuyPrice(50.0)
@@ -95,23 +105,12 @@ class ProductServiceTest {
                 .isActive(true)
                 .build();
 
-        // Initialize ProductResponse for test cases
-        response = ProductResponse.builder()
-                .productId(product.getProductId())
-                .productName(product.getProductName())
-                .description(product.getDescription())
-                .measurementUnit(product.getMeasurementUnit())
-                .unitBuyPrice(product.getUnitBuyPrice())
-                .unitSellPrice(product.getUnitSellPrice())
-                .discount(product.getDiscount())
-                .stock(product.getStock())
-                .pictureUrl(product.getPictureUrl())
-                .pictureUrl2(product.getPictureUrl2())
-                .isActive(product.getIsActive())
-                .category(product.getCategory().getCategoryId())  // Sử dụng ID thay vì đối tượng
-                .shop(product.getShop().getShopId())              // Sử dụng ID thay vì đối tượng
-                .build();
+        // Mock repository to return dummy data
+        Mockito.when(shopRepository.findById(anyLong())).thenReturn(Optional.of(shop));
+        Mockito.when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
+        Mockito.when(productRepository.save(ArgumentMatchers.any(Product.class))).thenReturn(product);
     }
+
 
     @Test
     void getAllProducts() {
@@ -157,10 +156,13 @@ class ProductServiceTest {
     void updateProduct() {
         // Mock findById and save methods
         Mockito.when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
+        Mockito.when(shopRepository.findById(anyLong())).thenReturn(Optional.of(shop));
+        Mockito.when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
         Mockito.when(productRepository.save(ArgumentMatchers.any(Product.class))).thenReturn(product);
 
         // When
-        ProductResponse result = productService.updateProduct(1L, requestUpdate);
+
+        var result = productService.updateProduct(1L, requestUpdate);
 
         // Then
         Assertions.assertThat(result.getProductId()).isEqualTo(1L);
