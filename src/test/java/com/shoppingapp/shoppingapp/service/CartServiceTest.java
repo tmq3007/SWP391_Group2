@@ -6,6 +6,7 @@ import com.shoppingapp.shoppingapp.exceptions.AppException;
 import com.shoppingapp.shoppingapp.models.*;
 import com.shoppingapp.shoppingapp.repository.CartItemRepository;
 import com.shoppingapp.shoppingapp.repository.CartRepository;
+import com.shoppingapp.shoppingapp.repository.ProductRepository;
 import com.shoppingapp.shoppingapp.service.Impl.CartServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,6 +45,8 @@ class CartServiceTest {
     private Cart cart;
     private CartItem cartItem;
     private Product product;
+    @Mock
+    private ProductRepository productRepository;
 
     @BeforeEach
     void initData() {
@@ -96,8 +99,8 @@ class CartServiceTest {
     @WithMockUser(roles = "CUSTOMER")
     @Transactional
     void addCartItem_request_success() throws Exception {
-        // Arrange
-        when(productService.getProductById(anyLong())).thenReturn(product);
+        // Mocking repositories
+        //when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
         when(cartRepository.findByUserId(user.getId())).thenReturn(cart);
         when(cartItemRepository.findByCartAndProductAndBuyUnit(any(Cart.class), any(Product.class), anyString())).thenReturn(null);
         when(cartItemRepository.save(any(CartItem.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -110,7 +113,7 @@ class CartServiceTest {
         assertThat(addedItem.getProduct().getProductId()).isEqualTo(product.getProductId());
         assertThat(addedItem.getQuantity()).isEqualTo(3); // Ensure the quantity is set correctly
         assertThat(cart.getTotalItem()).isEqualTo(1); // Total items in cart after addition
-        assertThat(cart.getTotalPrice()).isEqualTo(165.0); // Verify total price after addition
+        assertThat(cart.getTotalPrice()).isEqualTo(165.0); // 55 * 3 = 165.0
 
     }
 
