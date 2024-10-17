@@ -11,11 +11,12 @@ import java.util.Set;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ShopUpdateRequest {
+
     private String shopName;
     private String address;
     private String city;
-    private String state;
-    private String country;
+    private String district;
+    private String subdistrict;
     private String phone;
     private String description;
     private String logo;

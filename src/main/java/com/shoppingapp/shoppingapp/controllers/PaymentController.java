@@ -4,6 +4,8 @@ import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
 import com.shoppingapp.shoppingapp.dto.request.PaymentCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.PaymentUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.response.PaymentResponse;
+import com.shoppingapp.shoppingapp.exceptions.AppException;
+import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
 import com.shoppingapp.shoppingapp.models.Category;
 import com.shoppingapp.shoppingapp.models.Payment;
 import com.shoppingapp.shoppingapp.models.User;
@@ -25,13 +27,17 @@ public class PaymentController {
     private PaymentService paymentService;
 
     @GetMapping
-    public ResponseEntity<List<Payment>> getAllPayments() {
-        return ResponseEntity.ok(paymentService.getAllPayments());
+    public ApiResponse<List<Payment>> getAllPayments() {
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setResult(paymentService.getAllPayments());
+        return apiResponse;
     }
 
     @GetMapping("/{paymentId}")
-    public PaymentResponse getPayment(@PathVariable("paymentId") Long paymentId) {
-        return  paymentService.getPayment(paymentId);
+    public ApiResponse<PaymentResponse> getPayment(@PathVariable("paymentId") Long paymentId) {
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setResult(paymentService.getPayment(paymentId));
+        return  apiResponse;
     }
 
     @PostMapping("")
@@ -42,21 +48,27 @@ public class PaymentController {
     }
 
     @PatchMapping("/{paymentId}")
-    public ResponseEntity<PaymentResponse> updatePayment(@RequestBody PaymentUpdateRequest request,
+    public ApiResponse<PaymentResponse> updatePayment(@RequestBody PaymentUpdateRequest request,
                                                  @PathVariable("paymentId") Long paymentId ) {
-
-
-        return ResponseEntity.ok(paymentService.updatePayment(request,paymentId));
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setResult(paymentService.updatePayment(request,paymentId));
+        return apiResponse;
     }
 
     @DeleteMapping("/{paymentId}")
-    public ResponseEntity<String> deleteUser(@PathVariable("paymentId") Long paymentId) {
+    public ApiResponse<String> deletePayment(@PathVariable("paymentId") Long paymentId) {
         Payment paymentObj = paymentService.getPaymentById(paymentId);
-        String deleteMsg = "";
+
+        ApiResponse apiResponse = new ApiResponse();
         if(paymentObj != null){
-           deleteMsg =  paymentService.deletePayment(paymentObj);
+             paymentService.deletePayment(paymentObj);
+            apiResponse.setCode(0);
+           apiResponse.setResult("Deleted Payment Successfully");
         }
-        return ResponseEntity.ok(deleteMsg);
+        else {
+            throw new AppException(ErrorCode.PAYMENT_NOT_FOUND);
+        }
+        return apiResponse;
     }
 
 }
