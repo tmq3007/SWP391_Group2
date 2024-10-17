@@ -45,6 +45,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -94,11 +95,19 @@
 			<scope>test</scope>
 		</dependency>
 
+			<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail -->
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-mail</artifactId>
-				<version>3.3.4</version>
 			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context-support</artifactId>
+				<version>5.3.24</version>
+			</dependency>
+
+
 
 			<dependency>
 				<groupId>org.apache.commons</groupId>
