@@ -12,12 +12,12 @@ import java.util.List;
 
 public interface CartService {
 
-    public CartItem addCartItem(
+     CartItem addCartItem(
             User user,
             Product product,
             String unitBuy,
             int  quantity
     );
 
-    public Cart findUserCart(User user);
+     Cart findUserCart(User user);
 }

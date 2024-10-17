@@ -1,5 +1,9 @@
 package com.shoppingapp.shoppingapp.controllers;
 
+import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
+import com.shoppingapp.shoppingapp.dto.request.AddressCreationRequest;
+import com.shoppingapp.shoppingapp.dto.request.AddressUpdateRequest;
+import com.shoppingapp.shoppingapp.dto.response.AddressResponse;
 import com.shoppingapp.shoppingapp.models.Address;
 import com.shoppingapp.shoppingapp.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,30 +20,39 @@ public class AddressController {
     @Autowired
     private AddressService addressService;
 
+    // Get all addresses
     @GetMapping
-    public List<Address> getAllAddresses() {
-        return addressService.getAllAddresses();
+    public ResponseEntity<List<Address>> getAllAddresses() {
+        return ResponseEntity.ok(addressService.getAllAddress());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Address> getAddressById(@PathVariable Long id) {
-        return ResponseEntity.ok(addressService.getAddressById(id));
-
+    // Get address by ID
+    @GetMapping("{addressId}")
+    ApiResponse<AddressResponse> getAddress(@PathVariable("addressId") Long addressId) {
+        return ApiResponse.<AddressResponse>builder().result(addressService.getAddressById(addressId)).build();
     }
 
-    @PostMapping
-    public Address createAddress(@RequestBody Address address) {
-        return addressService.addAddress(address);
+    // Add new address
+    @PostMapping("")
+    ApiResponse<AddressResponse> createAddress(@RequestBody AddressCreationRequest request) {
+        ApiResponse apiResponse = new ApiResponse<>();
+        apiResponse.setResult(addressService.createAddress(request));
+        return apiResponse;
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Address> updateAddress(@PathVariable Long id, @RequestBody Address addressDetails) {
-        return ResponseEntity.ok(addressService.updateAddress(addressDetails,id));
+    // Update an address by ID
+    @PatchMapping("/{addressId}")
+    ResponseEntity<AddressResponse> updateAddress(
+            @RequestBody AddressUpdateRequest request,
+            @PathVariable("addressId") Long addressId
+    ) {
+        return ResponseEntity.ok(addressService.updateAddress(request, addressId));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAddress(@PathVariable Long id) {
-        addressService.deleteAddress(id);
-        return ResponseEntity.noContent().build();
+    // Delete an address by ID
+    @DeleteMapping("/{addressId}")
+    ApiResponse<String> deleteAddress(@PathVariable("addressId") Long addressId) {
+        addressService.deleteAddress(addressId);
+        return ApiResponse.<String>builder().result("Address is deleted").build();
     }
 }

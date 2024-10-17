@@ -1,6 +1,7 @@
 package com.shoppingapp.shoppingapp.controllers;
 
 import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
+import com.shoppingapp.shoppingapp.dto.request.ProfileUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.response.UserResponse;
@@ -93,4 +94,12 @@ public class UserController {
                 .result(userService.getCustomers())
                 .build();
     }
+
+    @PutMapping("/profile/{userId}")
+    ApiResponse<String> updateProfile(@PathVariable("userId") Long userId,@RequestBody ProfileUpdateRequest request) {
+        userService.updateProfile(userId,request);
+        return ApiResponse.<String>builder().result("User updated").build();
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package com.shoppingapp.shoppingapp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -32,6 +33,8 @@ public class User {
 
      @ManyToMany
     Set<Role> roles;
+
+
 
 
 }

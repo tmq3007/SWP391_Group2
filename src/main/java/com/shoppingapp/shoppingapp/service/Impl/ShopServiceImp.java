@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,21 +30,24 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class ShopServiceImp implements ShopService {
+    @Override
+    public Shop getShopProfile(String jwt) {
+        return null;
+    }
+
     @Autowired
     private ShopRepository shopRepository;
     @Autowired
     private ShopMapper shopMapper;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
-    private ProductRepository productRepository;
+
 
 
     @Override
-    public List<Shop> getAllShops() {
-        return (List<Shop>) shopRepository.findAll();
+    public List<ShopResponse> getAllShops() {
+
+        return shopRepository.findAll().stream().map(shopMapper::toShopResponse).collect(Collectors.toList());
     }
 
     @Override
@@ -52,7 +56,7 @@ public class ShopServiceImp implements ShopService {
     }
 
     @Override
-    public Shop createShop(ShopCreationRequest request) {
+    public ShopResponse createShop(ShopCreationRequest request) {
         if(shopRepository.existsByShopName(request.getShopName())){
             throw new AppException(ErrorCode.SHOP_EXISTED);
         }
@@ -63,9 +67,9 @@ public class ShopServiceImp implements ShopService {
         }
 
         shop.setUser(userOp.get());
+        Shop savedShop = shopRepository.save(shop);
 
-
-        return shopRepository.save(shop);
+        return shopMapper.toShopResponse(savedShop);
     }
 
     @Override
@@ -87,7 +91,11 @@ public class ShopServiceImp implements ShopService {
        return shopRepository.findAll().size();
     }
 
-
+    @Override
+    public Optional<Long> getShopIdByUserId(Long userId) {
+        Optional<Shop> shop = shopRepository.findByUserId(userId);
+        return shop.map(Shop::getShopId);
+    }
 
 
 }

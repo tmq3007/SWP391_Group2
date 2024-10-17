@@ -12,4 +12,5 @@ public interface OrderService {
     void deleteOrder(Orders order);
     void deleteOrders(List<Orders> orders);
     int getTotalOrders();
+    Long getShopId(Long orderId);
 }

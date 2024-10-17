@@ -16,10 +16,12 @@ import com.shoppingapp.shoppingapp.repository.ProductRepository;
 import com.shoppingapp.shoppingapp.repository.UserRepository;
 import com.shoppingapp.shoppingapp.service.CartService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.util.HashSet;
@@ -28,6 +30,7 @@ import java.util.Optional;
 import java.util.Set;
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CartServiceImpl implements CartService {
 
     private final UserRepository userRepository;
@@ -35,14 +38,27 @@ public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final CartMapper cartMapper;
+
+
     @Override
+    @Transactional
     @PreAuthorize("hasRole('CUSTOMER')")
     public CartItem addCartItem(User user, Product product, String unitBuy, int quantity) {
+        if (quantity <= 0) {
+            throw new AppException(ErrorCode.INVALID_KEY);
+        }
+
+        // Check if the product exists
+//       Product optionalProduct = productRepository.findById(product.getProductId())
+//               .orElseThrow(()->new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
+
+
         Cart cart = findUserCart(user);
 
         // Tìm kiếm sản phẩm trong giỏ hàng với cùng sản phẩm và đơn vị mua
         CartItem isPresent = cartItemRepository.findByCartAndProductAndBuyUnit(cart, product, unitBuy);
 
+        // If the item is not present in the cart, add it
         if (isPresent == null) {
             // Sản phẩm chưa có trong giỏ hàng, thêm mới
             CartItem cartItem = new CartItem();
@@ -60,44 +76,50 @@ public class CartServiceImpl implements CartService {
             cartItem.setCart(cart); // Gắn giỏ hàng cho item mới
 
             // Cập nhật tổng số lượng và giá của giỏ hàng
+            Double currentTotalPrice = cart.getTotalPrice() != null ? cart.getTotalPrice() : 0.0;
+
+            // Cập nhật tổng số lượng và giá của giỏ hàng
             cart.setTotalItem(cart.getTotalItem() + quantity);
-            cart.setTotalPrice(cart.getTotalPrice() + totalPrice);
+            cart.setTotalPrice(currentTotalPrice + totalPrice);
 
             return cartItemRepository.save(cartItem); // Lưu và trả về item mới
         } else {
+            // Update existing cart item
             int newQuantity = isPresent.getQuantity() + quantity;
             Double oldTotalPrice = isPresent.getTotalPrice();
             Double newTotalPrice = newQuantity * product.getUnitSellPrice();
 
-// Cập nhật số lượng và tổng giá cho item đã tồn tại
+            // Cập nhật số lượng và tổng giá cho item đã tồn tại
             isPresent.setQuantity(newQuantity);
             isPresent.setTotalPrice(newTotalPrice);
 
-// Cập nhật tổng số lượng và giá của giỏ hàng
+            // Cập nhật tổng số lượng và giá của giỏ hàng
             cart.setTotalItem(cart.getTotalItem() + quantity);
             cart.setTotalPrice(cart.getTotalPrice() - oldTotalPrice + newTotalPrice);
-
 
             return cartItemRepository.save(isPresent); // Lưu và trả về item đã cập nhật
         }
     }
 
+
     @Override
+    @Transactional
     @PreAuthorize("hasRole('CUSTOMER')")
     public Cart findUserCart(User user) {
         Cart cart = cartRepository.findByUserId(user.getId());
 
-        // Nếu không tìm thấy cart, tạo một giỏ hàng mới
         if (cart == null) {
             cart = new Cart();
             cart.setUser(user);
             cart.setCartItems(new HashSet<>());
-//            cart.setTotalItem(0);
-//            cart.setTotalPrice(0.0);
-            cart = cartRepository.save(cart);
+            cart.setTotalItem(0);
+            cart.setTotalPrice(0.0);
+            cart = cartRepository.save(cart); // Nếu cart là null, hãy tạo mới và lưu
         }
 
         return cart;
     }
+
+
 
 }
