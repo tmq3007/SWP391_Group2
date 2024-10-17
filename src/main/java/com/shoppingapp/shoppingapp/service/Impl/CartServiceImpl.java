@@ -16,6 +16,7 @@ import com.shoppingapp.shoppingapp.repository.ProductRepository;
 import com.shoppingapp.shoppingapp.repository.UserRepository;
 import com.shoppingapp.shoppingapp.service.CartService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,6 +30,7 @@ import java.util.Optional;
 import java.util.Set;
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CartServiceImpl implements CartService {
 
     private final UserRepository userRepository;
@@ -43,14 +45,13 @@ public class CartServiceImpl implements CartService {
     @PreAuthorize("hasRole('CUSTOMER')")
     public CartItem addCartItem(User user, Product product, String unitBuy, int quantity) {
         if (quantity <= 0) {
-            throw new AppException(ErrorCode.INVALID_KEY); // Use INVALID_KEY for invalid quantity
+            throw new AppException(ErrorCode.INVALID_KEY);
         }
 
         // Check if the product exists
-        Optional<Product> optionalProduct = productRepository.findById(product.getProductId());
-        if (optionalProduct.isEmpty()) {
-            throw new AppException(ErrorCode.PRODUCT_NOT_EXISTED);
-        }
+//       Product optionalProduct = productRepository.findById(product.getProductId())
+//               .orElseThrow(()->new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
+
 
         Cart cart = findUserCart(user);
 
@@ -99,6 +100,7 @@ public class CartServiceImpl implements CartService {
             return cartItemRepository.save(isPresent); // Lưu và trả về item đã cập nhật
         }
     }
+
 
     @Override
     @Transactional
