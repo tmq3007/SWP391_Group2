@@ -68,7 +68,7 @@ public class CartServiceImpl implements CartService {
             cartItem.setBuyUnit(unitBuy);
 
             // Tính tổng giá cho sản phẩm mới
-            Double totalPrice = quantity * product.getUnitSellPrice();
+            Double totalPrice = quantity * product.getUnitSellPrice()*(1-product.getDiscount());
             cartItem.setTotalPrice(totalPrice);
 
             // Thêm vào giỏ hàng
