@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,8 +37,9 @@ public class AddressServiceImp implements AddressService {
     private AddressMapper addressMapper;
 
     @Override
-    public List<Address> getAllAddress() {
-        return (List<Address>) addressRepository.findAll();
+    public List<AddressResponse> getAllAddress() {
+        return addressRepository.findAll().stream().map(addressMapper::toResponse).collect(Collectors.toList());
+
     }
 
     @Override
@@ -48,7 +50,7 @@ public class AddressServiceImp implements AddressService {
     }
 
     @Override
-    public Address createAddress(AddressCreationRequest request) {
+    public AddressResponse createAddress(AddressCreationRequest request) {
         var userOp = userRepository.findById(request.getUser());
         if (userOp.isEmpty()) {
             throw new AppException(ErrorCode.USER_NOT_EXISTED);
@@ -57,7 +59,7 @@ public class AddressServiceImp implements AddressService {
         User user = userOp.get();
         Address address = addressMapper.toAddress(request);
         address.setUser(user);
-        return addressRepository.save(address);
+        return addressMapper.toResponse(addressRepository.save(address));
     }
 
     @Override

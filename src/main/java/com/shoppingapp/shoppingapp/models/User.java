@@ -1,10 +1,10 @@
 package com.shoppingapp.shoppingapp.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -35,6 +35,8 @@ public class User {
     Set<Role> roles;
 
 
+     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Wishlist> wishListList;
 
 
 }

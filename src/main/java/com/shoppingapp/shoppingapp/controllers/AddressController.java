@@ -22,7 +22,7 @@ public class AddressController {
 
     // Get all addresses
     @GetMapping
-    public ResponseEntity<List<Address>> getAllAddresses() {
+    public ResponseEntity<List<AddressResponse>> getAllAddresses() {
         return ResponseEntity.ok(addressService.getAllAddress());
     }
 
