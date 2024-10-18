@@ -35,8 +35,6 @@ public class User {
     Set<Role> roles;
 
 
-     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Wishlist> wishListList;
 
 
 }

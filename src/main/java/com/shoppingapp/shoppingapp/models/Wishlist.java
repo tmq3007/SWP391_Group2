@@ -1,5 +1,6 @@
 package com.shoppingapp.shoppingapp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -17,9 +18,9 @@ public class Wishlist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long wishlistId;
 
-    @ManyToMany
 
-    List<Product> product;
+    @OneToMany
+    List<Product> products;
 
     @ManyToOne
     @JoinColumn(name = "userid")

@@ -1,15 +1,17 @@
 package com.shoppingapp.shoppingapp.controller;
-import com.shoppingapp.shoppingapp.models.Wishlist;
+
+import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
 import com.shoppingapp.shoppingapp.dto.request.WishlistRequest;
+import com.shoppingapp.shoppingapp.dto.response.WishlistResponse;
 import com.shoppingapp.shoppingapp.service.WishlistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(maxAge = 3600)
 @RestController
-@RequestMapping("/api/wishlists")
+@RequestMapping("/api/v1/wishlist")
 public class WishlistController {
 
     @Autowired
@@ -17,16 +19,24 @@ public class WishlistController {
 
     // Endpoint to create a new wishlist
     @PostMapping
-    public ResponseEntity<Wishlist> addWishlist(@RequestBody WishlistRequest wishlistRequest) {
-        Wishlist createdWishlist = wishlistService.createWishlist(wishlistRequest);
-        return ResponseEntity.ok(createdWishlist);
+    public ApiResponse<WishlistResponse> addWishlist(@RequestBody WishlistRequest wishlistRequest) {
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setResult(wishlistService.createWishlist(wishlistRequest));
+        return apiResponse;
     }
 
     // Endpoint to get all wishlists for a user
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Wishlist>> getUserWishlists(@PathVariable Long userId) {
-        List<Wishlist> wishlists = wishlistService.getWishlistsByUser(userId);
+    public ResponseEntity<List<WishlistResponse>> getUserWishlists(@PathVariable Long userId) {
+        List<WishlistResponse> wishlists = wishlistService.getWishlistsByUser(userId);
         return ResponseEntity.ok(wishlists);
+    }
+
+    // Endpoint to get a wishlist by ID
+    @GetMapping("/{wishlistId}")
+    public ResponseEntity<WishlistResponse> getWishlistById(@PathVariable Long wishlistId) {
+        WishlistResponse wishlist = wishlistService.getWishlistById(wishlistId);
+        return ResponseEntity.ok(wishlist);
     }
 
     // Endpoint to delete a wishlist by ID
@@ -38,21 +48,10 @@ public class WishlistController {
 
     // Endpoint to update an existing wishlist
     @PutMapping("/{wishlistId}")
-    public ResponseEntity<Wishlist> updateWishlist(
+    public ResponseEntity<WishlistResponse> updateWishlist(
             @PathVariable Long wishlistId,
             @RequestBody WishlistRequest wishlistRequest) {
-        Wishlist updatedWishlist = wishlistService.updateWishlist(wishlistId, wishlistRequest);
+        WishlistResponse updatedWishlist = wishlistService.updateWishlist(wishlistId, wishlistRequest);
         return ResponseEntity.ok(updatedWishlist);
-    }
-
-    // Endpoint to get a wishlist by ID (Optional)
-    @GetMapping("/{wishlistId}")
-    public ResponseEntity<Wishlist> getWishlistById(@PathVariable Long wishlistId) {
-        Wishlist wishlist = wishlistService.getWishlistById(wishlistId);
-        if (wishlist != null) {
-            return ResponseEntity.ok(wishlist);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
     }
 }
