@@ -109,8 +109,6 @@ public class ShopServiceTest {
             .shopName("Updated Shop Name")
             .address("Updated Address")
             .city("Updated City")
-            .district("Updated District")
-            .subdistrict("Updated Subdistrict")
             .phone("0987654321")
             .description("Updated Description")
             .logo("updated_logo.png")
