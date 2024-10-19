@@ -68,7 +68,7 @@ public class CartServiceImpl implements CartService {
             cartItem.setBuyUnit(unitBuy);
 
             // Tính tổng giá cho sản phẩm mới
-            Double totalPrice = quantity * product.getUnitSellPrice();
+            Double totalPrice = quantity * product.getUnitSellPrice()*(1-product.getDiscount());
             cartItem.setTotalPrice(totalPrice);
 
             // Thêm vào giỏ hàng
@@ -87,7 +87,7 @@ public class CartServiceImpl implements CartService {
             // Update existing cart item
             int newQuantity = isPresent.getQuantity() + quantity;
             Double oldTotalPrice = isPresent.getTotalPrice();
-            Double newTotalPrice = newQuantity * product.getUnitSellPrice();
+            double newTotalPrice = newQuantity * product.getUnitSellPrice()*(1-product.getDiscount());
 
             // Cập nhật số lượng và tổng giá cho item đã tồn tại
             isPresent.setQuantity(newQuantity);
@@ -95,7 +95,7 @@ public class CartServiceImpl implements CartService {
 
             // Cập nhật tổng số lượng và giá của giỏ hàng
             cart.setTotalItem(cart.getTotalItem() + quantity);
-            cart.setTotalPrice(cart.getTotalPrice() - oldTotalPrice + newTotalPrice);
+            cart.setTotalPrice(cart.getTotalPrice() + oldTotalPrice + newTotalPrice);
 
             return cartItemRepository.save(isPresent); // Lưu và trả về item đã cập nhật
         }

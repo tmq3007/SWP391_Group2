@@ -1,6 +1,7 @@
 package com.shoppingapp.shoppingapp.dto.response;
 
 import com.shoppingapp.shoppingapp.models.Category;
+import com.shoppingapp.shoppingapp.models.Review;
 import com.shoppingapp.shoppingapp.models.Shop;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
@@ -30,4 +31,5 @@ public class ProductResponse {
     private String pictureUrl;
     private String pictureUrl2;
     private Boolean isActive;
+    Set<Review> reviews;
 }

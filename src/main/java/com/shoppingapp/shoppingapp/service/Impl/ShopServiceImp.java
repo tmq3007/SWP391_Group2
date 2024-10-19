@@ -46,7 +46,6 @@ public class ShopServiceImp implements ShopService {
 
     @Override
     public List<ShopResponse> getAllShops() {
-
         return shopRepository.findAll().stream().map(shopMapper::toShopResponse).collect(Collectors.toList());
     }
 
