@@ -16,6 +16,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 
@@ -80,4 +82,12 @@ public class UnverifiedShopServiceImpl implements UnverifiedShopService {
         unverifiedShopRepository.delete(unverifiedShop);
     }
 
+    @Override
+    public Long getUnverifiedShopIdByUserId(Long userId) {
+        Optional<UnverifiedShop> shop = unverifiedShopRepository.findByUserId(userId);
+        if (shop.isEmpty()) {
+            throw new AppException(ErrorCode.SHOP_REQUEST_NOT_EXISTED);
+        }
+        return shop.get().getShopId();
+    }
 }

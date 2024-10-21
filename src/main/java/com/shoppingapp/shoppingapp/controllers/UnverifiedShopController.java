@@ -10,6 +10,8 @@ import com.shoppingapp.shoppingapp.service.UnverifiedShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/v1")
@@ -31,5 +33,10 @@ public class UnverifiedShopController {
     ApiResponse<String> verifyShop(@PathVariable("unverified-shop-id")  Long unverifiedShopId) {
         unverifiedShopService.verifyShop(unverifiedShopId);
         return ApiResponse.<String>builder().result("Shop has been verified").build();
+    }
+
+    @GetMapping("/get-unverifed-shopid/{userId}")
+    ApiResponse<Long> getUnverifiedShop(@PathVariable("userId") Long userId) {
+        return ApiResponse.<Long>builder().result(unverifiedShopService.getUnverifiedShopIdByUserId(userId)).build();
     }
 }
