@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/v1/shops")
@@ -65,5 +67,8 @@ public class ShopController {
         return ApiResponse.<Integer>builder().result(shopService.getTotalShops()).build();
     }
 
-
+    @GetMapping("/get-shopId/{userId}")
+    ApiResponse<Long> getShopIdByUserId(@PathVariable("userId") Long userId) {
+        return ApiResponse.<Long>builder().result(shopService.getShopIdByUserId(userId)).build();
+    }
 }
