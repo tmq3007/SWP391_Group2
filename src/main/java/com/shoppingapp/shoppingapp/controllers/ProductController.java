@@ -60,12 +60,8 @@ public class ProductController {
 
     //Build Delete Product REST API
     @DeleteMapping("{productId}")
-    public ResponseEntity<String> deleteProduct(@PathVariable("productId") Long ProductId) {
-        Product productObj = productService.getProductById(ProductId);
-        String deleteMsg = null;
-        if(productObj != null) {
-            deleteMsg=productService.deleteProductById(productObj);
-        }
-        return ResponseEntity.ok(deleteMsg);
+    ApiResponse<String> deleteShop(@PathVariable("productId") Long productId) {
+        productService.deleteProductById(productId);
+        return ApiResponse.<String>builder().result("Product is deleted").build();
     }
 }

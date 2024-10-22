@@ -150,7 +150,7 @@ public class CartController {
             updatedCartitem = cartItemService.updateCartItem(user.getId(),cartItemId,cartItem);
         }
         ApiResponse<CartItem> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(cartItem);
+        apiResponse.setResult(updatedCartitem);
         return apiResponse;
     }
 

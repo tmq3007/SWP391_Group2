@@ -1,6 +1,7 @@
 package com.shoppingapp.shoppingapp.dto.response;
 
 import com.shoppingapp.shoppingapp.models.Category;
+import com.shoppingapp.shoppingapp.models.Review;
 import com.shoppingapp.shoppingapp.models.Shop;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
@@ -19,8 +20,8 @@ public class ProductResponse {
 
     private Long productId;
     private String productName;
-    private Category category;
-    private Shop shop;
+    private Long category;
+    private Long shop;
     private String description;
     private String measurementUnit;
     private Double unitBuyPrice;
@@ -30,4 +31,5 @@ public class ProductResponse {
     private String pictureUrl;
     private String pictureUrl2;
     private Boolean isActive;
+    Set<Review> reviews;
 }

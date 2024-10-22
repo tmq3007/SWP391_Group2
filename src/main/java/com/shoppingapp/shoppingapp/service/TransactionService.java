@@ -13,4 +13,6 @@ public interface TransactionService {
     List<Transaction> getTransactionsByShopId(Shop shop);
 
     List<Transaction> getAllTransactions();
+
+    Transaction getTransactionById(Long transId);
 }
