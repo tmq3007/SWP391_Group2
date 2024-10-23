@@ -73,8 +73,6 @@ public class ProductControllerTest {
                 .unitSellPrice(Double.valueOf("40"))
                 .discount(Double.valueOf("0.2"))
                 .stock(Integer.parseInt("20"))
-                .pictureUrl("")
-                .pictureUrl2("")
                 .isActive(Boolean.valueOf("true"))
                 .build();
         productResponse = Product.builder()
@@ -128,8 +126,6 @@ public class ProductControllerTest {
                 .unitSellPrice(Double.valueOf("40"))
                 .discount(Double.valueOf("0.2"))
                 .stock(Integer.parseInt("20"))
-                .pictureUrl("")
-                .pictureUrl2("")
                 .isActive(Boolean.valueOf("true"))
                 .build();
 

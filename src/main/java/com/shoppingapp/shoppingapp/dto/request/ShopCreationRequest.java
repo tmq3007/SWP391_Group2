@@ -22,5 +22,4 @@ public class ShopCreationRequest {
     private String logo;
     private String cover;
 
-
 }

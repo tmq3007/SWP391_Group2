@@ -9,6 +9,7 @@ import com.shoppingapp.shoppingapp.models.Product;
 import com.shoppingapp.shoppingapp.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +43,7 @@ public class ProductController {
     }
 
     //Build Add Product REST API
-    @PostMapping
+    @PostMapping()
     public ApiResponse<ProductResponse> createProduct(@RequestBody ProductCreationRequest request) {
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setResult(productService.createProduct(request));
