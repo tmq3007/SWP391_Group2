@@ -39,4 +39,9 @@ public class UnverifiedShopController {
     ApiResponse<Long> getUnverifiedShop(@PathVariable("userId") Long userId) {
         return ApiResponse.<Long>builder().result(unverifiedShopService.getUnverifiedShopIdByUserId(userId)).build();
     }
+
+    @GetMapping("/get-all-unverified-shops")
+    ApiResponse<Iterable<UnverifiedShop>> getAllUnverifiedShops() {
+        return ApiResponse.<Iterable<UnverifiedShop>>builder().result(unverifiedShopService.getAllUnverifiedShops()).build();
+    }
 }
