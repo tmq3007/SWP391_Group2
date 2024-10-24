@@ -19,4 +19,5 @@ public interface ShopService {
 
     Shop getShopProfile(String jwt);
 
+
 }

@@ -25,6 +25,9 @@ import java.util.stream.Collectors;
 
 
 public class ProductServiceImpl implements ProductService {
+
+
+
     @Override
     public String deleteProductById(Long productId) {
         productRepository.findById(productId)
@@ -48,6 +51,8 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> getAllProducts() {
         return (List<Product>) productRepository.findAll();
     }
+
+
 
     @Override
     public Product getProductById(Long ProductId) {
@@ -114,6 +119,14 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toProductResponse(productRepository.save(product));
     }
 
+    @Override
+    public List<Product> getAllProductsByShopId(Long shopId) {
+        var shop = shopRepository.findById(shopId);
+        if(shop.isEmpty()){
+            throw new AppException(ErrorCode.SHOP_NOT_EXISTED);
+        }
+        return productRepository.findByShopId(shopId);
+    }
 
 
 }

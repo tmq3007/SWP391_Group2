@@ -39,7 +39,6 @@ public class ShopController {
     // get shop by user id
     @GetMapping("/getShopByUserId/{userId}")
     ApiResponse<?> getShopByUserId(@PathVariable("userId") Long userId) {
-        System.out.println("Get shop id by user id!");
         return ApiResponse.builder().result(shopService.getShopIdByUserId(userId)).build();
     }
 

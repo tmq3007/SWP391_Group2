@@ -8,5 +8,8 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
     boolean existsByProductName(String name);
-    List<Product> findProductsByShop(Shop shop);
+
+    default List<Product> findByShopId(Long shopId) {
+        return null;
+    }
 }

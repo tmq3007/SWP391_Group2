@@ -2,15 +2,11 @@ package com.shoppingapp.shoppingapp.controllers;
 
 import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
 import com.shoppingapp.shoppingapp.dto.request.UnverifiedShopCreationRequest;
-import com.shoppingapp.shoppingapp.mapper.ShopMapper;
 import com.shoppingapp.shoppingapp.mapper.UnverifiedShopMapper;
 import com.shoppingapp.shoppingapp.models.UnverifiedShop;
-import com.shoppingapp.shoppingapp.service.ShopService;
 import com.shoppingapp.shoppingapp.service.UnverifiedShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
