@@ -36,11 +36,9 @@ public class ProductController {
     }
 
     //Build Get All Product REST API
-    @GetMapping("/shop/{shopId}")
-    public ApiResponse<List<Product>> getAllProductsByShopId(@PathVariable Long shopId) {
-        return ApiResponse.<List<Product>>builder()
-                .result(productService.getAllProductsByShopId(shopId))
-                .build();
+    @GetMapping("/get-all-product-by-shopId/{shopId}")
+    public ResponseEntity<List<Product>> getAllProductsByShopId(@PathVariable Long shopId) {
+        return ResponseEntity.ok(productService.getAllProductsByShopId(shopId));
     }
 
     //Build Get Product REST API

@@ -6,23 +6,19 @@ import com.shoppingapp.shoppingapp.dto.response.ProductResponse;
 import com.shoppingapp.shoppingapp.exceptions.AppException;
 import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
 import com.shoppingapp.shoppingapp.mapper.ProductMapper;
-import com.shoppingapp.shoppingapp.models.Category;
 import com.shoppingapp.shoppingapp.models.Product;
-import com.shoppingapp.shoppingapp.models.Shop;
 import com.shoppingapp.shoppingapp.repository.CategoryRepository;
 import com.shoppingapp.shoppingapp.repository.ProductRepository;
 import com.shoppingapp.shoppingapp.repository.ShopRepository;
 import com.shoppingapp.shoppingapp.service.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
-
+@Slf4j
 
 public class ProductServiceImpl implements ProductService {
 
@@ -121,12 +117,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getAllProductsByShopId(Long shopId) {
-        var shop = shopRepository.findById(shopId);
-        if(shop.isEmpty()){
-            throw new AppException(ErrorCode.SHOP_NOT_EXISTED);
-        }
-        return productRepository.findByShopId(shopId);
+        return productRepository.findAllProductsByShopId(shopId);
     }
-
-
 }
