@@ -1,40 +1,28 @@
 package com.shoppingapp.shoppingapp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
-import java.util.Set;
 
 @Entity
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
-@Builder
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User {
-
+public class Wishlist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     Long id;
-
-     String firstName;
-     String lastName;
-
-     String email;
-
-     String username;
-     String password;
-
-     String phone;
-
-     Boolean isActive;
-
-     @ManyToMany
-    Set<Role> roles;
+    private Long wishlistId;
 
 
+    @OneToMany
+    List<Product> products;
 
-
+    @ManyToOne
+    @JoinColumn(name = "userid")
+    private User user;
 }
