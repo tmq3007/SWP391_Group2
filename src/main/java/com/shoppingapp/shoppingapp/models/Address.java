@@ -24,6 +24,6 @@ public class Address {
     private String street;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id", nullable = true) // Make user nullable
+    @JoinColumn(name = "id", nullable = false)
     private User user;
 }

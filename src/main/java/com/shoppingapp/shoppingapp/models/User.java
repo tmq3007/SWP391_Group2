@@ -35,7 +35,7 @@ public class User {
      @ManyToMany
      Set<Role> roles;
 
-     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+     @OneToMany
      List<Address> addresses;
 
 }
