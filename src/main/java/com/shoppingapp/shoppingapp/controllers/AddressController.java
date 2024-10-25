@@ -28,9 +28,10 @@ public class AddressController {
 
     // Get address by ID
     @GetMapping("{addressId}")
-    ApiResponse<AddressResponse> getAddress(@PathVariable("addressId") Long addressId) {
+    ApiResponse<?> getAddress(@PathVariable("addressId") Long addressId) {
         return ApiResponse.<AddressResponse>builder().result(addressService.getAddressById(addressId)).build();
     }
+
 
     // Add new address
     @PostMapping("")
@@ -41,17 +42,24 @@ public class AddressController {
     }
 
     // Update an address by ID
-    @PatchMapping("/{addressId}")
-    ResponseEntity<AddressResponse> updateAddress(
-            @RequestBody AddressUpdateRequest request,
-            @PathVariable("addressId") Long addressId
-    ) {
-        return ResponseEntity.ok(addressService.updateAddress(request, addressId));
+    @PatchMapping
+    public ResponseEntity<?> updateAddress(@RequestBody Address request) {
+        // Log request details for debugging
+        System.out.println("Full Address Details: "
+                + request.getAddressID() + "\n"
+                + request.getCity() + "\n"
+                + request.getDistrict() + "\n"
+                + request.getStreet() + "\n"
+                + request.getSubDistrict());
+
+        // Call the service to update the address and return the response
+        return ResponseEntity.ok(addressService.updateAddress(request));
     }
 
     // Delete an address by ID
     @DeleteMapping("/{addressId}")
     ApiResponse<String> deleteAddress(@PathVariable("addressId") Long addressId) {
+        System.out.println(addressId);
         addressService.deleteAddress(addressId);
         return ApiResponse.<String>builder().result("Address is deleted").build();
     }

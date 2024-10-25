@@ -1,5 +1,6 @@
 package com.shoppingapp.shoppingapp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -32,9 +33,9 @@ public class User {
      Boolean isActive;
 
      @ManyToMany
-    Set<Role> roles;
+     Set<Role> roles;
 
-
-
+     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+     List<Address> addresses;
 
 }
