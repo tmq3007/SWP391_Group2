@@ -4,7 +4,6 @@ import com.shoppingapp.shoppingapp.dto.request.UnverifiedShopCreationRequest;
 import com.shoppingapp.shoppingapp.models.UnverifiedShop;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UnverifiedShopService {
     UnverifiedShop getUnverifiedShop();

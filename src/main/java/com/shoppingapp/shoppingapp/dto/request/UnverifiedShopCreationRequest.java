@@ -1,13 +1,13 @@
 package com.shoppingapp.shoppingapp.dto.request;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
 
-@Data
+import lombok.*;
+
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
 
 public class UnverifiedShopCreationRequest {
     private String shopName;
@@ -18,5 +18,6 @@ public class UnverifiedShopCreationRequest {
     private String country;
     private String phone;
     private String description;
-
+    private String logo;
+    private String cover;
 }

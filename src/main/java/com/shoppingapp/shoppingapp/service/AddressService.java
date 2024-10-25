@@ -8,9 +8,9 @@ import com.shoppingapp.shoppingapp.models.Address;
 import java.util.List;
 
 public interface AddressService {
-    List<Address> getAllAddress();
+    List<AddressResponse> getAllAddress();
     AddressResponse getAddressById(long AddressId);
-    Address createAddress(AddressCreationRequest request);
+    AddressResponse createAddress(AddressCreationRequest request);
     AddressResponse updateAddress(AddressUpdateRequest request, long AddressId);
     String deleteAddress(Long AddressId);
 }
