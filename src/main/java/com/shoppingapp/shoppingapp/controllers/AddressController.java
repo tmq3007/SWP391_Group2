@@ -14,7 +14,7 @@ import java.util.List;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
-@RequestMapping("/api/v1/addresses")
+    @RequestMapping("/api/v1/addresses")
 public class AddressController {
 
     @Autowired
@@ -51,9 +51,9 @@ public class AddressController {
                 + request.getDistrict() + "\n"
                 + request.getStreet() + "\n"
                 + request.getSubDistrict());
-
+        addressService.updateAddress(request);
         // Call the service to update the address and return the response
-        return ResponseEntity.ok(addressService.updateAddress(request));
+        return ResponseEntity.ok("Great!");
     }
 
     // Delete an address by ID

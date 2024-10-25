@@ -77,6 +77,12 @@ public class UserController {
         return ApiResponse.<String>builder().result("User has been banned").build();
     }
 
+    @PutMapping("/updatePhone/{userId}/{userPhone}")
+    ApiResponse<?> updateUserPhone(@PathVariable("userId") String userId, @PathVariable("userPhone") String userPhone) {
+        System.out.println(userId +" "+userPhone);
+       return ApiResponse.builder().result(userService.updateUserPhone(Long.parseLong(userId), userPhone)).build();
+    }
+
     @PutMapping("/unban/{userId}")
     ApiResponse<String> unbanUser(@PathVariable("userId") Long userId) {
         userService.unbanUser(userId);
