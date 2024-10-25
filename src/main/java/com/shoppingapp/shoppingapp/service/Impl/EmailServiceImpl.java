@@ -1,6 +1,8 @@
 package com.shoppingapp.shoppingapp.service.Impl;
 
+import com.shoppingapp.shoppingapp.dto.request.RejectShopRequest;
 import com.shoppingapp.shoppingapp.dto.request.ResetPasswordRequest;
+import com.shoppingapp.shoppingapp.dto.request.VerifyShopRequest;
 import com.shoppingapp.shoppingapp.exceptions.AppException;
 import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
 import com.shoppingapp.shoppingapp.models.User;
@@ -53,6 +55,70 @@ public class EmailServiceImpl implements EmailService {
         // Send email with the new password
         sendPasswordResetEmail(user.getEmail(), newPassword);
     }
+
+    @Override
+    public void verifyShop(VerifyShopRequest verifyShopRequest) {
+        // Get user email from the request
+        String toEmail = verifyShopRequest.getEmail();
+
+        // Send shop verification email
+        sendShopVerificationEmail(toEmail);
+    }
+
+    @Override
+    public void rejectShop(RejectShopRequest rejectShopRequest) {
+        // Get user email and rejection message from the request
+        String toEmail = rejectShopRequest.getEmail();
+        String rejectionMessage = rejectShopRequest.getMessage();
+
+        // Send shop rejection email
+        sendShopRejectionEmail(toEmail, rejectionMessage);
+    }
+
+    private void sendShopVerificationEmail(String toEmail) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+            helper.setTo(toEmail);
+            helper.setSubject("Shop Verification");
+
+            // HTML content for the shop verification email
+            String htmlContent = "<h3>Shop Verified</h3>"
+                    + "<p>Congratulations! Your shop has been successfully verified.</p>"
+                    + "<p>You can now access all the features of the platform.</p>";
+
+            helper.setText(htmlContent, true); // Enable HTML content
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            log.error("Error sending shop verification email: {}", e.getMessage());
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
+        }
+    }
+
+    private void sendShopRejectionEmail(String toEmail, String rejectionMessage) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+            helper.setTo(toEmail);
+            helper.setSubject("Shop Rejected");
+
+            // HTML content for the shop rejection email
+            String htmlContent = "<h3>Shop Rejected</h3>"
+                    + "<p>Unfortunately, your shop could not be verified due to the following reason(s):</p>"
+                    + "<p><strong>" + rejectionMessage + "</strong></p>"
+                    + "<p>Please review the feedback and resubmit your application if applicable.</p>";
+
+            helper.setText(htmlContent, true); // Enable HTML content
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            log.error("Error sending shop rejection email: {}", e.getMessage());
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
+        }
+    }
+
+
 
     private String generateRandomPassword() {
         SecureRandom random = new SecureRandom();
