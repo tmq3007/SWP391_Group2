@@ -72,8 +72,6 @@ class ProductServiceTest {
                 .unitSellPrice(100.0)
                 .discount(10.0)
                 .stock(50)
-                .pictureUrl("url1")
-                .pictureUrl2("url2")
                 .isActive(true)
                 .build();
 
