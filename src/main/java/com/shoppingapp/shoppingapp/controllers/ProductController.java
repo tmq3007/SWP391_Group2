@@ -9,6 +9,7 @@ import com.shoppingapp.shoppingapp.models.Product;
 import com.shoppingapp.shoppingapp.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,12 @@ public class ProductController {
         return ResponseEntity.ok(productService.getAllProducts());
     }
 
+    //Build Get All Product REST API
+    @GetMapping("/get-all-product-by-shopId/{shopId}")
+    public ResponseEntity<List<Product>> getAllProductsByShopId(@PathVariable Long shopId) {
+        return ResponseEntity.ok(productService.getAllProductsByShopId(shopId));
+    }
+
     //Build Get Product REST API
 
     @GetMapping("{productId}")
@@ -42,7 +49,7 @@ public class ProductController {
     }
 
     //Build Add Product REST API
-    @PostMapping
+    @PostMapping()
     public ApiResponse<ProductResponse> createProduct(@RequestBody ProductCreationRequest request) {
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setResult(productService.createProduct(request));
@@ -60,12 +67,8 @@ public class ProductController {
 
     //Build Delete Product REST API
     @DeleteMapping("{productId}")
-    public ResponseEntity<String> deleteProduct(@PathVariable("productId") Long ProductId) {
-        Product productObj = productService.getProductById(ProductId);
-        String deleteMsg = null;
-        if(productObj != null) {
-            deleteMsg=productService.deleteProductById(productObj);
-        }
-        return ResponseEntity.ok(deleteMsg);
+    ApiResponse<String> deleteShop(@PathVariable("productId") Long productId) {
+        productService.deleteProductById(productId);
+        return ApiResponse.<String>builder().result("Product is deleted").build();
     }
 }

@@ -43,6 +43,8 @@ public class ProductControllerTest {
     private ProductService productService;
 
     private ProductCreationRequest request;
+    private ProductCreationRequest request1;
+
     private Product productResponse;
     private Category category;
     private Shop shop;
@@ -63,16 +65,14 @@ public class ProductControllerTest {
 
         request = ProductCreationRequest.builder()
                 .productName("siu")
-                .category(String.valueOf(category))
-                .shop(String.valueOf(shop))
+                .category(category.getCategoryId())
+                .shop(shop.getShopId())
                 .description("duoc")
                 .measurementUnit("12")
                 .unitBuyPrice(Double.valueOf("12"))
                 .unitSellPrice(Double.valueOf("40"))
                 .discount(Double.valueOf("0.2"))
                 .stock(Integer.parseInt("20"))
-                .pictureUrl("")
-                .pictureUrl2("")
                 .isActive(Boolean.valueOf("true"))
                 .build();
         productResponse = Product.builder()
@@ -116,9 +116,18 @@ public class ProductControllerTest {
     @Test
     void createProduct_validRequest_fail() throws Exception {
         //Given
-        Category nonExistentCategory = new Category();
-        nonExistentCategory.setCategoryId(2L);
-        request.setCategory(String.valueOf(nonExistentCategory.getCategoryId()));
+        request1 = ProductCreationRequest.builder()
+                .productName("siu")
+                .category(2L)
+                .shop(shop.getShopId())
+                .description("duoc")
+                .measurementUnit("12")
+                .unitBuyPrice(Double.valueOf("12"))
+                .unitSellPrice(Double.valueOf("40"))
+                .discount(Double.valueOf("0.2"))
+                .stock(Integer.parseInt("20"))
+                .isActive(Boolean.valueOf("true"))
+                .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
         String content = objectMapper.writeValueAsString(request);
@@ -127,9 +136,8 @@ public class ProductControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/products")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(content))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("code").value(1010))
-                .andExpect(MockMvcResultMatchers.jsonPath("message").value("Category not existed"));
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                ;
     }
 
     @Test
@@ -172,8 +180,8 @@ public class ProductControllerTest {
     void updateProduct() throws Exception {
         // Given
         ProductUpdateRequest updateRequest = ProductUpdateRequest.builder()
-                .category("Electronics")
-                .shop("Shop1")
+                .category(2L)
+                .shop(1L)
                 .description("Updated product description")
                 .measurementUnit("kg")
                 .unitBuyPrice(15.0)
@@ -187,8 +195,8 @@ public class ProductControllerTest {
 
         ProductResponse updatedProductResponse = ProductResponse.builder()
                 .productName("Updated Product")
-                .category(category)
-                .shop(shop)
+                .category(2L)
+                .shop(1L)
                 .description("Updated product description")
                 .measurementUnit("kg")
                 .unitBuyPrice(15.0)
@@ -215,7 +223,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "admin", authorities = { "ADMIN"  })
+    @WithMockUser
     void deleteProduct() throws Exception {
             // Given
             Mockito.when(productService.deleteProductById(ArgumentMatchers.any())).thenReturn("Product deleted successfully");

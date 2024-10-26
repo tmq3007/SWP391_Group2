@@ -6,36 +6,23 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
-import java.util.Set;
 
 @Entity
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
-@Builder
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User {
-
+public class Wishlist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     Long id;
+    private Long wishlistId;
 
-     String firstName;
-     String lastName;
 
-     String email;
+    @OneToMany
+    List<Product> products;
 
-     String username;
-     String password;
-
-     String phone;
-
-     Boolean isActive;
-
-     @ManyToMany
-     Set<Role> roles;
-
-     @OneToMany
-     List<Address> addresses;
-
+    @ManyToOne
+    @JoinColumn(name = "userid")
+    private User user;
 }

@@ -15,8 +15,8 @@ import java.util.Set;
 public class ProductCreationRequest {
 
     private String productName;
-    private String category;
-    private String shop;
+    private Long category;
+    private Long shop;
     private String description;
     private String measurementUnit;
     private Double unitBuyPrice;

@@ -15,6 +15,9 @@ public interface ShopService {
     String deleteShop(Long shopId);
 
     int getTotalShops();
-    Optional<Long> getShopIdByUserId(Long userId);
+    Long getShopIdByUserId(Long userId);
+
     Shop getShopProfile(String jwt);
+
+
 }

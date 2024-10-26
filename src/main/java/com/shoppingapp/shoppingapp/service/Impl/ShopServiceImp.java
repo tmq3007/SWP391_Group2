@@ -91,9 +91,12 @@ public class ShopServiceImp implements ShopService {
     }
 
     @Override
-    public Optional<Long> getShopIdByUserId(Long userId) {
+    public Long getShopIdByUserId(Long userId) {
         Optional<Shop> shop = shopRepository.findByUserId(userId);
-        return shop.map(Shop::getShopId);
+        if (shop.isEmpty()) {
+            throw new AppException(ErrorCode.SHOP_NOT_EXISTED);
+        }
+        return shop.get().getShopId();
     }
 
 

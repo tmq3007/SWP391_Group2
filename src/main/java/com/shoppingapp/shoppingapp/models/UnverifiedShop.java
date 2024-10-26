@@ -11,9 +11,10 @@ import java.util.Set;
 
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Builder
-public class Shop {
+public class UnverifiedShop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long shopId;
@@ -21,16 +22,6 @@ public class Shop {
     @ManyToOne
     @JoinColumn(name = "id", nullable = false)
     private User user;
-
-    @OneToMany
-    @JsonIgnore
-
-    private Set<Product> products;
-
-    @ManyToMany
-    @JsonIgnore
-    private Set<Orders> order;
-
     private String shopName;
     private String address;
     private String city;
@@ -41,12 +32,6 @@ public class Shop {
     private String logo;
     private String cover;
 
-    // Constructor with ID
-    public Shop(Long shopId) {
-        this.shopId = shopId;
-    }
+    private Boolean isRejected;
 
-    // Default constructor
-    public Shop() {
-    }
 }

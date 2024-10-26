@@ -1,5 +1,7 @@
 package com.shoppingapp.shoppingapp.service.Impl;
 
+import com.shoppingapp.shoppingapp.exceptions.AppException;
+import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
 import com.shoppingapp.shoppingapp.models.Orders;
 import com.shoppingapp.shoppingapp.models.Shop;
 import com.shoppingapp.shoppingapp.models.Transaction;
@@ -20,10 +22,15 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final ShopRepository shopRepository;
 
+    @Override
+    public Transaction getTransactionById(Long transId) {
+        return transactionRepository.findById(transId).orElseThrow(() -> new AppException(ErrorCode.TRANSACTION_NOT_EXISTED));
+    }
 
     @Override
     public Transaction createTransaction(Orders order) {
-        Shop shop = shopRepository.findById(order.getShop().getShopId()).get();
+        Shop shop = shopRepository.findById(order.getShop().getShopId()).orElseThrow(()
+                -> new AppException(ErrorCode.SHOP_NOT_EXISTED));
 
         Transaction transaction = new Transaction();
         transaction.setShop(shop);

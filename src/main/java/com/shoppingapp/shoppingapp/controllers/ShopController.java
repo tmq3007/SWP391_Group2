@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/v1/shops")
@@ -34,6 +36,12 @@ public class ShopController {
         return ApiResponse.<ShopResponse>builder().result(shopService.getShopById(shopId)).build();
     }
 
+    // get shop by user id
+    @GetMapping("/getShopByUserId/{userId}")
+    ApiResponse<?> getShopByUserId(@PathVariable("userId") Long userId) {
+        return ApiResponse.builder().result(shopService.getShopIdByUserId(userId)).build();
+    }
+
     //add new shop
     @PostMapping("")
     ApiResponse<ShopResponse> createShop(@RequestBody ShopCreationRequest request) {
@@ -41,6 +49,7 @@ public class ShopController {
         apiResponse.setResult(shopService.createShop(request));
         return apiResponse;
     }
+
     //upadate a shop by id
     @PatchMapping("/{shopId}")
     ResponseEntity<ShopResponse> updateShop(@RequestBody ShopUpdateRequest request, @PathVariable("shopId") Long shopId) {
@@ -57,5 +66,8 @@ public class ShopController {
         return ApiResponse.<Integer>builder().result(shopService.getTotalShops()).build();
     }
 
-
+    @GetMapping("/get-shopId/{userId}")
+    ApiResponse<Long> getShopIdByUserId(@PathVariable("userId") Long userId) {
+        return ApiResponse.<Long>builder().result(shopService.getShopIdByUserId(userId)).build();
+    }
 }

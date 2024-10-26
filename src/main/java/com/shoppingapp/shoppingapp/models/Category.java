@@ -10,7 +10,6 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Category {
@@ -21,4 +20,12 @@ public class Category {
      String description;
      String picture;
      Boolean isActive;
+
+    public Category(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    // Default constructor
+    public Category() {
+    }
 }
