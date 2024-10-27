@@ -1,7 +1,6 @@
 package com.shoppingapp.shoppingapp.controllers;
 
 import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
-import com.shoppingapp.shoppingapp.models.Transaction;
 import com.shoppingapp.shoppingapp.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

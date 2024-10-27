@@ -49,13 +49,5 @@ public class OrderServiceImpl implements OrderService {
         return (int) orderRepository.count();
     }
 
-    @Override
-    public Long getShopId(Long orderId) {
-        Orders order = orderRepository.findById(orderId).orElse(null);
-        if (order != null) {
-            return order.getShop().getShopId();
-        }
-        return null;
-    }
 
 }
