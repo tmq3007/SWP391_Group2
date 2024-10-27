@@ -45,31 +45,42 @@ public class WishlistService {
         // Find the user by ID
         var user = userRepository.findById(wishlistRequest.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        var userOp = userRepository.findById(Long.valueOf(wishlistRequest.getUserId()));
-        if (!userOp.isPresent()) {
-            throw new AppException(ErrorCode.USER_NOT_EXISTED);  // Xử lý khi không tìm thấy user
+
+        // Retrieve the user's wishlist or create a new one if it doesn't exist
+        Wishlist wishlist = wishlistRepository.findWishlistByUserId(user.getId());
+        if (wishlist == null) {
+            wishlist = new Wishlist();
+            wishlist.setUser(user); // Set the user for the new wishlist
+            wishlist.setProducts(new ArrayList<>()); // Initialize the products list
+        } else if (wishlist.getProducts() == null) {
+            wishlist.setProducts(new ArrayList<>()); // Initialize the products list if it's null
         }
-        // Create a new Wishlist object
-        Wishlist wishlist = wishlistMapper.toWishlist(wishlistRequest);
-        wishlist.setUser(user); // Set the user for the wishlist
 
-        // Fetch products based on the provided IDs
-        List<Product> products = productRepository.findAllById(wishlistRequest.getProductIds());
-        wishlist.setProducts(products); // Set products in the wishlist
+        // Fetch the product based on the provided ID
+        Product product = productRepository.findById(wishlistRequest.getProductId())
+                .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        // Save the wishlist and map it to WishlistResponse
+        // Add the product to the wishlist
+        wishlist.getProducts().add(product);
+
+        // Save the wishlist
         Wishlist savedWishlist = wishlistRepository.save(wishlist);
+
+        // Prepare the response
         WishlistResponse wishlistResponse = new WishlistResponse();
         wishlistResponse.setUser(savedWishlist.getUser());
         wishlistResponse.setProducts(savedWishlist.getProducts());
+
         return wishlistResponse;
     }
 
+
+
     // Get all wishlists for a specific user and return a list of WishlistResponse
-    public List<WishlistResponse> getWishlistsByUser(Long userId) {
-        List<Wishlist> wishlists = wishlistRepository.findWishListItemByUserId(userId);
-        List<WishlistResponse> wishlistResponses = new ArrayList<>();
-        return wishlistMapper.toWishlistResponseList(wishlists); // Map to response list
+    public WishlistResponse getWishlistByUserId(Long userId) {
+        Wishlist wishlist = wishlistRepository.findWishlistByUserId(userId);
+        //WishlistResponse wishlistResponses = new ArrayList<>();
+        return wishlistMapper.toWishlistResponse(wishlist); // Map to response list
     }
 
     // Get a wishlist by its ID and return WishlistResponse
@@ -84,21 +95,12 @@ public class WishlistService {
         wishlistRepository.deleteById(wishlistId);
     }
 
-    // Update an existing wishlist using WishlistRequest and return WishlistResponse
-    public WishlistResponse updateWishlist(Long wishlistId, WishlistRequest wishlistRequest) {
-        return wishlistRepository.findById(wishlistId).map(wishlist -> {
-            // Find the user by ID
-            User user = userRepository.findById(wishlistRequest.getUserId())
-                    .orElseThrow(() -> new RuntimeException("User not found"));
-            wishlist.setUser(user); // Update the user
-
-            // Fetch and set products based on the provided IDs
-            List<Product> products = productRepository.findAllById(wishlistRequest.getProductIds());
-            wishlist.setProducts(products); // Update products in the wishlist
-
-            // Save the updated wishlist and map it to WishlistResponse
-            Wishlist updatedWishlist = wishlistRepository.save(wishlist);
-            return wishlistMapper.toWishlistResponse(updatedWishlist);
-        }).orElseThrow(() -> new RuntimeException("Wishlist not found")); // Exception if not found
+    public WishlistResponse deleteWishlistItem(Long userId, Long productId) {
+        var product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
+        Wishlist wishlist = wishlistRepository.findWishlistByUserId(userId);
+        wishlist.getProducts().remove(product);
+        wishlistRepository.save(wishlist);
+        Wishlist savedWishlist = wishlistRepository.save(wishlist);
+        return wishlistMapper.toWishlistResponse(wishlist);
     }
 }

@@ -1,5 +1,6 @@
 package com.shoppingapp.shoppingapp.dto.request;
 
+import com.shoppingapp.shoppingapp.models.Product;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,5 +13,5 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class WishlistRequest {
     private Long userId;              // User ID
-    private List<Long> productIds;    // List of Product IDs
+    private Long productId;    // List of Product IDs
 }

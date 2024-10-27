@@ -3,6 +3,7 @@ package com.shoppingapp.shoppingapp.controller;
 import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
 import com.shoppingapp.shoppingapp.dto.request.WishlistRequest;
 import com.shoppingapp.shoppingapp.dto.response.WishlistResponse;
+import com.shoppingapp.shoppingapp.models.Wishlist;
 import com.shoppingapp.shoppingapp.service.WishlistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +30,9 @@ public class WishlistController {
 
     // Endpoint to get all wishlists for a user
     @GetMapping("/user/{userId}")
-    public ApiResponse<List<WishlistResponse>> getUserWishlists(@PathVariable Long userId) {
-        ApiResponse<List<WishlistResponse>> apiResponse = new ApiResponse<>();
-        List<WishlistResponse> wishlists = wishlistService.getWishlistsByUser(userId);
+    public ApiResponse<WishlistResponse> getUserWishlist(@PathVariable Long userId) {
+        ApiResponse<WishlistResponse> apiResponse = new ApiResponse<>();
+        WishlistResponse wishlists = wishlistService.getWishlistByUserId(userId);
         apiResponse.setResult(wishlists);
         return apiResponse;
     }
@@ -46,22 +47,14 @@ public class WishlistController {
     }
 
     // Endpoint to delete a wishlist by ID
-    @DeleteMapping("/{wishlistId}")
-    public ApiResponse<Void> deleteWishlist(@PathVariable Long wishlistId) {
-        wishlistService.deleteWishlist(wishlistId);
-        ApiResponse<Void> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(null);  // No content to return
+
+    @DeleteMapping("/user/{userId}/{productId}")
+    public ApiResponse<WishlistResponse> deleteWishlistProduct(@PathVariable Long userId, @PathVariable Long productId) {
+        WishlistResponse wishlist = wishlistService.deleteWishlistItem(userId, productId);
+        ApiResponse<WishlistResponse> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(wishlist);  // No content to return
         return apiResponse;
     }
 
-    // Endpoint to update an existing wishlist
-    @PutMapping("/{wishlistId}")
-    public ApiResponse<WishlistResponse> updateWishlist(
-            @PathVariable Long wishlistId,
-            @RequestBody WishlistRequest wishlistRequest) {
-        ApiResponse<WishlistResponse> apiResponse = new ApiResponse<>();
-        WishlistResponse updatedWishlist = wishlistService.updateWishlist(wishlistId, wishlistRequest);
-        apiResponse.setResult(updatedWishlist);
-        return apiResponse;
-    }
+
 }
