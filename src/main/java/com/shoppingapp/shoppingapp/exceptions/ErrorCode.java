@@ -1,6 +1,7 @@
 package com.shoppingapp.shoppingapp.exceptions;
 
 import lombok.Getter;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
@@ -37,7 +38,8 @@ public enum ErrorCode {
     PAYMENT_EXISTED(4001,"Payment existed",HttpStatus.BAD_REQUEST),
     TRANSACTION_NOT_FOUND(4002,"Transaction not found",HttpStatus.BAD_REQUEST),
     TRANSACTION_NOT_EXISTED(4003,"Transaction not existed",HttpStatus.BAD_REQUEST),
-    OLD_PASSWORD_IS_INCORRECT(2006,"Old password is incorrect",HttpStatus.BAD_REQUEST),
+    SHOP_IS_EMPTY(4004,"Shop is empty",HttpStatus.BAD_REQUEST),
+
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

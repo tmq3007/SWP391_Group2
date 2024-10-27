@@ -52,6 +52,8 @@ public class UnverifiedShopServiceImpl implements UnverifiedShopService {
         }
 
         unverifiedShop.setUser(userOp.get());
+
+        unverifiedShop.setIsRejected(false);
         return unverifiedShopRepository.save(unverifiedShop);
     }
 
