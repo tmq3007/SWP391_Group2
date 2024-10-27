@@ -1,9 +1,6 @@
 package com.shoppingapp.shoppingapp.controllers;
 
-import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
-import com.shoppingapp.shoppingapp.dto.request.ProfileUpdateRequest;
-import com.shoppingapp.shoppingapp.dto.request.UserCreationRequest;
-import com.shoppingapp.shoppingapp.dto.request.UserUpdateRequest;
+import com.shoppingapp.shoppingapp.dto.request.*;
 import com.shoppingapp.shoppingapp.dto.response.UserResponse;
 import com.shoppingapp.shoppingapp.service.UserService;
 import lombok.AllArgsConstructor;
@@ -57,6 +54,8 @@ public class UserController {
 
     @PutMapping("/{userId}")
     ApiResponse<UserResponse> updateUser(@PathVariable("userId")  Long userId, @RequestBody UserUpdateRequest request) {
+        System.out.println("Update");
+        System.out.println("Object"+request.toString());
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateUser(userId, request))
                 .build();
@@ -73,6 +72,12 @@ public class UserController {
     ApiResponse<String> banUser(@PathVariable("userId") Long userId) {
         userService.banUser(userId);
         return ApiResponse.<String>builder().result("User has been banned").build();
+    }
+
+    @PutMapping("/updatePhone/{userId}/{userPhone}")
+    ApiResponse<?> updateUserPhone(@PathVariable("userId") String userId, @PathVariable("userPhone") String userPhone) {
+        System.out.println(userId +" "+userPhone);
+       return ApiResponse.builder().result(userService.updateUserPhone(Long.parseLong(userId), userPhone)).build();
     }
 
     @PutMapping("/unban/{userId}")
@@ -99,6 +104,12 @@ public class UserController {
     ApiResponse<String> updateProfile(@PathVariable("userId") Long userId,@RequestBody ProfileUpdateRequest request) {
         userService.updateProfile(userId,request);
         return ApiResponse.<String>builder().result("User updated").build();
+    }
+
+    @PutMapping("/change-password/{userId}")
+    ApiResponse<String> changePassword(@PathVariable("userId") Long userId,@RequestBody ChangePasswordRequest request) {
+        userService.changePassword(userId,request);
+        return ApiResponse.<String>builder().result("Password Changed").build();
     }
 
 

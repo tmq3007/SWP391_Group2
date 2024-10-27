@@ -1,5 +1,6 @@
 package com.shoppingapp.shoppingapp.service.Impl;
 
+import com.shoppingapp.shoppingapp.dto.request.ChangePasswordRequest;
 import com.shoppingapp.shoppingapp.dto.request.ProfileUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserUpdateRequest;
@@ -84,10 +85,11 @@ public class UserServiceImpl implements UserService {
     @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse updateUser(Long userId, UserUpdateRequest request) {
         User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
+        System.out.println("User "+user.getUsername());
+        System.out.println("Requ "+request.getUsername());
         userMapper.updateUser(user, request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-
+        System.out.println("Phon "+user.getPhone());
         Set<Role> roles = new HashSet<>(roleRepository.findAllById(request.getRoles()));
         if (roles.size() != request.getRoles().size()) {
             throw new AppException(ErrorCode.ROLE_NOT_FOUND); // New Error Code
@@ -95,6 +97,14 @@ public class UserServiceImpl implements UserService {
         user.setRoles(new HashSet<>(roles));
 
         return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    @Override
+    public String updateUserPhone(Long id, String phone) {
+        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        user.setPhone(phone);
+        userRepository.save(user);
+        return "Update phone successful!";
     }
 
 
@@ -161,8 +171,17 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public boolean changePassword(Long id, String newPassword) {
-        return false;
+    public void changePassword(Long id, ChangePasswordRequest request) {
+        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            throw new AppException(ErrorCode.OLD_PASSWORD_IS_INCORRECT);
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+
+
     }
 
     @Override

@@ -63,17 +63,24 @@ public class AddressServiceImp implements AddressService {
     }
 
     @Override
-    public AddressResponse updateAddress(AddressUpdateRequest request, long addressId) {
-        Address address = addressRepository.findById(addressId)
+    public String updateAddress(Address request) {
+        // Retrieve the existing address
+        Address address = addressRepository.findById(request.getAddressID())
                 .orElseThrow(() -> new AppException(ErrorCode.ADDRESS_NOT_FOUND));
-
-        addressMapper.updateAddress(address, request);
-        return addressMapper.toResponse(addressRepository.save(address));
+        address.setCity(request.getCity());
+        address.setDistrict(request.getDistrict());
+        address.setStreet(request.getStreet());
+        address.setSubDistrict(request.getSubDistrict());
+        addressRepository.save(address);
+        return "Address updated successfully";
     }
+
 
     @Override
     public String deleteAddress(Long addressId) {
         addressRepository.deleteById(addressId);
         return "Deleted";
     }
+
+
 }

@@ -11,6 +11,7 @@ public interface AddressService {
     List<AddressResponse> getAllAddress();
     AddressResponse getAddressById(long AddressId);
     AddressResponse createAddress(AddressCreationRequest request);
-    AddressResponse updateAddress(AddressUpdateRequest request, long AddressId);
+    String updateAddress(Address address);
     String deleteAddress(Long AddressId);
+
 }

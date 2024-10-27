@@ -30,6 +30,7 @@
   "launch-mode": "IDEA",
   "enable-all-warnings": false,
   "benchmark": false,
+  "java": "java",
   "jvm-arguments": [
     "-Xss64m"
   ],

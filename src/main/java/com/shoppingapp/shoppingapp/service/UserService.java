@@ -1,5 +1,6 @@
 package com.shoppingapp.shoppingapp.service;
 
+import com.shoppingapp.shoppingapp.dto.request.ChangePasswordRequest;
 import com.shoppingapp.shoppingapp.dto.request.ProfileUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserUpdateRequest;
@@ -15,7 +16,7 @@ public interface UserService {
    UserResponse getMyInfo();
 
    UserResponse updateUser(Long id, UserUpdateRequest userUpdateRequest);
-
+   String updateUserPhone(Long id, String phone);
    void deleteUser(Long id);
 
    List<UserResponse> getAll();
@@ -33,5 +34,5 @@ public interface UserService {
    void unbanUser(Long id);
 
    void updateProfile(Long id, ProfileUpdateRequest request);
-   boolean changePassword(Long id, String newPassword);
+   public void changePassword(Long id, ChangePasswordRequest request);
 }
