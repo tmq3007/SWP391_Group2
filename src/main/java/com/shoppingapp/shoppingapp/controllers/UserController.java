@@ -1,9 +1,6 @@
 package com.shoppingapp.shoppingapp.controllers;
 
-import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
-import com.shoppingapp.shoppingapp.dto.request.ProfileUpdateRequest;
-import com.shoppingapp.shoppingapp.dto.request.UserCreationRequest;
-import com.shoppingapp.shoppingapp.dto.request.UserUpdateRequest;
+import com.shoppingapp.shoppingapp.dto.request.*;
 import com.shoppingapp.shoppingapp.dto.response.UserResponse;
 import com.shoppingapp.shoppingapp.service.UserService;
 import lombok.AllArgsConstructor;
@@ -107,6 +104,12 @@ public class UserController {
     ApiResponse<String> updateProfile(@PathVariable("userId") Long userId,@RequestBody ProfileUpdateRequest request) {
         userService.updateProfile(userId,request);
         return ApiResponse.<String>builder().result("User updated").build();
+    }
+
+    @PutMapping("/change-password/{userId}")
+    ApiResponse<String> changePassword(@PathVariable("userId") Long userId,@RequestBody ChangePasswordRequest request) {
+        userService.changePassword(userId,request);
+        return ApiResponse.<String>builder().result("Password Changed").build();
     }
 
 

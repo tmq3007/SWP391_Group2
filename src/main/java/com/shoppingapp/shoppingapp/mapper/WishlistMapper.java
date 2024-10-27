@@ -14,23 +14,14 @@ import java.util.List;
 public interface WishlistMapper {
 
     // Maps Wishlist to WishlistResponse
-    @Mapping(source = "user", target = "user") // Ensure user is mapped if needed
-    @Mapping(source = "products", target = "products") // Ensure products are mapped if needed
+
     WishlistResponse toWishlistResponse(Wishlist wishlist);
 
-    // Maps WishlistRequest to Wishlist
-    @Mapping(target = "user", ignore = true) // Ignore user; will be set later in service
-    @Mapping(target = "products", ignore = true) // Ignore products; will be set later in service
+
     Wishlist toWishlist(WishlistRequest request);
 
-    // Update an existing Wishlist from WishlistRequest
-    @Mapping(target = "user", ignore = true) // Ignore user; will be set later in service
-    @Mapping(target = "products", ignore = true) // Ignore products when updating
+
     void updateWishlist(@MappingTarget Wishlist wishlist, WishlistRequest request);
 
-    // Maps a list of Wishlists to a list of WishlistResponses
-    List<WishlistResponse> toWishlistResponseList(List<Wishlist> wishlists);
 
-    // Optionally, you could add this method to map Product to ProductResponse if needed
-    // ProductResponse toProductResponse(Product product);
 }
