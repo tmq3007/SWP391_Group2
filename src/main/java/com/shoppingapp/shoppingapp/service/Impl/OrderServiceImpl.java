@@ -56,4 +56,25 @@ public class OrderServiceImpl implements OrderService {
                 .filter(order -> order.getUser().getId().equals(id))
                 .toList();
     }
+
+    @Override
+    public String updateIsPaidTrue(Long id) {
+        Orders order = orderRepository.findById(id).orElse(null);
+        if(order != null) {
+            order.setIsPaid(true);
+            orderRepository.save(order);
+            return "Order IsPaid to TRUE";
+        }
+        return "Order not found!";
+    }
+    @Override
+    public String updateIsPaidFalse(Long id) {
+        Orders order = orderRepository.findById(id).orElse(null);
+        if(order != null) {
+            order.setIsPaid(false);
+            orderRepository.save(order);
+            return "Order IsPaid to TRUE";
+        }
+        return "Order not found!";
+    }
 }

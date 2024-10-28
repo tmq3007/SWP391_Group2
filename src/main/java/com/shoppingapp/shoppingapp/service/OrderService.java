@@ -13,4 +13,6 @@ public interface OrderService {
     void deleteOrders(List<Orders> orders);
     int getTotalOrders();
     List<Orders> getOrdersByUserId(Long id);
+    String updateIsPaidTrue(Long id);
+    String updateIsPaidFalse(Long id);
 }

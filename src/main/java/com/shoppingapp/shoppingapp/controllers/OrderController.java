@@ -16,6 +16,22 @@ public class OrderController{
     @Autowired
     private OrderService orderService;
 
+    // UPDATE ORDER STATUS ISPAID TO TRUE
+    @PatchMapping("/isPaidToTrue/{id}")
+    public ApiResponse<?> isPaidToTrue(@PathVariable("id") Long id) {
+        return ApiResponse.builder()
+                .result(orderService.updateIsPaidTrue(id))
+                .build();
+    }
+
+    // UPDATE ORDER STATUS ISPAID TO FALSE
+    @PatchMapping("/isPaidToFalse/{id}")
+    public ApiResponse<?> isPaidToFalse(@PathVariable("id") Long id) {
+        return ApiResponse.builder()
+                .result(orderService.updateIsPaidFalse(id))
+                .build();
+    }
+
     @GetMapping("")
     public ResponseEntity<List<Orders>> getAllOrder(){
         return ResponseEntity.ok(orderService.getAllOrders());
