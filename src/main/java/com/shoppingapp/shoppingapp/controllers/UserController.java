@@ -18,6 +18,14 @@ public class UserController {
 
     UserService userService;
 
+    @GetMapping("/getUsername/{id}")
+    ApiResponse<?> getUserName(@PathVariable("id") Long userId) {
+        System.out.println("Id"+userId);
+        return ApiResponse.builder().
+                result(userService.userName(userId)).
+                build();
+    }
+
     @PostMapping("/sign-up")
     ApiResponse<UserResponse> createUser(@RequestBody UserCreationRequest request) {
         return ApiResponse.<UserResponse>builder()

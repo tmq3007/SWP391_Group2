@@ -29,7 +29,7 @@ public class Shop {
 
     @ManyToMany
     @JsonIgnore
-    private Set<Orders> order;
+    private Set<OrderItems> orderItems;
 
     private String shopName;
     private String address;

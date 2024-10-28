@@ -28,6 +28,7 @@ public class OrderController{
 
     @PostMapping("")
     public ResponseEntity<Orders> addOrder(@RequestBody Orders order){
+        System.out.println("G"+order.getUser().getId());
         return ResponseEntity.ok(orderService.addOrder(order));
     }
 
@@ -55,6 +56,10 @@ public class OrderController{
         return ApiResponse.<Integer>builder().result(orderService.getTotalOrders()).build();
     }
 
+    @GetMapping("/byUserId/{id}")
+    public ApiResponse<?> getOrdersByUserId(@PathVariable("id") Long id){
+        return ApiResponse.builder().result(orderService.getOrdersByUserId(id)).build();
+    }
 
 
 }

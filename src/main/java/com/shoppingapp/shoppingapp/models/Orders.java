@@ -30,6 +30,8 @@ public class Orders {
 
     private String address;
 
+    private String phone;
+
     @ManyToOne
     private User user;
 

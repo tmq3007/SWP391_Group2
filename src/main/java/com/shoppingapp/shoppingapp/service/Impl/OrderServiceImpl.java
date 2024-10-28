@@ -49,5 +49,11 @@ public class OrderServiceImpl implements OrderService {
         return (int) orderRepository.count();
     }
 
-
+    @Override
+    public List<Orders> getOrdersByUserId(Long id) {
+        return orderRepository.findAll()
+                .stream()
+                .filter(order -> order.getUser().getId().equals(id))
+                .toList();
+    }
 }

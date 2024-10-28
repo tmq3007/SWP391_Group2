@@ -115,6 +115,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String userName(Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        System.out.println("Result: "+user+", "+user.getId());
+        return user.getFirstName() + user.getLastName();
+    }
+
+    @Override
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getAll() {
         log.info("In method get Users");
