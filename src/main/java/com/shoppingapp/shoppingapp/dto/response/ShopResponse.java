@@ -15,7 +15,7 @@ import java.util.Set;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ShopResponse {
-      Long shopID;
+      Long shopId;
       String shopName;
       User user;
       Set<Product> products;

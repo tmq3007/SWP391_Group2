@@ -78,7 +78,7 @@ public class ShopControllerTest {
                 .build();
 
         shopResponse = new ShopResponse().builder()
-                .shopID(1L)
+                .shopId(1L)
                 .shopName("Pet Shops")
                 .logo("logo.img")
                 .cover("cover.img")
@@ -104,7 +104,7 @@ public class ShopControllerTest {
             .build();
 
     ShopResponse updatedShopResponse = ShopResponse.builder()
-            .shopID(1L)
+            .shopId(1L)
             .shopName("Updated Shop Name")
             .address("Updated Address")
             .city("Updated City")
