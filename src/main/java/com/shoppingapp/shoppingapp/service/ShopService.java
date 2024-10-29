@@ -13,11 +13,8 @@ public interface ShopService {
     ShopResponse createShop(ShopCreationRequest request);
     ShopResponse updateShop(ShopUpdateRequest request, Long ShopId);
     String deleteShop(Long shopId);
-
     int getTotalShops();
     Long getShopIdByUserId(Long userId);
-
     Shop getShopProfile(String jwt);
-
-
+    Shop getShopByUserId(Long userId);
 }

@@ -50,12 +50,31 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Long getShopId(Long orderId) {
-        Orders order = orderRepository.findById(orderId).orElse(null);
-        if (order != null) {
-            return order.getShop().getShopId();
-        }
-        return null;
+    public List<Orders> getOrdersByUserId(Long id) {
+        return orderRepository.findAll()
+                .stream()
+                .filter(order -> order.getUser().getId().equals(id))
+                .toList();
     }
 
+    @Override
+    public String updateIsPaidTrue(Long id) {
+        Orders order = orderRepository.findById(id).orElse(null);
+        if(order != null) {
+            order.setIsPaid(true);
+            orderRepository.save(order);
+            return "Order IsPaid to TRUE";
+        }
+        return "Order not found!";
+    }
+    @Override
+    public String updateIsPaidFalse(Long id) {
+        Orders order = orderRepository.findById(id).orElse(null);
+        if(order != null) {
+            order.setIsPaid(false);
+            orderRepository.save(order);
+            return "Order IsPaid to TRUE";
+        }
+        return "Order not found!";
+    }
 }

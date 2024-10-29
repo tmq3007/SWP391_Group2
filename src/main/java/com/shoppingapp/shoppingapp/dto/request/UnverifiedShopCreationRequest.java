@@ -12,12 +12,12 @@ import lombok.*;
 public class UnverifiedShopCreationRequest {
     private String shopName;
     private Long user;
-    private String address;
-    private String city;
-    private String state;
-    private String country;
-    private String phone;
-    private String description;
-    private String logo;
-    private String cover;
+    String address;
+    String city;
+    String district;
+    String subdistrict;
+    String description;
+    String phone;
+    String logo;
+    String cover;
 }

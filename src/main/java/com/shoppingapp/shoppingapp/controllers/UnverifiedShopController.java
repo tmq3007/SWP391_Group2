@@ -40,4 +40,10 @@ public class UnverifiedShopController {
     ApiResponse<Iterable<UnverifiedShop>> getAllUnverifiedShops() {
         return ApiResponse.<Iterable<UnverifiedShop>>builder().result(unverifiedShopService.getAllUnverifiedShops()).build();
     }
+
+    @PutMapping("/reject-shop/{unverified-shop-id}")
+    ApiResponse<String> rejectShop(@PathVariable("unverified-shop-id") Long unverifiedShopId) {
+        unverifiedShopService.rejectShop(unverifiedShopId);
+        return ApiResponse.<String>builder().result("Shop request has been rejected").build();
+    }
 }

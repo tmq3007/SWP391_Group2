@@ -119,4 +119,16 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> getAllProductsByShopId(Long shopId) {
         return productRepository.findAllProductsByShopId(shopId);
     }
+
+    @Override
+    public String deleteAmountAfterMadeOrder(Long productId, int amount) {
+        Product product = productRepository.findById(productId).orElse(null);
+        if(product == null) {
+            throw new AppException(ErrorCode.PRODUCT_NOT_EXISTED);
+        }else{
+            product.setStock(product.getStock() - amount);
+            productRepository.save(product);
+            return "Saved successfully";
+        }
+    }
 }

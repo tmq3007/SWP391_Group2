@@ -71,4 +71,12 @@ public class ProductController {
         productService.deleteProductById(productId);
         return ApiResponse.<String>builder().result("Product is deleted").build();
     }
+
+    // DELETE AMOUNT OF PRODUCT AFTER APPROVE TO MAKE AN ORDER
+    @DeleteMapping("/deleteAmount/{id}/{amount}")
+    ApiResponse<?> deleteAmount(@PathVariable("id") Long id, @PathVariable("amount") int amount) {
+        return ApiResponse.builder()
+                .result(productService.deleteAmountAfterMadeOrder(id,amount))
+                .build();
+    }
 }
