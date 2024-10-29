@@ -72,4 +72,11 @@ public class OrdersItemServiceImpl implements OrderItemsService {
             return "OrderItems added!";
         }
     }
+
+    @Override
+    public List<OrderItems> getAllByShopId(Long id) {
+        return orderItemRepository.findAll()
+                .stream()
+                .filter((a) -> a.getShop().getShopId().equals(id)).toList();
+    }
 }

@@ -42,6 +42,14 @@ public class ShopController {
         return ApiResponse.builder().result(shopService.getShopIdByUserId(userId)).build();
     }
 
+    @GetMapping("/getShopInformationByUserId/{id}")
+    ApiResponse<?> getShopInformationByUserId(@PathVariable("id") Long id) {
+        System.out.println("Get shop by id!");
+        return ApiResponse.builder()
+                .result(shopService.getShopByUserId(id))
+                .build();
+    }
+
     //add new shop
     @PostMapping("")
     ApiResponse<ShopResponse> createShop(@RequestBody ShopCreationRequest request) {

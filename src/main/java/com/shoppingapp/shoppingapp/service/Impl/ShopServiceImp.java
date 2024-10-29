@@ -35,6 +35,8 @@ public class ShopServiceImp implements ShopService {
         return null;
     }
 
+
+
     @Autowired
     private ShopRepository shopRepository;
     @Autowired
@@ -42,7 +44,14 @@ public class ShopServiceImp implements ShopService {
     @Autowired
     private UserRepository userRepository;
 
-
+    @Override
+    public Shop getShopByUserId(Long userId) {
+        return shopRepository.findAll()
+                .stream()
+                .filter((a) -> a.getUser().getId().equals(userId))
+                .findFirst()
+                .orElse(null);
+    }
 
     @Override
     public List<ShopResponse> getAllShops() {

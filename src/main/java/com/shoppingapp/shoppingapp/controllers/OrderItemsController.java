@@ -23,6 +23,12 @@ public class OrderItemsController {
         return ApiResponse.builder().result(orderItemsService.getByOrderId(id)).build();
     }
 
+    @GetMapping("/getAllByShopId/{id}")
+    ApiResponse<?> findAllByShopId(@PathVariable("id") Long id) {
+        System.out.println("Get all by shop id");
+        return ApiResponse.builder().result(orderItemsService.getAllByShopId(id)).build();
+    }
+
     @PostMapping("/{id}")
     ApiResponse<?> add(@RequestBody OrderItems orderItems, @PathVariable Long id) {
         System.out.println("Order id: "+id);

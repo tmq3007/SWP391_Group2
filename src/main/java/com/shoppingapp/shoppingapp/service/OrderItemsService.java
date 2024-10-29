@@ -8,4 +8,5 @@ public interface OrderItemsService {
     List<OrderItems> getAll();
     List<OrderItems> getByOrderId(Long id);
     String add(OrderItems orderItems,Long orderId);
+    List<OrderItems> getAllByShopId(Long orderId);
 }
