@@ -23,14 +23,15 @@ public class UnverifiedShop {
     @JoinColumn(name = "id", nullable = false)
     private User user;
     private String shopName;
-    private String address;
-    private String city;
-    private String state;
-    private String country;
-    private String phone;
-    private String description;
-    private String logo;
-    private String cover;
+
+    String address;
+    String city;
+    String district;
+    String subdistrict;
+    String description;
+    String phone;
+    String logo;
+    String cover;
 
     private Boolean isRejected;
 

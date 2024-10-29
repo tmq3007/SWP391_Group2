@@ -18,8 +18,6 @@ public class ShopResponse {
       Long shopId;
       String shopName;
       User user;
-      Set<Product> products;
-      Set<Orders> order;
       String address;
       String city;
       String district;
