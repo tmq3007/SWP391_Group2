@@ -74,8 +74,8 @@ public class UnverifiedShopServiceImpl implements UnverifiedShopService {
         shop.setUser(userRepository.findById(unverifiedShop.getUser().getId()).orElseThrow());
         shop.setAddress(unverifiedShop.getAddress());
         shop.setCity(unverifiedShop.getCity());
-        shop.setState(unverifiedShop.getState());
-        shop.setCountry(unverifiedShop.getCountry());
+        shop.setDistrict(unverifiedShop.getDistrict());
+        shop.setSubdistrict(unverifiedShop.getSubdistrict());
         shop.setPhone(unverifiedShop.getPhone());
         shop.setDescription(unverifiedShop.getDescription());
         shop.setLogo(unverifiedShop.getLogo());
