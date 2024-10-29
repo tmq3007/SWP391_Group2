@@ -50,7 +50,7 @@ public class ShopServiceImp implements ShopService {
     }
 
     @Override
-    public ShopResponse getShopById(long shopId) {
+    public ShopResponse getShopById(Long shopId) {
         return shopMapper.toShopResponse(shopRepository.findById(shopId).orElseThrow(()-> new AppException(ErrorCode.SHOP_NOT_EXISTED)));
     }
 
@@ -72,7 +72,7 @@ public class ShopServiceImp implements ShopService {
     }
 
     @Override
-    public ShopResponse updateShop(ShopUpdateRequest request, long shopId) {
+    public ShopResponse updateShop(ShopUpdateRequest request, Long shopId) {
         Shop shop = shopRepository.findById(shopId).orElseThrow(()-> new AppException(ErrorCode.SHOP_NOT_EXISTED));
         shopMapper.updateShop(shop,request);
 
