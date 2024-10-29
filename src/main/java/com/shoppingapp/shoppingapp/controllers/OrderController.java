@@ -1,7 +1,6 @@
 package com.shoppingapp.shoppingapp.controllers;
 
 import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
-import com.shoppingapp.shoppingapp.models.Transaction;
 import com.shoppingapp.shoppingapp.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +16,22 @@ public class OrderController{
     @Autowired
     private OrderService orderService;
 
+    // UPDATE ORDER STATUS ISPAID TO TRUE
+    @PatchMapping("/isPaidToTrue/{id}")
+    public ApiResponse<?> isPaidToTrue(@PathVariable("id") Long id) {
+        return ApiResponse.builder()
+                .result(orderService.updateIsPaidTrue(id))
+                .build();
+    }
+
+    // UPDATE ORDER STATUS ISPAID TO FALSE
+    @PatchMapping("/isPaidToFalse/{id}")
+    public ApiResponse<?> isPaidToFalse(@PathVariable("id") Long id) {
+        return ApiResponse.builder()
+                .result(orderService.updateIsPaidFalse(id))
+                .build();
+    }
+
     @GetMapping("")
     public ResponseEntity<List<Orders>> getAllOrder(){
         return ResponseEntity.ok(orderService.getAllOrders());
@@ -29,6 +44,7 @@ public class OrderController{
 
     @PostMapping("")
     public ResponseEntity<Orders> addOrder(@RequestBody Orders order){
+        System.out.println("G"+order.getUser().getId());
         return ResponseEntity.ok(orderService.addOrder(order));
     }
 
@@ -56,6 +72,10 @@ public class OrderController{
         return ApiResponse.<Integer>builder().result(orderService.getTotalOrders()).build();
     }
 
+    @GetMapping("/byUserId/{id}")
+    public ApiResponse<?> getOrdersByUserId(@PathVariable("id") Long id){
+        return ApiResponse.builder().result(orderService.getOrdersByUserId(id)).build();
+    }
 
 
 }

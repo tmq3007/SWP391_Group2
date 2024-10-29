@@ -32,4 +32,6 @@ public class UnverifiedShop {
     private String logo;
     private String cover;
 
+    private Boolean isRejected;
+
 }

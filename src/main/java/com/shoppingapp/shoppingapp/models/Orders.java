@@ -14,8 +14,6 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
-    private Long userId;
-
     private Long paymentId;
 
     private LocalDate paymentDate;
@@ -24,8 +22,17 @@ public class Orders {
 
     private Boolean isPaid;
 
+    private Double total;
+
+    private Double finalTotal;
+
+    private String note;
+
+    private String address;
+
+    private String phone;
+
     @ManyToOne
-    @JoinColumn(name = "shop_id", nullable = false)
-    private Shop shop;
+    private User user;
 
 }

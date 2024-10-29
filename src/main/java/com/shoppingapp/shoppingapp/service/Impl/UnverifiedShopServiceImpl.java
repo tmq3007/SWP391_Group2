@@ -1,5 +1,6 @@
 package com.shoppingapp.shoppingapp.service.Impl;
 
+import com.shoppingapp.shoppingapp.dto.request.RejectShopRequest;
 import com.shoppingapp.shoppingapp.dto.request.UnverifiedShopCreationRequest;
 import com.shoppingapp.shoppingapp.exceptions.AppException;
 import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
@@ -52,6 +53,8 @@ public class UnverifiedShopServiceImpl implements UnverifiedShopService {
         }
 
         unverifiedShop.setUser(userOp.get());
+
+        unverifiedShop.setIsRejected(false);
         return unverifiedShopRepository.save(unverifiedShop);
     }
 
@@ -84,6 +87,16 @@ public class UnverifiedShopServiceImpl implements UnverifiedShopService {
     }
 
     @Override
+    public void rejectShop(Long unverifiedShopId) {
+        var unverifiedShop = unverifiedShopRepository.findById(unverifiedShopId).orElseThrow(
+                () -> new AppException(ErrorCode.SHOP_REQUEST_NOT_EXISTED));
+
+        unverifiedShop.setIsRejected(true);
+
+        unverifiedShopRepository.save(unverifiedShop);
+    }
+
+    @Override
     public Long getUnverifiedShopIdByUserId(Long userId) {
         Optional<UnverifiedShop> shop = unverifiedShopRepository.findByUserId(userId);
         if (shop.isEmpty()) {
@@ -94,6 +107,8 @@ public class UnverifiedShopServiceImpl implements UnverifiedShopService {
 
     @Override
     public List<UnverifiedShop> getAllUnverifiedShops() {
-        return unverifiedShopRepository.findAll();
+        return unverifiedShopRepository.findAll().stream()
+                .filter(unverifiedShop -> !unverifiedShop.getIsRejected())
+                .toList();
     }
 }

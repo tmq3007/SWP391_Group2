@@ -17,7 +17,11 @@ public interface UserService {
 
    UserResponse updateUser(Long id, UserUpdateRequest userUpdateRequest);
 
+   String updateUserPhone(Long id, String phone);
+
    void deleteUser(Long id);
+
+   String userName (Long id);
 
    List<UserResponse> getAll();
 

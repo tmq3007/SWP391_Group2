@@ -18,6 +18,14 @@ public class UserController {
 
     UserService userService;
 
+    @GetMapping("/getUsername/{id}")
+    ApiResponse<?> getUserName(@PathVariable("id") Long userId) {
+        System.out.println("Id"+userId);
+        return ApiResponse.builder().
+                result(userService.userName(userId)).
+                build();
+    }
+
     @PostMapping("/sign-up")
     ApiResponse<UserResponse> createUser(@RequestBody UserCreationRequest request) {
         return ApiResponse.<UserResponse>builder()
@@ -54,6 +62,8 @@ public class UserController {
 
     @PutMapping("/{userId}")
     ApiResponse<UserResponse> updateUser(@PathVariable("userId")  Long userId, @RequestBody UserUpdateRequest request) {
+        System.out.println("Update");
+        System.out.println("Object"+request.toString());
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateUser(userId, request))
                 .build();
@@ -70,6 +80,12 @@ public class UserController {
     ApiResponse<String> banUser(@PathVariable("userId") Long userId) {
         userService.banUser(userId);
         return ApiResponse.<String>builder().result("User has been banned").build();
+    }
+
+    @PutMapping("/updatePhone/{userId}/{userPhone}")
+    ApiResponse<?> updateUserPhone(@PathVariable("userId") String userId, @PathVariable("userPhone") String userPhone) {
+        System.out.println(userId +" "+userPhone);
+       return ApiResponse.builder().result(userService.updateUserPhone(Long.parseLong(userId), userPhone)).build();
     }
 
     @PutMapping("/unban/{userId}")

@@ -35,6 +35,12 @@ public class ProductController {
         return ResponseEntity.ok(productService.getAllProducts());
     }
 
+    //Build Get All Product REST API
+    @GetMapping("/get-all-product-by-shopId/{shopId}")
+    public ResponseEntity<List<Product>> getAllProductsByShopId(@PathVariable Long shopId) {
+        return ResponseEntity.ok(productService.getAllProductsByShopId(shopId));
+    }
+
     //Build Get Product REST API
 
     @GetMapping("{productId}")
@@ -64,5 +70,13 @@ public class ProductController {
     ApiResponse<String> deleteShop(@PathVariable("productId") Long productId) {
         productService.deleteProductById(productId);
         return ApiResponse.<String>builder().result("Product is deleted").build();
+    }
+
+    // DELETE AMOUNT OF PRODUCT AFTER APPROVE TO MAKE AN ORDER
+    @DeleteMapping("/deleteAmount/{id}/{amount}")
+    ApiResponse<?> deleteAmount(@PathVariable("id") Long id, @PathVariable("amount") int amount) {
+        return ApiResponse.builder()
+                .result(productService.deleteAmountAfterMadeOrder(id,amount))
+                .build();
     }
 }

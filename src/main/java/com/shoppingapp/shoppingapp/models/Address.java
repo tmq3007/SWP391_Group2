@@ -23,7 +23,8 @@ public class Address {
     private String subDistrict;
     private String street;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "id", nullable = false)
+    @JsonIgnore
     private User user;
 }

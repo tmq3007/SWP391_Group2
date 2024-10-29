@@ -6,25 +6,24 @@ import com.shoppingapp.shoppingapp.dto.response.ProductResponse;
 import com.shoppingapp.shoppingapp.exceptions.AppException;
 import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
 import com.shoppingapp.shoppingapp.mapper.ProductMapper;
-import com.shoppingapp.shoppingapp.models.Category;
 import com.shoppingapp.shoppingapp.models.Product;
-import com.shoppingapp.shoppingapp.models.Shop;
 import com.shoppingapp.shoppingapp.repository.CategoryRepository;
 import com.shoppingapp.shoppingapp.repository.ProductRepository;
 import com.shoppingapp.shoppingapp.repository.ShopRepository;
 import com.shoppingapp.shoppingapp.service.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
-
+@Slf4j
 
 public class ProductServiceImpl implements ProductService {
+
+
+
     @Override
     public String deleteProductById(Long productId) {
         productRepository.findById(productId)
@@ -48,6 +47,8 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> getAllProducts() {
         return (List<Product>) productRepository.findAll();
     }
+
+
 
     @Override
     public Product getProductById(Long ProductId) {
@@ -114,6 +115,20 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toProductResponse(productRepository.save(product));
     }
 
+    @Override
+    public List<Product> getAllProductsByShopId(Long shopId) {
+        return productRepository.findAllProductsByShopId(shopId);
+    }
 
-
+    @Override
+    public String deleteAmountAfterMadeOrder(Long productId, int amount) {
+        Product product = productRepository.findById(productId).orElse(null);
+        if(product == null) {
+            throw new AppException(ErrorCode.PRODUCT_NOT_EXISTED);
+        }else{
+            product.setStock(product.getStock() - amount);
+            productRepository.save(product);
+            return "Saved successfully";
+        }
+    }
 }
