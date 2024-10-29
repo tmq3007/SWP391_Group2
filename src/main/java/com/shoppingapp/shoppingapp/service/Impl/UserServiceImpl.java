@@ -5,13 +5,18 @@ import com.shoppingapp.shoppingapp.dto.request.ProfileUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.response.UserResponse;
+import com.shoppingapp.shoppingapp.dto.response.VendorResponse;
 import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
 import com.shoppingapp.shoppingapp.exceptions.AppException;
 import com.shoppingapp.shoppingapp.mapper.UserMapper;
 import com.shoppingapp.shoppingapp.models.Role;
+import com.shoppingapp.shoppingapp.models.Shop;
+import com.shoppingapp.shoppingapp.models.UnverifiedShop;
 import com.shoppingapp.shoppingapp.models.User;
 
 import com.shoppingapp.shoppingapp.repository.RoleRepository;
+import com.shoppingapp.shoppingapp.repository.ShopRepository;
+import com.shoppingapp.shoppingapp.repository.UnverifiedShopRepository;
 import com.shoppingapp.shoppingapp.repository.UserRepository;
 import com.shoppingapp.shoppingapp.service.UserService;
 import lombok.AccessLevel;
@@ -27,6 +32,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -38,6 +44,8 @@ public class UserServiceImpl implements UserService {
 
     UserRepository userRepository;
     RoleRepository roleRepository;
+    ShopRepository shopRepository;
+    UnverifiedShopRepository unverifiedShopRepository;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
 
@@ -130,10 +138,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public List<UserResponse> getVendors() {
+    public List<VendorResponse> getVendors() {
         return userRepository.findAll().stream()
                 .filter(user -> user.getRoles().stream().anyMatch(role -> role.getName().equals("VENDOR")))
-                .map(userMapper::toUserResponse)
+                .map(user -> {
+                    Optional<Shop> shop = shopRepository.findByUserId(user.getId()); // Assuming there's a method to find a shop by user ID
+                    Shop shop1 = shop.orElse(null);
+
+                    Optional<UnverifiedShop> unverifiedShop = unverifiedShopRepository.findByUserId(user.getId());
+                    UnverifiedShop unverifiedShop1 = unverifiedShop.orElse(null);
+
+                    return VendorResponse.builder()
+                            .id(user.getId())
+                            .firstName(user.getFirstName())
+                            .lastName(user.getLastName())
+                            .email(user.getEmail())
+                            .phone(user.getPhone())
+                            .isActive(user.getIsActive())
+                            .shop(shop1)
+                            .unverifiedShop(unverifiedShop1)
+                            .build();
+                })
                 .toList();
     }
 

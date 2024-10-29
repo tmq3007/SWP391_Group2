@@ -18,10 +18,10 @@ public class StatisticShopResponse {
     Long totalOrder;
     String address;
     String city;
-    String district;
-    String subdistrict;
-    String description;
+    String state;
+    String country;
     String phone;
+    String description;
     String logo;
     String cover;
 }

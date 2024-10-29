@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shoppingapp.shoppingapp.dto.request.UserCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.response.UserResponse;
+import com.shoppingapp.shoppingapp.dto.response.VendorResponse;
 import com.shoppingapp.shoppingapp.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +52,7 @@ public class UserControllerTest {
     private Long userId;
 
 
-    private List<UserResponse> vendors;
+    private List<VendorResponse> vendors;
     private List<UserResponse> customers;
 
     @BeforeEach
@@ -124,8 +125,8 @@ public class UserControllerTest {
         userId = 1L;
 
         vendors = Arrays.asList(
-                UserResponse.builder().id(1L).username("vendor1").email("vendor1@example.com").build(),
-                UserResponse.builder().id(2L).username("vendor2").email("vendor2@example.com").build()
+                VendorResponse.builder().id(1L).email("vendor1@example.com").build(),
+                VendorResponse.builder().id(2L).email("vendor2@example.com").build()
         );
 
         customers = Arrays.asList(

@@ -8,4 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Orders, Long> {
+
+    @Query(value = "SELECT COUNT(*) FROM orders WHERE shop_id = :shopId", nativeQuery = true)
+    int countOrdersByShopId(@Param("shopId") Long shopId);
 }

@@ -5,6 +5,7 @@ import com.shoppingapp.shoppingapp.dto.request.ProfileUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.response.UserResponse;
+import com.shoppingapp.shoppingapp.dto.response.VendorResponse;
 import com.shoppingapp.shoppingapp.models.User;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public interface UserService {
 
    List<UserResponse> getAll();
 
-   List<UserResponse> getVendors();
+   List<VendorResponse> getVendors();
 
    List<UserResponse> getCustomers();
 

@@ -4,6 +4,7 @@ import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
 import com.shoppingapp.shoppingapp.dto.request.ShopCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.ShopUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.response.ShopResponse;
+import com.shoppingapp.shoppingapp.dto.response.StatisticShopResponse;
 import com.shoppingapp.shoppingapp.mapper.ShopMapper;
 import com.shoppingapp.shoppingapp.service.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,5 +70,10 @@ public class ShopController {
     @GetMapping("/get-shopId/{userId}")
     ApiResponse<Long> getShopIdByUserId(@PathVariable("userId") Long userId) {
         return ApiResponse.<Long>builder().result(shopService.getShopIdByUserId(userId)).build();
+    }
+
+    @GetMapping("/get-all-statistics-shops")
+    ApiResponse<List<StatisticShopResponse>> getAllStatisticsShops() {
+        return ApiResponse.<List<StatisticShopResponse>>builder().result(shopService.getAllStatisticShops()).build();
     }
 }
