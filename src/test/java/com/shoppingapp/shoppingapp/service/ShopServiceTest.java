@@ -80,7 +80,7 @@ public class ShopServiceTest {
 
 
         shopResponse = ShopResponse.builder()
-                .shopID(1L)
+                .shopId(1L)
                 .shopName("Pet Shops")
                 .logo("logo.img")
                 .cover("cover.img")
@@ -128,7 +128,7 @@ public class ShopServiceTest {
         ShopResponse result = shopService.createShop(request);
 
         // Then
-        Assertions.assertThat(result.getShopID()).isEqualTo(1L); // Verify that the returned shop ID matches
+        Assertions.assertThat(result.getShopId()).isEqualTo(1L); // Verify that the returned shop ID matches
         Assertions.assertThat(result.getShopName()).isEqualTo("Pet Shops"); // Verify that the returned shop name matches
     }
 
@@ -161,7 +161,7 @@ public class ShopServiceTest {
 
         // Then
         Assertions.assertThat(result).isNotNull(); // Check that the result is not null
-        Assertions.assertThat(result.getShopID()).isEqualTo(1L); // Verify that the returned shop ID matches
+        Assertions.assertThat(result.getShopId()).isEqualTo(1L); // Verify that the returned shop ID matches
         Assertions.assertThat(result.getShopName()).isEqualTo("Pet Shops"); // Verify that the shop name matches
         Assertions.assertThat(result.getAddress()).isEqualTo("Hoa Lac"); // Verify that the address matches
         Assertions.assertThat(result.getCity()).isEqualTo("Ha Noi"); // Verify that the city matches
