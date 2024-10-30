@@ -51,10 +51,13 @@ public class OrderController{
     @PatchMapping("/{orderId}")
     public ResponseEntity<Orders> updateOrder(@PathVariable("orderId") Long orderId, @RequestBody Orders order){
         Orders current = orderService.getOrderById(orderId);
+        System.out.println("Curent id: "+orderId);
+        System.out.println("Current: "+current.getPaymentId());
         if(current != null){
             current.setOrderDate(order.getOrderDate());
             current.setIsPaid(order.getIsPaid());
             current.setPaymentDate(order.getPaymentDate());
+            current.setPaymentId(order.getPaymentId());
         }
         return ResponseEntity.ok(orderService.updateOrder(current));
     }

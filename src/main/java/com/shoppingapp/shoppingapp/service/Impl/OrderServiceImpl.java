@@ -57,6 +57,9 @@ public class OrderServiceImpl implements OrderService {
         // update ispaid - odate - pdate - paymentid
         List<OrderItems> list = orderItemRepository.findAll()
                 .stream().filter(a -> a.getOrderId() == order.getOrderId()).toList();
+
+        System.out.println("Order "+order.getOrderId() + order.getPaymentId());
+
         list.forEach((a) -> {a.setOrderItemsDate(order.getOrderDate());
             a.setOrderItemsPaymentDate(order.getPaymentDate());
             a.setIsPaid(order.getIsPaid());
