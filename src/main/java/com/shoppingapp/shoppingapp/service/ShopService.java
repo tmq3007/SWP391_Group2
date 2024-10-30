@@ -5,6 +5,7 @@ import java.util.Optional;
 import com.shoppingapp.shoppingapp.dto.request.ShopCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.ShopUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.response.ShopResponse;
+import com.shoppingapp.shoppingapp.dto.response.StatisticShopResponse;
 import com.shoppingapp.shoppingapp.models.Shop;;
 
 public interface ShopService {
@@ -17,4 +18,6 @@ public interface ShopService {
     Long getShopIdByUserId(Long userId);
     Shop getShopProfile(String jwt);
     Shop getShopByUserId(Long userId);
+    List<StatisticShopResponse> getAllStatisticShops();
+
 }

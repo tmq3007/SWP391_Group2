@@ -3,6 +3,7 @@ package com.shoppingapp.shoppingapp.service.Impl;
 import com.shoppingapp.shoppingapp.dto.request.ShopCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.ShopUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.response.ShopResponse;
+import com.shoppingapp.shoppingapp.dto.response.StatisticShopResponse;
 import com.shoppingapp.shoppingapp.exceptions.AppException;
 import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
 import com.shoppingapp.shoppingapp.mapper.ShopMapper;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -43,6 +45,8 @@ public class ShopServiceImp implements ShopService {
     private ShopMapper shopMapper;
     @Autowired
     private UserRepository userRepository;
+    ProductRepository productRepository;
+    OrderRepository orderRepository;
 
     @Override
     public Shop getShopByUserId(Long userId) {
@@ -51,6 +55,34 @@ public class ShopServiceImp implements ShopService {
                 .filter((a) -> a.getUser().getId().equals(userId))
                 .findFirst()
                 .orElse(null);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<StatisticShopResponse> getAllStatisticShops() {
+        return shopRepository.findAll().stream()
+                .map(shop -> {
+                    // Get total products and orders for this shop
+                    Long totalProduct = (long) productRepository.countProductsByShopId(shop.getShopId());
+                    Long totalOrder = (long) orderRepository.countOrdersByShopId(shop.getShopId());
+
+                    // Create and return the StatisticShopResponse for this shop
+                    return StatisticShopResponse.builder()
+                            .shopID(shop.getShopId())
+                            .shopName(shop.getShopName())
+                            .user(shop.getUser()) // assuming Shop entity has a User field
+                            .totalProduct(totalProduct)
+                            .totalOrder(totalOrder)
+                            .address(shop.getAddress())
+                            .city(shop.getCity())
+                            .district(shop.getDistrict())
+                            .subdistrict(shop.getSubdistrict())
+                            .phone(shop.getPhone())
+                            .description(shop.getDescription())
+                            .logo(shop.getLogo())
+                            .cover(shop.getCover())
+                            .build();
+                }).toList();
     }
 
     @Override

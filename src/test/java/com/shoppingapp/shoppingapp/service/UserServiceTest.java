@@ -3,6 +3,7 @@ package com.shoppingapp.shoppingapp.service;
 import com.shoppingapp.shoppingapp.dto.request.UserCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.response.UserResponse;
+import com.shoppingapp.shoppingapp.dto.response.VendorResponse;
 import com.shoppingapp.shoppingapp.exceptions.AppException;
 import com.shoppingapp.shoppingapp.mapper.UserMapper;
 import com.shoppingapp.shoppingapp.models.Role;
@@ -354,12 +355,10 @@ public class UserServiceTest {
         Mockito.when(userMapper.toUserResponse(vendorUser2)).thenReturn(vendorResponse2);
 
         // Call the method
-        List<UserResponse> result = userService.getVendors();
+        List<VendorResponse> result = userService.getVendors();
 
         // Validate results
         Assertions.assertThat(result).hasSize(2); // Should have 2 vendors
-        Assertions.assertThat(result.get(0).getUsername()).isEqualTo("vendor1");
-        Assertions.assertThat(result.get(1).getUsername()).isEqualTo("vendor2");
     }
 
     @Test

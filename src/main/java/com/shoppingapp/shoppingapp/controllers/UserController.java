@@ -2,6 +2,7 @@ package com.shoppingapp.shoppingapp.controllers;
 
 import com.shoppingapp.shoppingapp.dto.request.*;
 import com.shoppingapp.shoppingapp.dto.response.UserResponse;
+import com.shoppingapp.shoppingapp.dto.response.VendorResponse;
 import com.shoppingapp.shoppingapp.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -95,8 +96,8 @@ public class UserController {
     }
 
     @GetMapping("/all-vendors")
-    ApiResponse<List<UserResponse>> getVendors() {
-        return ApiResponse.<List<UserResponse>>builder()
+    ApiResponse<List<VendorResponse>> getVendors() {
+        return ApiResponse.<List<VendorResponse>>builder()
                 .result(userService.getVendors())
                 .build();
     }
