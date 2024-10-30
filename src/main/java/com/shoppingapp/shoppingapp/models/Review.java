@@ -17,9 +17,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Review {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    Long reviewId;
 
     @Column(nullable = false)
     String reviewText;
@@ -33,7 +34,7 @@ public class Review {
     Product product;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "id", nullable = false)
     User user;
 
     @Column(nullable = false)
