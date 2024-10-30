@@ -10,6 +10,7 @@ import com.shoppingapp.shoppingapp.service.OrderItemsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +23,7 @@ public class OrdersItemServiceImpl implements OrderItemsService {
 
     @Autowired
     private OrderRepository orderRepository;
+
     @Autowired
     private ShopRepository shopRepository;
 
@@ -53,23 +55,32 @@ public class OrdersItemServiceImpl implements OrderItemsService {
         } else {
             System.out.println("Success!");
             return orderItemRepository.findAll().stream()
-                    .filter(item -> item.getOrders() != null && // Check if orders is not null
-                            item.getOrders().getOrderId() != null && // Check if orderId is not null
-                            item.getOrders().getOrderId().equals(id)) // Now safe to compare
+                    .filter(item -> item.getOrderId() != null && // Check if orders is not null
+                            item.getOrderId() != null && // Check if orderId is not null
+                            item.getOrderId().equals(id)) // Now safe to compare
                     .collect(Collectors.toList());
         }
     }
 
     @Override
-    public String add(OrderItems orderItems,Long orderId) {
-        Orders orders = orderRepository.findById(orderId).orElse(null);
+    public String add(OrderItems orderItems) {
+        Orders orders = orderRepository.findById(orderItems.getOrderId()).orElse(null);
         if(orders == null){
             System.out.println("No order found!");
             return "No order found!";
         }else{
-            orderItemRepository.save(orderItems);
-            System.out.println("Order added succcessfully!");
-            return "OrderItems added!";
+            // set back to it father
+            System.out.println("Add order items");
+            orderItems.setOrderItemsDate(orders.getOrderDate());
+            orderItems.setOrderItemsPaymentDate(orders.getPaymentDate());
+            orderItems.setIsPaid(orders.getIsPaid());
+            orderItems.setPaymentId(orders.getPaymentId());
+            OrderItems a = orderItemRepository.save(orderItems);
+            List<OrderItems> list = orders.getOrderItemsList();
+            list.add(a);
+            orders.setOrderItemsList(list);
+            orderRepository.save(orders);
+            return "Success!";
         }
     }
 
@@ -78,5 +89,10 @@ public class OrdersItemServiceImpl implements OrderItemsService {
         return orderItemRepository.findAll()
                 .stream()
                 .filter((a) -> a.getShop().getShopId().equals(id)).toList();
+    }
+
+    @Override
+    public OrderItems getById(Long id) {
+        return orderItemRepository.findById(id).orElse(null);
     }
 }

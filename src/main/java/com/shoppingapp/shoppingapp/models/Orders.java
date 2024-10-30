@@ -1,10 +1,10 @@
 package com.shoppingapp.shoppingapp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Data
@@ -25,11 +25,10 @@ public class Orders {
     private String address;
     private String phone;
 
-    @OneToMany(mappedBy = "orders", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonManagedReference
+
+    @OneToMany
     private List<OrderItems> orderItemsList;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
     private User user;
 }
