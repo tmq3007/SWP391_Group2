@@ -1,6 +1,7 @@
 package com.shoppingapp.shoppingapp.controllers;
 
 import com.shoppingapp.shoppingapp.dto.request.*;
+import com.shoppingapp.shoppingapp.dto.response.CustomerResponse;
 import com.shoppingapp.shoppingapp.dto.response.UserResponse;
 import com.shoppingapp.shoppingapp.dto.response.VendorResponse;
 import com.shoppingapp.shoppingapp.service.UserService;
@@ -103,8 +104,8 @@ public class UserController {
     }
 
     @GetMapping("/all-customers")
-    ApiResponse<List<UserResponse>> getCustomers() {
-        return ApiResponse.<List<UserResponse>>builder()
+    ApiResponse<List<CustomerResponse>> getCustomers() {
+        return ApiResponse.<List<CustomerResponse>>builder()
                 .result(userService.getCustomers())
                 .build();
     }
