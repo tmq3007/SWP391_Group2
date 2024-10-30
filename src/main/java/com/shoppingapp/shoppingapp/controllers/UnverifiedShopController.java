@@ -46,4 +46,11 @@ public class UnverifiedShopController {
         unverifiedShopService.rejectShop(unverifiedShopId);
         return ApiResponse.<String>builder().result("Shop request has been rejected").build();
     }
+
+    @DeleteMapping("/delete-rejected-request/{unverifiedShopId}")
+    ApiResponse<String> deleteRejectedRequest(@PathVariable("unverifiedShopId") Long unverifiedShopId) {
+        unverifiedShopService.deleteRejectedRequest(unverifiedShopId);
+        return ApiResponse.<String>builder().result("Request is deleted").build();
+    }
+
 }
