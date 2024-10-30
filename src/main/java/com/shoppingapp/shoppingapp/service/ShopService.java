@@ -19,5 +19,5 @@ public interface ShopService {
     Shop getShopProfile(String jwt);
     Shop getShopByUserId(Long userId);
     List<StatisticShopResponse> getAllStatisticShops();
-
+    StatisticShopResponse getStatisticShop(Long shopId);
 }
