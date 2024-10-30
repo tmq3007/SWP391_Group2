@@ -53,4 +53,10 @@ public class UnverifiedShopController {
         return ApiResponse.<String>builder().result("Request is deleted").build();
     }
 
+    @GetMapping("/get-status-rejected/{unverified-shop-id}")
+    ApiResponse<Long> getStatusRejected(@PathVariable("unverified-shop-id") Long unverifiedShopId) {
+        Long statusRejected = unverifiedShopService.getStatusRejectedByUnverifiedShopId(unverifiedShopId);
+        return ApiResponse.<Long>builder().result(statusRejected).build();
+    }
+
 }

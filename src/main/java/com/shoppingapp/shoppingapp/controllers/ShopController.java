@@ -84,4 +84,11 @@ public class ShopController {
     ApiResponse<List<StatisticShopResponse>> getAllStatisticsShops() {
         return ApiResponse.<List<StatisticShopResponse>>builder().result(shopService.getAllStatisticShops()).build();
     }
+
+    @GetMapping("/get-statistic-shop/{shopId}")
+    public ApiResponse<StatisticShopResponse> getStatisticShop(@PathVariable Long shopId) {
+        StatisticShopResponse statisticShopResponse = shopService.getStatisticShop(shopId);
+        return ApiResponse.<StatisticShopResponse>builder().result(statisticShopResponse).build();
+    }
+
 }

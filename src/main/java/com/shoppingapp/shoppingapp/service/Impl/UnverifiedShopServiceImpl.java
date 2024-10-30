@@ -34,6 +34,14 @@ public class UnverifiedShopServiceImpl implements UnverifiedShopService {
         unverifiedShopRepository.delete(unverifiedShop);
     }
 
+    @Override
+    public Long getStatusRejectedByUnverifiedShopId(Long unverifiedShopId) {
+        return unverifiedShopRepository.findById(unverifiedShopId)
+                .map(unverifiedShop -> unverifiedShop.getIsRejected() ? 1L : 0L)
+                .orElseThrow(() -> new AppException(ErrorCode.SHOP_REQUEST_NOT_EXISTED));
+    }
+
+
     private final UnverifiedShopRepository unverifiedShopRepository;
     private final ShopRepository shopRepository;
     UnverifiedShopMapper unverifiedShopMapper;
