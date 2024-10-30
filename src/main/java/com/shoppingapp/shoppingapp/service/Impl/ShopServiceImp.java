@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ShopServiceImp implements ShopService {
     @Override
-    @PreAuthorize("hasRole('VENDOR')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'VENDOR')")
     public StatisticShopResponse getStatisticShop(Long shopId) {
         // Find the shop by its ID
         Shop shop = shopRepository.findById(shopId)
