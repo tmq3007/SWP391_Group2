@@ -31,5 +31,5 @@ public class ProductResponse {
     private String pictureUrl;
     private String pictureUrl2;
     private Boolean isActive;
-    Set<Review> reviews;
+    private Double averageRating;
 }

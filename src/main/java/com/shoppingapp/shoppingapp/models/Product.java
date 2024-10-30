@@ -42,8 +42,5 @@ public class Product {
     private String pictureUrl;
     private String pictureUrl2;
     private Boolean isActive;
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews = new ArrayList<>();
-
+    private Double averageRating;
 }

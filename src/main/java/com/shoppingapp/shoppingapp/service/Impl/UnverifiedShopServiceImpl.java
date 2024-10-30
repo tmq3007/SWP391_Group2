@@ -27,7 +27,12 @@ import java.util.Optional;
 @Slf4j
 
 public class UnverifiedShopServiceImpl implements UnverifiedShopService {
+    @Override
+    public void deleteRejectedRequest(Long unverifiedShopId) {
 
+        var unverifiedShop = unverifiedShopRepository.findById(unverifiedShopId).orElseThrow(() -> new AppException (ErrorCode.SHOP_REQUEST_NOT_EXISTED));
+        unverifiedShopRepository.delete(unverifiedShop);
+    }
 
     private final UnverifiedShopRepository unverifiedShopRepository;
     private final ShopRepository shopRepository;
@@ -111,4 +116,6 @@ public class UnverifiedShopServiceImpl implements UnverifiedShopService {
                 .filter(unverifiedShop -> !unverifiedShop.getIsRejected())
                 .toList();
     }
+
+
 }

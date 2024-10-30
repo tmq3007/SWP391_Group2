@@ -25,4 +25,5 @@ public class ProductUpdateRequest {
     private String pictureUrl;
     private String pictureUrl2;
     private Boolean isActive;
+    private Double averageRating;
 }
