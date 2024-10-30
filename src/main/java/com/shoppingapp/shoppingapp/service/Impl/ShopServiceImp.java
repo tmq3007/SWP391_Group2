@@ -46,7 +46,7 @@ public class ShopServiceImp implements ShopService {
     @Autowired
     private UserRepository userRepository;
     ProductRepository productRepository;
-    OrderRepository orderRepository;
+    OrderItemRepository orderItemRepository;
 
     @Override
     public Shop getShopByUserId(Long userId) {
@@ -64,7 +64,7 @@ public class ShopServiceImp implements ShopService {
                 .map(shop -> {
                     // Get total products and orders for this shop
                     Long totalProduct = (long) productRepository.countProductsByShopId(shop.getShopId());
-                    Long totalOrder = (long) orderRepository.countOrdersByShopId(shop.getShopId());
+                    Long totalOrder = (long) orderItemRepository.countOrderItemsByShopId(shop.getShopId());
 
                     // Create and return the StatisticShopResponse for this shop
                     return StatisticShopResponse.builder()
