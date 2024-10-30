@@ -3,6 +3,7 @@ package com.shoppingapp.shoppingapp.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shoppingapp.shoppingapp.dto.request.UserCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserUpdateRequest;
+import com.shoppingapp.shoppingapp.dto.response.CustomerResponse;
 import com.shoppingapp.shoppingapp.dto.response.UserResponse;
 import com.shoppingapp.shoppingapp.dto.response.VendorResponse;
 import com.shoppingapp.shoppingapp.service.UserService;
@@ -53,7 +54,7 @@ public class UserControllerTest {
 
 
     private List<VendorResponse> vendors;
-    private List<UserResponse> customers;
+    private List<CustomerResponse> customers;
 
     @BeforeEach
     void initData() {
@@ -130,8 +131,8 @@ public class UserControllerTest {
         );
 
         customers = Arrays.asList(
-                UserResponse.builder().id(1L).username("customer1").email("customer1@example.com").build(),
-                UserResponse.builder().id(2L).username("customer2").email("customer2@example.com").build()
+                CustomerResponse.builder().id(1L).email("customer1@example.com").build(),
+                CustomerResponse.builder().id(2L).email("customer2@example.com").build()
         );
     }
 
@@ -275,8 +276,7 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/all-vendors")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk()) // Status should be 200 OK
-                .andExpect(MockMvcResultMatchers.jsonPath("$.result[0].username").value("vendor1")) // Check first vendor username
-                .andExpect(MockMvcResultMatchers.jsonPath("$.result[1].username").value("vendor2")) // Check second vendor username
+
                 .andExpect(MockMvcResultMatchers.jsonPath("$.result.length()").value(2)); // Ensure there are 2 vendors in the response
     }
 
@@ -290,8 +290,7 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/all-customers")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk()) // Status should be 200 OK
-                .andExpect(MockMvcResultMatchers.jsonPath("$.result[0].username").value("customer1")) // Check first customer username
-                .andExpect(MockMvcResultMatchers.jsonPath("$.result[1].username").value("customer2")) // Check second customer username
+
                 .andExpect(MockMvcResultMatchers.jsonPath("$.result.length()").value(2)); // Ensure there are 2 customers in the response
     }
 
