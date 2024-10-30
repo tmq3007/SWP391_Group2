@@ -43,4 +43,5 @@ public class Product {
     private String pictureUrl2;
     private Boolean isActive;
     private Double averageRating;
+
 }
