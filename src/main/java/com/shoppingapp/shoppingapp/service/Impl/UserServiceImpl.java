@@ -4,6 +4,7 @@ import com.shoppingapp.shoppingapp.dto.request.ChangePasswordRequest;
 import com.shoppingapp.shoppingapp.dto.request.ProfileUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserUpdateRequest;
+import com.shoppingapp.shoppingapp.dto.response.CustomerResponse;
 import com.shoppingapp.shoppingapp.dto.response.UserResponse;
 import com.shoppingapp.shoppingapp.dto.response.VendorResponse;
 import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
@@ -14,10 +15,7 @@ import com.shoppingapp.shoppingapp.models.Shop;
 import com.shoppingapp.shoppingapp.models.UnverifiedShop;
 import com.shoppingapp.shoppingapp.models.User;
 
-import com.shoppingapp.shoppingapp.repository.RoleRepository;
-import com.shoppingapp.shoppingapp.repository.ShopRepository;
-import com.shoppingapp.shoppingapp.repository.UnverifiedShopRepository;
-import com.shoppingapp.shoppingapp.repository.UserRepository;
+import com.shoppingapp.shoppingapp.repository.*;
 import com.shoppingapp.shoppingapp.service.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +44,7 @@ public class UserServiceImpl implements UserService {
     RoleRepository roleRepository;
     ShopRepository shopRepository;
     UnverifiedShopRepository unverifiedShopRepository;
+    OrderRepository orderRepository;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
 
@@ -164,10 +163,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public List<UserResponse> getCustomers() {
+    public List<CustomerResponse> getCustomers() {
         return userRepository.findAll().stream()
                 .filter(user -> user.getRoles().stream().anyMatch(role -> role.getName().equals("CUSTOMER")))
-                .map(userMapper::toUserResponse)
+                .map(user -> {
+
+                    Long totalOrder = (long) orderRepository.countOrderByUserId(user.getId()); // Assuming there's a method to get the total order of a customer
+
+                   return CustomerResponse.builder()
+                            .id(user.getId())
+                            .firstName(user.getFirstName())
+                            .lastName(user.getLastName())
+                            .email(user.getEmail())
+                            .phone(user.getPhone())
+                            .isActive(user.getIsActive())
+                            .totalOrder(totalOrder) // Assuming there's a method to get the total order of a customer
+                            .build();
+                })
                 .toList();
     }
 

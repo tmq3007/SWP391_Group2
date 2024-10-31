@@ -4,6 +4,7 @@ import com.shoppingapp.shoppingapp.dto.request.ChangePasswordRequest;
 import com.shoppingapp.shoppingapp.dto.request.ProfileUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.UserUpdateRequest;
+import com.shoppingapp.shoppingapp.dto.response.CustomerResponse;
 import com.shoppingapp.shoppingapp.dto.response.UserResponse;
 import com.shoppingapp.shoppingapp.dto.response.VendorResponse;
 import com.shoppingapp.shoppingapp.models.User;
@@ -28,7 +29,7 @@ public interface UserService {
 
    List<VendorResponse> getVendors();
 
-   List<UserResponse> getCustomers();
+   List<CustomerResponse> getCustomers();
 
    UserResponse getUserById(Long id);
 

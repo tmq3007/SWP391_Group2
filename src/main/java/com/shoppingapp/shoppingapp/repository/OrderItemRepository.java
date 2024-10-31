@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface OrderItemRepository extends JpaRepository<OrderItems, Long> {
 
-    @Query(value = "SELECT COUNT(*) FROM orders WHERE shop_id = :shopId", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM order_items WHERE shop_shop_id = :shopId", nativeQuery = true)
     int countOrderItemsByShopId(@Param("shopId") Long shopId);
 }
