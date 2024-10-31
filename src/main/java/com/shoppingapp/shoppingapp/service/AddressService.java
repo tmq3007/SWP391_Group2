@@ -13,5 +13,6 @@ public interface AddressService {
     AddressResponse createAddress(AddressCreationRequest request);
     String updateAddress(Address address);
     String deleteAddress(Long AddressId);
+    List<AddressResponse> getAddressByUserId(long userId);
 
 }

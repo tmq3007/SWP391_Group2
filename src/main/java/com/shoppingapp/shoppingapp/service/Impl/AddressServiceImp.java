@@ -82,5 +82,11 @@ public class AddressServiceImp implements AddressService {
         return "Deleted";
     }
 
+    @Override
+    public List<AddressResponse> getAddressByUserId(long userId) {
+        return addressRepository.findAddressesByUserId(userId).stream().map(addressMapper::toResponse).collect(Collectors.toList());
+
+    }
+
 
 }
