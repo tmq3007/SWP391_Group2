@@ -10,14 +10,14 @@ import com.shoppingapp.shoppingapp.models.Shop;;
 
 public interface ShopService {
     List<ShopResponse> getAllShops();
-    ShopResponse getShopById(long ShopId);
+    ShopResponse getShopById(Long ShopId);
     ShopResponse createShop(ShopCreationRequest request);
-    ShopResponse updateShop(ShopUpdateRequest request, long ShopId);
+    ShopResponse updateShop(ShopUpdateRequest request, Long ShopId);
     String deleteShop(Long shopId);
     int getTotalShops();
     Long getShopIdByUserId(Long userId);
     Shop getShopProfile(String jwt);
     Shop getShopByUserId(Long userId);
     List<StatisticShopResponse> getAllStatisticShops();
-
+    StatisticShopResponse getStatisticShop(Long shopId);
 }

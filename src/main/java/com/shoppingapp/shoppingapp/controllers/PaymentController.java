@@ -3,7 +3,7 @@ package com.shoppingapp.shoppingapp.controllers;
 import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
 import com.shoppingapp.shoppingapp.dto.request.PaymentCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.PaymentUpdateRequest;
-import com.shoppingapp.shoppingapp.dto.response.PaymentResponse;
+
 import com.shoppingapp.shoppingapp.exceptions.AppException;
 import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
 import com.shoppingapp.shoppingapp.models.Category;

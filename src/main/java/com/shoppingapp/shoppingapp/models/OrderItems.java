@@ -1,12 +1,12 @@
 package com.shoppingapp.shoppingapp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.AccessType;
+import lombok.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -17,6 +17,11 @@ public class OrderItems {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderItemsId;
 
+    private LocalDate orderItemsDate;
+    private LocalDate orderItemsPaymentDate;
+    private Boolean isPaid;
+    private Long paymentId;
+
     private String productName;
     private String productImage;
     private String productSellPrice;
@@ -25,12 +30,11 @@ public class OrderItems {
     private Double itemTotalPrice;
     private Double finalPrice;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
-    @JsonBackReference
-    private Orders orders;
-
+    // connect with order
+    private Long orderId;
     @ManyToOne
-    @JoinColumn(name = "shop_id")
-    private Shop shop;
+    private Shop shop; // connect with shop
 }
+
+
+

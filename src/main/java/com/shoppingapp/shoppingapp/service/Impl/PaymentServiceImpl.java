@@ -2,7 +2,7 @@ package com.shoppingapp.shoppingapp.service.Impl;
 
 import com.shoppingapp.shoppingapp.dto.request.PaymentCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.PaymentUpdateRequest;
-import com.shoppingapp.shoppingapp.dto.response.PaymentResponse;
+
 import com.shoppingapp.shoppingapp.exceptions.AppException;
 import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
 import com.shoppingapp.shoppingapp.mapper.PaymentMapper;

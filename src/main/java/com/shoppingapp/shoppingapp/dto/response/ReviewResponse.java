@@ -4,13 +4,15 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PaymentResponse {
+public class ReviewResponse {
+    Long id;
+    String reviewText;
+    Double rating;
+    Long productId;
+    Long userId;
 
-    Long paymentId;
-    String paymentType;
-    Boolean isActive;
 }

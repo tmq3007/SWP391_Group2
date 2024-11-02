@@ -33,6 +33,38 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ShopServiceImp implements ShopService {
     @Override
+    @PreAuthorize("hasAnyRole('ADMIN', 'VENDOR')")
+    public StatisticShopResponse getStatisticShop(Long shopId) {
+        // Find the shop by its ID
+        Shop shop = shopRepository.findById(shopId)
+                .orElseThrow(() -> new AppException (ErrorCode.SHOP_NOT_EXISTED));
+
+        // Calculate the total number of products for the shop
+        Long totalProduct = (long) productRepository.countProductsByShopId(shopId);
+
+        // Calculate the total number of orders for the shop
+        Long totalOrder = (long) orderItemRepository.countOrderItemsByShopId(shopId);
+
+        // Build and return the StatisticShopResponse for this shop
+        return StatisticShopResponse.builder()
+                .shopID(shop.getShopId())
+                .shopName(shop.getShopName())
+                .user(shop.getUser()) // assuming Shop entity has a User field
+                .totalProduct(totalProduct)
+                .totalOrder(totalOrder)
+                .address(shop.getAddress())
+                .city(shop.getCity())
+                .district(shop.getDistrict())
+                .subdistrict(shop.getSubdistrict())
+                .phone(shop.getPhone())
+                .description(shop.getDescription())
+                .logo(shop.getLogo())
+                .cover(shop.getCover())
+                .build();
+    }
+
+
+    @Override
     public Shop getShopProfile(String jwt) {
         return null;
     }
@@ -46,7 +78,7 @@ public class ShopServiceImp implements ShopService {
     @Autowired
     private UserRepository userRepository;
     ProductRepository productRepository;
-    OrderRepository orderRepository;
+    OrderItemRepository orderItemRepository;
 
     @Override
     public Shop getShopByUserId(Long userId) {
@@ -64,7 +96,7 @@ public class ShopServiceImp implements ShopService {
                 .map(shop -> {
                     // Get total products and orders for this shop
                     Long totalProduct = (long) productRepository.countProductsByShopId(shop.getShopId());
-                    Long totalOrder = (long) orderRepository.countOrdersByShopId(shop.getShopId());
+                    Long totalOrder = (long) orderItemRepository.countOrderItemsByShopId(shop.getShopId());
 
                     // Create and return the StatisticShopResponse for this shop
                     return StatisticShopResponse.builder()
@@ -85,13 +117,15 @@ public class ShopServiceImp implements ShopService {
                 }).toList();
     }
 
+
+
     @Override
     public List<ShopResponse> getAllShops() {
         return shopRepository.findAll().stream().map(shopMapper::toShopResponse).collect(Collectors.toList());
     }
 
     @Override
-    public ShopResponse getShopById(long shopId) {
+    public ShopResponse getShopById(Long shopId) {
         return shopMapper.toShopResponse(shopRepository.findById(shopId).orElseThrow(()-> new AppException(ErrorCode.SHOP_NOT_EXISTED)));
     }
 
@@ -102,7 +136,7 @@ public class ShopServiceImp implements ShopService {
         }
         Shop shop = shopMapper.toShop(request);
         var userOp = userRepository.findById(Long.valueOf(request.getUser()));
-        if (!userOp.isPresent()) {
+        if (userOp.isEmpty()) {
             throw new AppException(ErrorCode.USER_NOT_EXISTED);  // Xử lý khi không tìm thấy user
         }
 
@@ -113,7 +147,7 @@ public class ShopServiceImp implements ShopService {
     }
 
     @Override
-    public ShopResponse updateShop(ShopUpdateRequest request, long shopId) {
+    public ShopResponse updateShop(ShopUpdateRequest request, Long shopId) {
         Shop shop = shopRepository.findById(shopId).orElseThrow(()-> new AppException(ErrorCode.SHOP_NOT_EXISTED));
         shopMapper.updateShop(shop,request);
 

@@ -14,4 +14,6 @@ public interface UnverifiedShopService {
     Long getUnverifiedShopIdByUserId(Long userId);
 
     List<UnverifiedShop> getAllUnverifiedShops();
+    void deleteRejectedRequest(Long unverifiedShopId);
+    Long getStatusRejectedByUnverifiedShopId(Long unverifiedShopId);
 }

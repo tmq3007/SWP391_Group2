@@ -19,7 +19,13 @@ public class OrderItemsController {
     }
 
     @GetMapping("/{id}")
-    ApiResponse<?> findById(@PathVariable Long id) {
+    ApiResponse<?> findByOrderItemsId(@PathVariable("id") Long id) {
+        return ApiResponse.builder().result(orderItemsService.getById(id)).build();
+    }
+
+    @GetMapping("/findByOrderId/{id}")
+    ApiResponse<?> findByOrderId(@PathVariable("id") Long id) {
+        System.out.println("Find by id");
         return ApiResponse.builder().result(orderItemsService.getByOrderId(id)).build();
     }
 
@@ -29,10 +35,10 @@ public class OrderItemsController {
         return ApiResponse.builder().result(orderItemsService.getAllByShopId(id)).build();
     }
 
-    @PostMapping("/{id}")
-    ApiResponse<?> add(@RequestBody OrderItems orderItems, @PathVariable Long id) {
-        System.out.println("Order id: "+id);
-        return ApiResponse.builder().result(orderItemsService.add(orderItems,id)).build();
+    @PostMapping
+    ApiResponse<?> add(@RequestBody OrderItems orderItems) {
+        System.out.println("Order id: "+orderItems.getOrderId());
+        return ApiResponse.builder().result(orderItemsService.add(orderItems)).build();
     }
 
 }

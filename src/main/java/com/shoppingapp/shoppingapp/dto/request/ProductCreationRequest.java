@@ -26,5 +26,5 @@ public class ProductCreationRequest {
     private String pictureUrl;
     private String pictureUrl2;
     private Boolean isActive;
-
+    private Double averageRating;
 }
