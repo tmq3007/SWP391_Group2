@@ -15,4 +15,5 @@ public interface OrderService {
     List<Orders> getOrdersByUserId(Long id);
     String updateIsPaidTrue(Long id);
     String updateIsPaidFalse(Long id);
+    List<Orders> getAllOrdersByUserId(Long id);
 }

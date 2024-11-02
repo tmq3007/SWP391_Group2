@@ -126,4 +126,19 @@ public class OrderServiceImpl implements OrderService {
         }
         return "Order not found!";
     }
+
+    @Override
+    public List<Orders> getAllOrdersByUserId(Long id) {
+        System.out.println("Get all order by user id");
+        List<Orders> list = orderRepository.findAll().stream().filter(
+                (a) -> a.getUser().getId().equals(id)
+        ).toList();
+        if(list.isEmpty()) {
+            System.out.println("List failed!");
+            return null;
+        }else{
+            System.out.println("List success!");
+            return list;
+        }
+    }
 }

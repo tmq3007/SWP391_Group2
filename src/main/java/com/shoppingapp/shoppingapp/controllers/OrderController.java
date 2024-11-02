@@ -2,6 +2,7 @@ package com.shoppingapp.shoppingapp.controllers;
 
 import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
 import com.shoppingapp.shoppingapp.service.OrderService;
+import com.shoppingapp.shoppingapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,9 @@ public class OrderController{
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private UserService userService;
+
     // UPDATE ORDER STATUS ISPAID TO TRUE
     @PatchMapping("/isPaidToTrue/{id}")
     public ApiResponse<?> isPaidToTrue(@PathVariable("id") Long id) {
@@ -29,6 +33,12 @@ public class OrderController{
     public ApiResponse<?> isPaidToFalse(@PathVariable("id") Long id) {
         return ApiResponse.builder()
                 .result(orderService.updateIsPaidFalse(id))
+                .build();
+    }
+
+    @GetMapping("/{userId}")
+    ApiResponse<?> getAllOrderByUserId(@PathVariable("userId") Long userId) {
+        return ApiResponse.builder().result(orderService.getAllOrdersByUserId(userId))
                 .build();
     }
 
@@ -80,6 +90,5 @@ public class OrderController{
     public ApiResponse<?> getOrdersByUserId(@PathVariable("id") Long id){
         return ApiResponse.builder().result(orderService.getOrdersByUserId(id)).build();
     }
-
 
 }
