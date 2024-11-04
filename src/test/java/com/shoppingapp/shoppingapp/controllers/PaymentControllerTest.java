@@ -2,14 +2,10 @@ package com.shoppingapp.shoppingapp.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shoppingapp.shoppingapp.dto.request.*;
-import com.shoppingapp.shoppingapp.dto.response.CategoryResponse;
 import com.shoppingapp.shoppingapp.dto.response.PaymentResponse;
 import com.shoppingapp.shoppingapp.exceptions.AppException;
 import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
-import com.shoppingapp.shoppingapp.models.Category;
 import com.shoppingapp.shoppingapp.models.Payment;
-import com.shoppingapp.shoppingapp.service.CategoryService;
-import com.shoppingapp.shoppingapp.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +24,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Slf4j
 @AutoConfigureMockMvc
