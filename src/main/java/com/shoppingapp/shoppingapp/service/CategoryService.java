@@ -14,4 +14,6 @@ public interface CategoryService {
     Category addCategory(CategoryCreationRequest request);
     CategoryResponse updateCategory(Long categoryId,CategoryUpdateRequest request);
     String deleteCategory(Category category);
+
+    List<Category> getTop10ByMostProducts();
 }

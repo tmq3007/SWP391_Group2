@@ -72,4 +72,9 @@ public class CategoryServiceImpl implements CategoryService {
         return "Category deleted successfully with ID:" + category.getCategoryId();
     }
 
+    @Override
+    public List<Category> getTop10ByMostProducts() {
+        return categoryRepository.findTop10ByMostProducts();
+    }
+
 }

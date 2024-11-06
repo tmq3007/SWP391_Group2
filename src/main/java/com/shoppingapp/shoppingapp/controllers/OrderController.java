@@ -81,5 +81,9 @@ public class OrderController{
         return ApiResponse.builder().result(orderService.getOrdersByUserId(id)).build();
     }
 
+    @GetMapping("/countOrdersByMonthAndYear")
+    public ApiResponse<List<Object[]>> countOrdersByMonthAndYear(){
+        return ApiResponse.<List<Object[]>>builder().result(orderService.countOrdersByMonthAndYear()).build();
+    }
 
 }
