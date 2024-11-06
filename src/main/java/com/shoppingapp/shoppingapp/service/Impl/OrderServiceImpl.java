@@ -9,12 +9,14 @@ import com.shoppingapp.shoppingapp.repository.OrderRepository;
 import com.shoppingapp.shoppingapp.repository.UserRepository;
 import com.shoppingapp.shoppingapp.service.OrderService;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
@@ -128,17 +130,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Orders> getAllOrdersByUserId(Long id) {
-        System.out.println("Get all order by user id");
-        List<Orders> list = orderRepository.findAll().stream().filter(
-                (a) -> a.getUser().getId().equals(id)
-        ).toList();
-        if(list.isEmpty()) {
-            System.out.println("List failed!");
-            return null;
-        }else{
-            System.out.println("List success!");
-            return list;
-        }
+    public List<Object[]> countOrdersByMonthAndYear() {
+        log.info("Information: " + orderRepository.countOrdersByMonthAndYear());
+        return orderRepository.countOrdersByMonthAndYear();
     }
 }

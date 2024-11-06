@@ -131,4 +131,14 @@ public class ProductServiceImpl implements ProductService {
             return "Saved successfully";
         }
     }
+
+    @Override
+    public List<Product> getTop10ByHighestAverageRating() {
+        return productRepository.findTop10ByHighestAverageRating();
+    }
+
+    @Override
+    public List<Product> getTop10ByMostSold() {
+        return productRepository.findTop10ByMostSold();
+    }
 }

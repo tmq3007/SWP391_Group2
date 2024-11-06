@@ -77,4 +77,18 @@ public class ProductController {
                 .result(productService.deleteAmountAfterMadeOrder(id,amount))
                 .build();
     }
+
+    @GetMapping("/top10ByHighestAverageRating")
+    public ApiResponse<List<Product>> getTop10ByHighestAverageRating() {
+        return ApiResponse.<List<Product>>builder()
+                .result(productService.getTop10ByHighestAverageRating())
+                .build();
+    }
+
+    @GetMapping("/top10ByMostSold")
+    public ApiResponse<List<Product>> getTop10ByMostSold() {
+        return ApiResponse.<List<Product>>builder()
+                .result(productService.getTop10ByMostSold())
+                .build();
+    }
 }
