@@ -12,7 +12,6 @@ import com.shoppingapp.shoppingapp.service.CategoryService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -77,4 +76,10 @@ public class CategoryController {
     }
 
 
+    @GetMapping("/get-top-10-by-most-products")
+    public ApiResponse<List<Category>> getTop10ByMostProducts() {
+        return ApiResponse.<List<Category>>builder()
+                .result(categoryService.getTop10ByMostProducts())
+                .build();
+    }
 }
