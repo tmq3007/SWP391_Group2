@@ -9,12 +9,14 @@ import com.shoppingapp.shoppingapp.repository.OrderRepository;
 import com.shoppingapp.shoppingapp.repository.UserRepository;
 import com.shoppingapp.shoppingapp.service.OrderService;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
@@ -125,5 +127,11 @@ public class OrderServiceImpl implements OrderService {
             return "Order IsPaid to TRUE";
         }
         return "Order not found!";
+    }
+
+    @Override
+    public List<Object[]> countOrdersByMonthAndYear() {
+        log.info("Information: " + orderRepository.countOrdersByMonthAndYear());
+        return orderRepository.countOrdersByMonthAndYear();
     }
 }
