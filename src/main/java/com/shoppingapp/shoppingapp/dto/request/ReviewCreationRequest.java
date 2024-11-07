@@ -15,10 +15,8 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ReviewCreationRequest {
-
     String reviewText;
     Double rating;
-    Long productId;
+    String productName;
     Long userId;
-
 }

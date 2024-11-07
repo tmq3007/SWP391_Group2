@@ -49,7 +49,7 @@ public class ShopServiceImp implements ShopService {
         return StatisticShopResponse.builder()
                 .shopID(shop.getShopId())
                 .shopName(shop.getShopName())
-                .user(shop.getUser()) // assuming Shop entity has a User field
+                .user(shop.getUser())
                 .totalProduct(totalProduct)
                 .totalOrder(totalOrder)
                 .address(shop.getAddress())
