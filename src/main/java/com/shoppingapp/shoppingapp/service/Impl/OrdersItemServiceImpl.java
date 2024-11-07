@@ -32,20 +32,6 @@ public class OrdersItemServiceImpl implements OrderItemsService {
         return orderItemRepository.findAll();
     }
 
-    /*@Override
-    public List<OrderItems> getByOrderId(Long id) {
-        Orders orders = orderRepository.findById(id).orElse(null);
-        if(orders == null){
-            System.out.println("Get order items by order id FAILED!");
-            return null;
-        }else{
-            System.out.println("Success !");
-            return orderItemRepository.findAll().stream()
-                    .filter(item -> item.getOrders().getOrderId().equals(id))
-                    .collect(Collectors.toList());
-        }
-    }*/
-
     @Override
     public List<OrderItems> getByOrderId(Long id) {
         Orders orders = orderRepository.findById(id).orElse(null);
@@ -56,8 +42,8 @@ public class OrdersItemServiceImpl implements OrderItemsService {
             System.out.println("Success!");
             return orderItemRepository.findAll().stream()
                     .filter(item -> item.getOrderId() != null && // Check if orders is not null
-                            item.getOrderId() != null && // Check if orderId is not null
-                            item.getOrderId().equals(id)) // Now safe to compare
+                            item.getOrderId() != null &&
+                            item.getOrderId().equals(id))
                     .collect(Collectors.toList());
         }
     }
