@@ -64,6 +64,7 @@ public class ShopController {
     ResponseEntity<ShopResponse> updateShop(@RequestBody ShopUpdateRequest request, @PathVariable("shopId") Long shopId) {
     return ResponseEntity.ok(shopService.updateShop(request,shopId));
     }
+
     @DeleteMapping("/{shopId}")
     ApiResponse<String> deleteShop(@PathVariable("shopId") Long shopId) {
         shopService.deleteShop(shopId);
