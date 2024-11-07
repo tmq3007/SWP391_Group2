@@ -18,7 +18,7 @@ public class ReviewCreationRequest {
 
     String reviewText;
     Double rating;
-    Long productId;
+    String productName;
     Long userId;
 
 }

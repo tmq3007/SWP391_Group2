@@ -4,6 +4,7 @@ import com.shoppingapp.shoppingapp.dto.request.ReviewCreationRequest;
 import com.shoppingapp.shoppingapp.exceptions.AppException;
 import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
 import com.shoppingapp.shoppingapp.mapper.ReviewMapper;
+import com.shoppingapp.shoppingapp.models.Product;
 import com.shoppingapp.shoppingapp.models.Review;
 import com.shoppingapp.shoppingapp.repository.ProductRepository;
 import com.shoppingapp.shoppingapp.repository.ReviewRepository;
@@ -29,7 +30,11 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Review createReview(ReviewCreationRequest request) {
         // Kiểm tra product id
-        var productOptional = productRepository.findById(request.getProductId());
+        List<Product> pro = productRepository.findProductsByProductName(request.getProductName());
+        if (pro.isEmpty()) {
+            throw new AppException(ErrorCode.PRODUCT_NOT_EXISTED);
+        }
+        var productOptional = productRepository.findById(pro.getFirst().getProductId());
         if (productOptional.isEmpty()) {
             throw new AppException(ErrorCode.PRODUCT_NOT_EXISTED);
         }

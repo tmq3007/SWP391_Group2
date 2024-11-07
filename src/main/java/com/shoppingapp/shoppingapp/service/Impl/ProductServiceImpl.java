@@ -79,7 +79,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = productMapper.toProduct(request);
         product.setShop(shopOptional.get());
         product.setCategory(categoryOptional.get());
-
+        product.setAverageRating(0.0);
         return productRepository.save(product);
     }
 
