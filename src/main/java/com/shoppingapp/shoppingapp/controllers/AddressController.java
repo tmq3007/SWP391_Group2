@@ -4,6 +4,8 @@ import com.shoppingapp.shoppingapp.dto.request.ApiResponse;
 import com.shoppingapp.shoppingapp.dto.request.AddressCreationRequest;
 import com.shoppingapp.shoppingapp.dto.request.AddressUpdateRequest;
 import com.shoppingapp.shoppingapp.dto.response.AddressResponse;
+import com.shoppingapp.shoppingapp.dto.response.ShopResponse;
+import com.shoppingapp.shoppingapp.dto.response.WishlistResponse;
 import com.shoppingapp.shoppingapp.models.Address;
 import com.shoppingapp.shoppingapp.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +24,17 @@ public class AddressController {
 
     // Get all addresses
     @GetMapping
-    public ResponseEntity<List<AddressResponse>> getAllAddresses() {
-        return ResponseEntity.ok(addressService.getAllAddress());
+    public ApiResponse<List<AddressResponse>> getAllAddresses() {
+        ApiResponse<List<AddressResponse>> apiResponse = new ApiResponse<>();
+        return ApiResponse.<List<AddressResponse>>builder()
+                .result(addressService.getAllAddress())
+                .build();
+
+    }
+
+    @GetMapping("/user/{userId}")
+    ApiResponse<List<AddressResponse>> getAddressByUserId(@PathVariable("userId") Long userId) {
+        return ApiResponse.<List<AddressResponse>>builder().result(addressService.getAddressByUserId(userId)).build();
     }
 
     // Get address by ID
