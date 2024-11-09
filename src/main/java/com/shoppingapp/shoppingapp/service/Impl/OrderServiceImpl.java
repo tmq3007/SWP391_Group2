@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -59,7 +60,7 @@ public class OrderServiceImpl implements OrderService {
         // update ispaid - odate - pdate - paymentid
         List<OrderItems> list = orderItemRepository.findAll()
                 .stream().filter(a -> a.getOrderId() == order.getOrderId()).toList();
-
+        System.out.println("Result - "+order.getPaymentId());
         System.out.println("Order "+order.getOrderId() + order.getPaymentId());
 
         list.forEach((a) -> {a.setOrderItemsDate(order.getOrderDate());
@@ -112,6 +113,16 @@ public class OrderServiceImpl implements OrderService {
     public String updateIsPaidTrue(Long id) {
         Orders order = orderRepository.findById(id).orElse(null);
         if(order != null) {
+        List<OrderItems> list = orderItemRepository.findAll()
+                .stream().filter(a -> a.getOrderId() == order.getOrderId()).toList();
+        System.out.println("Order "+order.getOrderId() + order.getPaymentId());
+        list.forEach((a) -> {a.setOrderItemsDate(order.getOrderDate());
+            LocalDate date = LocalDate.now();
+            a.setOrderItemsPaymentDate(date);
+            a.setIsPaid(true);
+            a.setPaymentId(order.getPaymentId());});
+            orderItemRepository.saveAll(list);
+
             order.setIsPaid(true);
             orderRepository.save(order);
             return "Order IsPaid to TRUE";
@@ -121,6 +132,29 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public String updateIsPaidFalse(Long id) {
         Orders order = orderRepository.findById(id).orElse(null);
+
+
+        List<OrderItems> list = orderItemRepository.findAll()
+                .stream().filter(a -> a.getOrderId() == order.getOrderId()).toList();
+
+        System.out.println("Order "+order.getOrderId() + order.getPaymentId());
+
+
+        LocalDate date = LocalDate.now();
+        list.forEach((a) -> {a.setOrderItemsDate(order.getOrderDate());
+            a.setOrderItemsPaymentDate(date);
+            a.setIsPaid(true);
+            a.setPaymentId(order.getPaymentId());});
+        orderItemRepository.saveAll(list);
+
+
+        if(order != null) {
+            order.setIsPaid(true);
+            orderRepository.save(order);
+            return "Order IsPaid to TRUE";
+        }
+
+
         if(order != null) {
             order.setIsPaid(false);
             orderRepository.save(order);

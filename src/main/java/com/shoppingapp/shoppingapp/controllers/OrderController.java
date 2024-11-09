@@ -52,14 +52,13 @@ public class OrderController{
     public ResponseEntity<Orders> updateOrder(@PathVariable("orderId") Long orderId, @RequestBody Orders order){
         Orders current = orderService.getOrderById(orderId);
         System.out.println("Curent id: "+orderId);
-        System.out.println("Current: "+current.getPaymentId());
+        System.out.println("Current: "+order.getPaymentId());
         if(current != null){
-            current.setOrderDate(order.getOrderDate());
-            current.setIsPaid(order.getIsPaid());
-            current.setPaymentDate(order.getPaymentDate());
-            current.setPaymentId(order.getPaymentId());
+            return ResponseEntity.ok(orderService.updateOrder(order));
+        }else{
+            return null;
         }
-        return ResponseEntity.ok(orderService.updateOrder(current));
+
     }
 
     @DeleteMapping("/{orderId}")
