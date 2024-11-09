@@ -35,7 +35,7 @@ public class ReviewServiceImpl implements ReviewService {
         if (pro.isEmpty()) {
             throw new AppException(ErrorCode.PRODUCT_NOT_EXISTED);
         }
-        var productOptional = productRepository.findById(pro.getFirst().getProductId());
+        var productOptional = productRepository.findById(pro.get(0).getProductId());
         if (productOptional.isEmpty()) {
             throw new AppException(ErrorCode.PRODUCT_NOT_EXISTED);
         }
