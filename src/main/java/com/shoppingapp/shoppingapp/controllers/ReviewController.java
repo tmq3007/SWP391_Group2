@@ -29,7 +29,12 @@ public class ReviewController {
     public ResponseEntity<List<Review>> getAllReviewsByProductId(@PathVariable Long productId) {
         return ResponseEntity.ok(reviewService.getAllReviewsByProductId(productId));
     }
-
+    // get review by shop id
+    @GetMapping("/get-all-review-by-shop-id/{shopId}")
+    public ResponseEntity<List<Review>> getAllReviewsByShopId(@PathVariable Long shopId) {
+        List<Review> reviews = reviewService.getAllReviewsByShopId(shopId);
+        return ResponseEntity.ok(reviews);
+    }
     //create review
     //Build Add Product REST API
     @PostMapping()

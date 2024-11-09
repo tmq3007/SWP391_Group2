@@ -44,4 +44,5 @@ public class Product {
     private Boolean isActive;
     private Double averageRating;
 
+
 }

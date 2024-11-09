@@ -13,4 +13,6 @@ public interface ReviewService {
     Review createReview(ReviewCreationRequest request);
     //get all review product id have
     List<Review> getAllReviewsByProductId(Long productId);
+
+    List<Review> getAllReviewsByShopId(Long shopId);
 }
