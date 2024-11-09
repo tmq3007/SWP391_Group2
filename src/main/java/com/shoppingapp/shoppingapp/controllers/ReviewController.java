@@ -41,7 +41,8 @@ public class ReviewController {
 
     @GetMapping("/get-all-review-by-shop-id/{shopId}")
     public ResponseEntity<List<Review>> getAllReviewsByShopId(@PathVariable Long shopId) {
-        return ResponseEntity.ok(reviewService.getAllReviewsByShopId(shopId));
+        List<Review> reviews = reviewService.getAllReviewsByShopId(shopId);
+        return ResponseEntity.ok(reviews);
     }
 
 }

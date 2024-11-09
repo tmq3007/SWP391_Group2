@@ -13,6 +13,7 @@ import com.shoppingapp.shoppingapp.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -56,7 +57,11 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     public List<Review> getAllReviewsByShopId(Long shopId) {
-        return reviewRepository.findAllReviewsByProductId(shopId);
+        List<Product> products = productRepository.findAllProductsByShopId(shopId);
+        List<Review> reviews = new ArrayList<>();
+        for (Product product : products) {
+            reviews.addAll(reviewRepository.findAllReviewsByProductId(product.getProductId()));
+        }
+        return reviews;
     }
-
 }

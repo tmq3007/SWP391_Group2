@@ -20,6 +20,7 @@ public interface ProductService {
     String deleteProductById(Long productId);
 
     List<Product> getAllProductsByShopId(Long shopId);
+
     String deleteAmountAfterMadeOrder(Long productId, int amount);
 
     List<Product> getTop10ByHighestAverageRating();

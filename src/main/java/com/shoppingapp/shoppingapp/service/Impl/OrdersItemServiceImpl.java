@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 @Service
 public class OrdersItemServiceImpl implements OrderItemsService {
 
+
     @Autowired
     private OrderItemRepository orderItemRepository;
 
@@ -80,5 +81,16 @@ public class OrdersItemServiceImpl implements OrderItemsService {
     @Override
     public OrderItems getById(Long id) {
         return orderItemRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public String updateIsPaidTrue(Long id) {
+        OrderItems orderItems = orderItemRepository.findById(id).orElse(null);
+        if(orderItems != null) {
+            orderItems.setIsPaid(true);
+            orderItemRepository.save(orderItems);
+            return "Order IsPaid to TRUE";
+        }
+        return "Order not found!";
     }
 }
