@@ -7,7 +7,9 @@ import com.shoppingapp.shoppingapp.exceptions.AppException;
 import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
 import com.shoppingapp.shoppingapp.mapper.CategoryMapper;
 import com.shoppingapp.shoppingapp.models.Category;
+import com.shoppingapp.shoppingapp.models.Product;
 import com.shoppingapp.shoppingapp.repository.CategoryRepository;
+import com.shoppingapp.shoppingapp.repository.ProductRepository;
 import com.shoppingapp.shoppingapp.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
     @Autowired
     private CategoryMapper categoryMapper;
+    @Autowired
+    private ProductRepository productRepository;
 
 
     @Override
@@ -75,6 +79,18 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> getTop10ByMostProducts() {
         return categoryRepository.findTop10ByMostProducts();
+    }
+
+    @Override
+    public CategoryResponse updateCategory2(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(()-> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
+        category.setIsActive(false);
+        List<Product> productList = productRepository.findProductsByCategoryId(categoryId);
+        for (Product product : productList) {
+            product.setIsActive(false);
+        }
+        return categoryMapper.toCategoryResponse(categoryRepository.save(category));
     }
 
 }

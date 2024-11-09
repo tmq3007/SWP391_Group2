@@ -59,19 +59,14 @@ public class CategoryController {
         return apiResponse ;
     }
 
-    @DeleteMapping("/{categoryId}")
+    @PatchMapping("/delete/{categoryId}")
     public ApiResponse<String> deleteCategory(@PathVariable("categoryId") Long categoryId) {
-        Category categoryObj = categoryService.getCategoryById(categoryId);
-        ApiResponse<String> apiResponse = new ApiResponse<>();
 
-        if (categoryObj != null) {
-            categoryService.deleteCategory(categoryObj); // Service deletes the category
+        ApiResponse<String> apiResponse = new ApiResponse<>();
+            //categoryService.deleteCategory(categoryObj);
+            categoryService.updateCategory2(categoryId);
             apiResponse.setCode(0);
             apiResponse.setResult("Category deleted successfully");
-        } else {
-            throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
-        }
-
         return apiResponse;
     }
 
@@ -82,4 +77,6 @@ public class CategoryController {
                 .result(categoryService.getTop10ByMostProducts())
                 .build();
     }
+
+
 }

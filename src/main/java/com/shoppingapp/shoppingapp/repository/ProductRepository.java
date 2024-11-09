@@ -27,5 +27,13 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = "SELECT p.* FROM product p JOIN order_items oi ON oi.product_name = p.product_name GROUP BY p.product_id ORDER BY COUNT(oi.order_items_id) DESC LIMIT 10", nativeQuery = true)
     List<Product> findTop10ByMostSold();
 
+
     List<Product> findProductsByProductName(String productName);
+
+
+    @Query(value = "SELECT * FROM Product WHERE category_id = :categoryId", nativeQuery = true)
+    List<Product> findProductsByCategoryId(@Param("categoryId") Long categoryId);
+
+
+
 }

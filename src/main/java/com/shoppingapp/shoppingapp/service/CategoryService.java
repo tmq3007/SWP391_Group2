@@ -16,4 +16,5 @@ public interface CategoryService {
     String deleteCategory(Category category);
 
     List<Category> getTop10ByMostProducts();
+    CategoryResponse updateCategory2(Long categoryId );
 }
