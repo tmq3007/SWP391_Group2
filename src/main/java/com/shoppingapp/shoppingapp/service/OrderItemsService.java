@@ -10,4 +10,5 @@ public interface OrderItemsService {
     String add(OrderItems orderItems);
     List<OrderItems> getAllByShopId(Long orderId);
     OrderItems getById(Long id);
+    String updateIsPaidTrue(Long id);
 }

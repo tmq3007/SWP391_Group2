@@ -30,7 +30,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public Review createReview(ReviewCreationRequest request) {
-        // Kiểm tra product id
+        // Kiểm tra product name
         List<Product> pro = productRepository.findProductsByProductName(request.getProductName());
         if (pro.isEmpty()) {
             throw new AppException(ErrorCode.PRODUCT_NOT_EXISTED);
@@ -56,7 +56,6 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewRepository.findAllReviewsByProductId(productId);
     }
 
-    @Override
     public List<Review> getAllReviewsByShopId(Long shopId) {
         List<Product> products = productRepository.findAllProductsByShopId(shopId);
         List<Review> reviews = new ArrayList<>();

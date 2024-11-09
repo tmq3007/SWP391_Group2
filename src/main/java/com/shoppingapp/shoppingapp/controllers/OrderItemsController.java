@@ -41,4 +41,11 @@ public class OrderItemsController {
         return ApiResponse.builder().result(orderItemsService.add(orderItems)).build();
     }
 
+    // UPDATE ORDER STATUS ISPAID TO TRUE
+    @PatchMapping("/isPaidToTrue/{id}")
+    public ApiResponse<?> isPaidToTrue(@PathVariable("id") Long id) {
+        return ApiResponse.builder()
+                .result(orderItemsService.updateIsPaidTrue(id))
+                .build();
+    }
 }

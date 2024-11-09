@@ -14,8 +14,12 @@ import com.shoppingapp.shoppingapp.dto.response.IntrospectResponse;
 import com.shoppingapp.shoppingapp.exceptions.AppException;
 import com.shoppingapp.shoppingapp.exceptions.ErrorCode;
 import com.shoppingapp.shoppingapp.models.InvalidatedToken;
+import com.shoppingapp.shoppingapp.models.Shop;
+import com.shoppingapp.shoppingapp.models.UnverifiedShop;
 import com.shoppingapp.shoppingapp.models.User;
 import com.shoppingapp.shoppingapp.repository.InvalidatedTokenRepository;
+import com.shoppingapp.shoppingapp.repository.ShopRepository;
+import com.shoppingapp.shoppingapp.repository.UnverifiedShopRepository;
 import com.shoppingapp.shoppingapp.repository.UserRepository;
 import com.shoppingapp.shoppingapp.service.AuthenticationService;
 import lombok.experimental.NonFinal;
@@ -40,6 +44,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ShopRepository shopRepository;
+
+    @Autowired
+    private UnverifiedShopRepository unverifiedShopRepository;
 
     @Autowired
     private InvalidatedTokenRepository invalidatedTokenRepository;
@@ -140,6 +150,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private String generateToken(User user) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
+        Long shopId = shopRepository.findByUserId(user.getId())
+                .map(Shop::getShopId)
+                .orElse(null);
+
+        Long unverifiedShopId = unverifiedShopRepository.findByUserId(user.getId())
+                .map(UnverifiedShop::getShopId)
+                .orElse(null);
+
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getUsername())
                 .issuer("shoppingapp")
@@ -150,6 +168,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
                 .claim("userId", user.getId())
+                .claim("shopId", shopId)
+                .claim("unverifiedShopId", unverifiedShopId)
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
