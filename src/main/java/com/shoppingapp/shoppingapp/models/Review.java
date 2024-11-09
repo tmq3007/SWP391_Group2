@@ -28,7 +28,7 @@ public class Review {
     @Column(nullable = false)
     Double rating;
 
-    @JsonIgnore
+
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     Product product;
