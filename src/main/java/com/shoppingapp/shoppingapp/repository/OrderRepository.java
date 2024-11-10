@@ -19,4 +19,8 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
             "GROUP BY YEAR(order_date), MONTH(order_date) " +
             "ORDER BY orderYear, orderMonth", nativeQuery = true)
     List<Object[]> countOrdersByMonthAndYear();
+
+    @Query(value = "SELECT SUM(final_total) FROM orders", nativeQuery = true)
+    Double sumTotalRevenue();
+
 }

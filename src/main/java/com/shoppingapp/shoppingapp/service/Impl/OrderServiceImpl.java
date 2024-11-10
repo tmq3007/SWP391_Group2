@@ -168,4 +168,9 @@ public class OrderServiceImpl implements OrderService {
         log.info("Information: " + orderRepository.countOrdersByMonthAndYear());
         return orderRepository.countOrdersByMonthAndYear();
     }
+
+    @Override
+    public Double sumTotalRevenue() {
+        return orderRepository.sumTotalRevenue();
+    }
 }

@@ -16,4 +16,6 @@ public interface OrderService {
     String updateIsPaidTrue(Long id);
     String updateIsPaidFalse(Long id);
     List<Object[]> countOrdersByMonthAndYear();
+
+    Double sumTotalRevenue();
 }

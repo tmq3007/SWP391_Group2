@@ -85,4 +85,9 @@ public class OrderController{
         return ApiResponse.<List<Object[]>>builder().result(orderService.countOrdersByMonthAndYear()).build();
     }
 
+    @GetMapping("/sumTotalRevenue")
+    public ApiResponse<Double> sumTotalRevenue(){
+        return ApiResponse.<Double>builder().result(orderService.sumTotalRevenue()).build();
+    }
+
 }
